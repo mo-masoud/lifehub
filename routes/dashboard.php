@@ -84,6 +84,6 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         Route::get('settings/locale', LocaleController::class)->name('settings.locale');
 
         Route::resource('passwords', PasswordManagerController::class)
-            ->only(['index', 'store', 'destroy', 'edit']);
+            ->only(['index', 'store', 'destroy', 'update']);
     });
 });

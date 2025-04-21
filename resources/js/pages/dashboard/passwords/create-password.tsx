@@ -4,10 +4,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { __ } from '@/lib/i18n';
+import { generatePassword } from '@/lib/utils';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { Dices, Eye, EyeOff, PlusCircle } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
+import { toast } from 'sonner';
 
 type PasswordForm = {
     name: string;
@@ -32,17 +34,10 @@ export const CreatePassword = () => {
         post(route('dashboard.passwords.store'), {
             preserveScroll: true,
             preserveState: false,
+            onSuccess: () => {
+                toast.success(__('messages.created_successfully'));
+            },
         });
-    };
-
-    const generatePassword = () => {
-        const length = 12;
-        const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?';
-        let password = '';
-        for (let i = 0, n = charset.length; i < length; ++i) {
-            password += charset.charAt(Math.floor(Math.random() * n));
-        }
-        setData('password', password);
     };
 
     return (
@@ -106,7 +101,14 @@ export const CreatePassword = () => {
                             <Button variant="ghost" size="icon" onClick={() => setShowPassword((prev) => !prev)} type="button">
                                 {showPassword ? <EyeOff /> : <Eye />}
                             </Button>
-                            <Button variant="ghost" size="icon" type="button" onClick={generatePassword}>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                type="button"
+                                onClick={() => {
+                                    setData('password', generatePassword());
+                                }}
+                            >
                                 <Dices />
                             </Button>
                         </div>

@@ -17,6 +17,9 @@ return [
         'warning' => 'Warning',
         'cancel' => 'Cancel',
         'caution_cant_undone' => 'Please proceed with caution, this cannot be undone.',
+        'deleted_successfully' => 'Deleted successfully.',
+        'created_successfully' => 'Created successfully.',
+        'updated_successfully' => 'Updated successfully.',
         'or_return' => 'Or, return to',
         'new' => 'New',
         'next' => 'Next',
@@ -94,6 +97,7 @@ return [
 
     'passwords' => [
         'create_password' => 'Create a new password',
+        'update_password' => 'Update password',
         'name_placeholder' => 'Name of the password.',
         'username_placeholder' => 'Username/email for the password.',
         'password_placeholder' => 'Password for the password.',

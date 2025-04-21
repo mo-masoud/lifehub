@@ -1,18 +1,31 @@
 import Heading from '@/components/dashboard/heading';
-import { CreatePassword } from '@/components/dashboard/passwords/create-password';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
+import { CreatePassword } from '@/pages/dashboard/passwords/create-password';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, ExternalLink, Eye, EyeOff, FilePenLine, KeyRound, Search, Trash2 } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, ExternalLink, Eye, EyeOff, KeyRound, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { UpdatePassword } from '@/pages/dashboard/passwords/update-password';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +34,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Passwords() {
+export default function Index() {
     const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
 
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
@@ -57,6 +70,15 @@ export default function Passwords() {
                 replace: true,
             },
         );
+    };
+
+    const destroy = (id: number) => {
+        router.delete(route('dashboard.passwords.destroy', id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success(__('messages.deleted_successfully'));
+            },
+        });
     };
 
     return (
@@ -125,12 +147,29 @@ export default function Passwords() {
                                         )}
                                     </TableHead>
                                     <TableHead className="flex items-center justify-end text-sm">
-                                        <Button variant="ghost" size="icon">
-                                            <FilePenLine className="size-4 text-green-500" />
-                                        </Button>
-                                        <Button variant="ghost" size="icon">
-                                            <Trash2 className="size-4 text-red-500" />
-                                        </Button>
+                                        <UpdatePassword password={password} />
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="ghost" size="icon">
+                                                    <Trash2 className="size-4 text-red-500" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
+                                                    <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        className={buttonVariants({ variant: 'destructive' })}
+                                                        onClick={() => destroy(password.id)}
+                                                    >
+                                                        {__('messages.delete')}
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </TableHead>
                                 </TableRow>
                             ))}
