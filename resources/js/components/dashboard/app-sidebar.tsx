@@ -1,19 +1,32 @@
 import { NavFooter } from '@/components/dashboard/nav-footer';
 import { NavMain } from '@/components/dashboard/nav-main';
 import { NavUser } from '@/components/dashboard/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem
+} from '@/components/ui/sidebar';
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid } from 'lucide-react';
+import { KeyRound, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: __('general.dashboard'),
         href: route('dashboard.home'),
-        icon: LayoutGrid,
+        icon: LayoutGrid
     },
+    {
+        title: __('general.password_manager'),
+        href: route('dashboard.passwords.index'),
+        icon: KeyRound
+    }
 ];
 
 const footerNavItems: NavItem[] = [];

@@ -8,9 +8,11 @@ use App\Http\Controllers\Dashboard\Auth\NewPasswordController;
 use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
+use App\Http\Controllers\Dashboard\PasswordManagerController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::prefix('dashboard')->as('dashboard.')->group(function () {
@@ -80,5 +82,8 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         })->name('appearance');
 
         Route::get('settings/locale', LocaleController::class)->name('settings.locale');
+
+        Route::resource('passwords', PasswordManagerController::class)
+            ->only(['index', 'store', 'destroy', 'edit']);
     });
 });

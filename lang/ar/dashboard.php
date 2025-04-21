@@ -8,6 +8,8 @@ return [
         'platform' => 'المنصة',
         'home' => 'الرئيسية',
         'settings' => 'الإعدادات',
+        'password_manager' => 'كلمات المرور',
+        'search' => 'ابحث عن أي شيء...',
     ],
 
     'messages' => [
@@ -17,6 +19,14 @@ return [
         'cancel' => 'إلغاء',
         'caution_cant_undone' => 'يرجى المتابعة بحذر، لا يمكن التراجع عن هذا الإجراء.',
         'or_return' => 'أو، العودة إلى',
+        'new' => 'جديد',
+        'next' => 'التالي',
+        'previous' => 'السابق',
+        'delete' => 'حذف',
+        'delete_confirmation' => 'هل أنت متأكد أنك تريد حذف هذا؟',
+        'update' => 'تحديث',
+        'history' => 'التاريخ',
+        'showing_pagination' => 'عرض من :from إلى :to من :total نتيجة.',
     ],
 
     'auth' => [
@@ -71,6 +81,7 @@ return [
 
     'fields' => [
         'name' => 'الاسم',
+        'username' => 'اسم المستخدم',
         'full_name' => 'الاسم الكامل',
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
@@ -78,5 +89,19 @@ return [
         'current_password' => 'كلمة المرور الحالية',
         'new_password' => 'كلمة المرور الجديدة',
         'preferred_locale' => 'اللغة المفضلة',
+        'url' => 'الرابط',
     ],
+
+    'passwords' => [
+        'create_password' => 'إنشاء كلمة مرور جديدة',
+        'name_placeholder' => 'اسم كلمة المرور.',
+        'username_placeholder' => 'اسم المستخدم.',
+        'url_placeholder' => 'رابط كلمة المرور.',
+        'password_placeholder' => 'كلمة مرور جديدة.',
+        'no_passwords_founds' => 'لا توجد كلمات مرور.',
+    ],
+
+    'words' => [
+        'actions' => 'الإجراءات',
+    ]
 ];

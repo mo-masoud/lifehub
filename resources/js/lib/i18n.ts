@@ -5,7 +5,7 @@ export function setTranslations(data: Record<string, any>) {
     (globalThis as any).translations = data;
 }
 
-export function __(key: string, params: Record<string, string | number> = {}): string {
+export function __(key: string, params: Record<string, string | number | undefined> = {}): string {
     const parts = key.split('.');
     let value: any = (globalThis as any).translations || translations || {};
 

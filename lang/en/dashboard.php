@@ -2,11 +2,13 @@
 
 return [
     'general' => [
-        'application_name' => 'X-Dash',
+        'application_name' => 'Lifehub',
         'dashboard' => 'Dashboard',
         'platform' => 'Platform',
         'home' => 'Home',
         'settings' => 'Settings',
+        'password_manager' => 'Passwords',
+        'search' => 'Search for anything...',
     ],
 
     'messages' => [
@@ -16,6 +18,14 @@ return [
         'cancel' => 'Cancel',
         'caution_cant_undone' => 'Please proceed with caution, this cannot be undone.',
         'or_return' => 'Or, return to',
+        'new' => 'New',
+        'next' => 'Next',
+        'previous' => 'Previous',
+        'delete' => 'Delete',
+        'delete_confirmation' => 'Are you sure you want to delete this?',
+        'update' => 'Update',
+        'history' => 'History',
+        'showing_pagination' => 'Showing :from to :to of :total results.',
     ],
 
     'auth' => [
@@ -71,6 +81,7 @@ return [
 
     'fields' => [
         'name' => 'Name',
+        'username' => 'Username',
         'full_name' => 'Full name',
         'email' => 'Email address',
         'password' => 'Password',
@@ -78,5 +89,19 @@ return [
         'current_password' => 'Current password',
         'new_password' => 'New password',
         'preferred_locale' => 'Preferred locale',
+        'url' => 'URL',
     ],
+
+    'passwords' => [
+        'create_password' => 'Create a new password',
+        'name_placeholder' => 'Name of the password.',
+        'username_placeholder' => 'Username/email for the password.',
+        'password_placeholder' => 'Password for the password.',
+        'url_placeholder' => 'URL for the password.',
+        'no_passwords_founds' => 'Their are no passwords founds.'
+    ],
+
+    'words' => [
+        'actions' => 'Actions'
+    ]
 ];
