@@ -63,7 +63,7 @@ class SSHController extends Controller
     {
         $data = $request->validated();
 
-        if (isset($data['prompt'])) {
+        if (isset($data['prompt']) && !isset($data['username'], $data['ip'])) {
             $prompt = str_replace('ssh ', '', $data['prompt']);
             $prompt = explode('@', $prompt);
             $data['username'] = $prompt[0];
