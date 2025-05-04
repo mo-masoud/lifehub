@@ -9,6 +9,7 @@ return [
         'settings' => 'Settings',
         'password_manager' => 'Passwords',
         'search' => 'Search for anything...',
+        'ssh_manager' => 'SSH',
     ],
 
     'messages' => [
@@ -93,6 +94,7 @@ return [
         'new_password' => 'New password',
         'preferred_locale' => 'Preferred locale',
         'url' => 'URL',
+        'ip' => 'IP/Host',
     ],
 
     'passwords' => [
@@ -103,6 +105,19 @@ return [
         'password_placeholder' => 'Password for the password.',
         'url_placeholder' => 'URL for the password.',
         'no_passwords_founds' => 'Their are no passwords founds.'
+    ],
+
+    'ssh' => [
+        'create_ssh' => 'Create a new ssh',
+        'update_ssh' => 'Update ssh',
+        'name_placeholder' => 'Name of the SSH.',
+        'username_placeholder' => 'Username for the SSH.',
+        'password_placeholder' => 'Password for the SSH.',
+        'ip_placeholder' => 'IP/Host for the SSH.',
+        'prompt' => 'SSH Prompt',
+        'prompt_placeholder' => 'SSH Prompt e.g "root@localhost:~#".',
+        'no_sshs_founds' => 'Their are no ssh founds.',
+        'ip' => 'IP/Host',
     ],
 
     'words' => [

@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\PasswordManagerController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
+use App\Http\Controllers\Dashboard\SSHController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -85,5 +86,9 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
 
         Route::resource('passwords', PasswordManagerController::class)
             ->only(['index', 'store', 'destroy', 'update']);
+
+        Route::resource('sshs', SSHController::class)
+            ->only(['index', 'store', 'destroy', 'update'])
+            ->parameters(['sshs' => 'ssh']);
     });
 });

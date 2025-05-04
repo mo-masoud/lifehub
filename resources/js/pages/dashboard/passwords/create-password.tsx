@@ -19,6 +19,8 @@ type PasswordForm = {
 };
 
 export const CreatePassword = () => {
+    const [showSheet, setShowSheet] = useState(false);
+
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<PasswordForm>>({
@@ -33,22 +35,23 @@ export const CreatePassword = () => {
 
         post(route('dashboard.passwords.store'), {
             preserveScroll: true,
-            preserveState: false,
+            preserveState: true,
             onSuccess: () => {
                 toast.success(__('messages.created_successfully'));
+                setShowSheet(false);
             },
         });
     };
 
     return (
-        <Sheet>
+        <Sheet open={showSheet} onOpenChange={setShowSheet}>
             <SheetTrigger asChild>
-                <Button>
+                <Button onClick={() => setShowSheet(true)}>
                     <span>{__('messages.new')}</span>
                     <PlusCircle />
                 </Button>
             </SheetTrigger>
-            <SheetContent className="min-w-[600px]">
+            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
                 <SheetHeader>
                     <SheetTitle>{__('passwords.create_password')}</SheetTitle>
                     <SheetDescription className="sr-only"></SheetDescription>

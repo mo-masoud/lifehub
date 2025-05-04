@@ -41,6 +41,16 @@ class User extends Authenticatable
     }
 
     /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @return list<string>
+     */
+    public function sshs(): HasMany
+    {
+        return $this->hasMany(SSH::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

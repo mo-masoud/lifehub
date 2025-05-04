@@ -3,11 +3,10 @@ import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
-import { CreatePassword } from '@/pages/dashboard/passwords/create-password';
 import type { BreadcrumbItem, Pagination } from '@/types';
-import { Password } from '@/types/models';
+import { SSH } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, ExternalLink, Eye, EyeOff, KeyRound, Search, Trash2 } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -25,17 +24,18 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { UpdatePassword } from '@/pages/dashboard/passwords/update-password';
+import { CreateSsh } from '@/pages/dashboard/sshs/create-ssh';
+import { UpdateSsh } from '@/pages/dashboard/sshs/update-ssh';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: __('general.password_manager'),
-        href: route('dashboard.passwords.index'),
+        title: __('general.ssh_manager'),
+        href: route('dashboard.sshs.index'),
     },
 ];
 
 export default function Index() {
-    const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
+    const { sshs, filters } = usePage<{ sshs: Pagination<SSH>; filters: { keyword?: string } }>().props;
 
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
@@ -63,7 +63,7 @@ export default function Index() {
         setKeyword(e.target.value);
 
         router.get(
-            route('dashboard.passwords.index'),
+            route('dashboard.sshs.index'),
             { keyword: e.target.value },
             {
                 preserveState: true,
@@ -73,7 +73,7 @@ export default function Index() {
     };
 
     const destroy = (id: number) => {
-        router.delete(route('dashboard.passwords.destroy', id), {
+        router.delete(route('dashboard.sshs.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success(__('messages.deleted_successfully'));
@@ -83,14 +83,14 @@ export default function Index() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={__('general.password_manager')} />
+            <Head title={__('general.ssh_manager')} />
             <div className="mt-12 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <KeyRound className="mb-8 size-5" />
-                    <Heading title={__('general.password_manager')} />
+                    <Computer className="mb-8 size-5" />
+                    <Heading title={__('general.ssh_manager')} />
                 </div>
 
-                <CreatePassword />
+                <CreateSsh />
             </div>
 
             <div className="px-4">
@@ -104,50 +104,52 @@ export default function Index() {
                 </div>
                 <Card className="mt-4 p-0 pb-2">
                     <Table>
-                        {passwords.data.length === 0 && <TableCaption>{__('passwords.no_passwords_founds')}</TableCaption>}
+                        {sshs.data.length === 0 && <TableCaption>{__('ssh.no_sshs_founds')}</TableCaption>}
                         <TableHeader className="bg-muted">
                             <TableRow>
                                 <TableHead className="text-start text-xs ltr:rounded-tl-xl rtl:rounded-tr-xl">{__('fields.name')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('fields.username')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('fields.ip')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('ssh.prompt')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('fields.password')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('fields.url')}</TableHead>
                                 <TableHead className="text-end text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">
                                     <span className="sr-only">{__('words.actions')}</span>
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {passwords.data.map((password) => (
-                                <TableRow key={password.id}>
-                                    <TableHead className="text-start text-sm">{password.name}</TableHead>
+                            {sshs.data.map((ssh) => (
+                                <TableRow key={ssh.id}>
+                                    <TableHead className="text-start text-sm">{ssh.name}</TableHead>
                                     <TableHead className="text-start text-sm">
-                                        <span className="cursor-pointer" onClick={() => copyToClipboard(password.username)}>
-                                            {password.username}
+                                        <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.username)}>
+                                            {ssh.username}
                                         </span>
                                     </TableHead>
-                                    <TableHead className="flex w-40 items-center gap-2 text-start text-sm">
-                                        <span className="cursor-pointer" onClick={() => copyToClipboard(password.password)}>
-                                            {showingPasswords.includes(password.id) ? password.password : '**************'}
+                                    <TableHead className="text-start text-sm">
+                                        <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.ip)}>
+                                            {ssh.ip}
                                         </span>
-                                        <Button size="icon" variant="ghost" onClick={() => toggleShowPassword(password.id)}>
-                                            {showingPasswords.includes(password.id) ? (
+                                    </TableHead>
+                                    <TableHead className="text-start text-sm">
+                                        <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.prompt)}>
+                                            {ssh.prompt}
+                                        </span>
+                                    </TableHead>
+                                    <TableHead className="w-40 text-start text-sm">
+                                        <span className="cursor-pointer ltr:mr-2 rtl:ml-2" onClick={() => copyToClipboard(ssh.password)}>
+                                            {showingPasswords.includes(ssh.id) ? ssh.password : '**************'}
+                                        </span>
+                                        <Button size="icon" variant="ghost" onClick={() => toggleShowPassword(ssh.id)}>
+                                            {showingPasswords.includes(ssh.id) ? (
                                                 <EyeOff className="size-4 text-red-300" />
                                             ) : (
                                                 <Eye className="size-4 text-blue-400" />
                                             )}
                                         </Button>
                                     </TableHead>
-                                    <TableHead className="text-start text-sm">
-                                        {password.url ? (
-                                            <a href={password.url} target="_blank">
-                                                <ExternalLink className="size-4 text-blue-500" />
-                                            </a>
-                                        ) : (
-                                            'N\\A'
-                                        )}
-                                    </TableHead>
                                     <TableHead className="flex items-center justify-end text-sm">
-                                        <UpdatePassword password={password} />
+                                        <UpdateSsh ssh={ssh} />
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button variant="ghost" size="icon">
@@ -163,7 +165,7 @@ export default function Index() {
                                                     <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
                                                     <AlertDialogAction
                                                         className={buttonVariants({ variant: 'destructive' })}
-                                                        onClick={() => destroy(password.id)}
+                                                        onClick={() => destroy(ssh.id)}
                                                     >
                                                         {__('messages.delete')}
                                                     </AlertDialogAction>
@@ -181,9 +183,9 @@ export default function Index() {
                     <div className="flex items-center gap-2">
                         <span className="text-muted-foreground text-xs">
                             {__('messages.showing_pagination', {
-                                from: passwords.from || 0,
-                                to: passwords.to || 0,
-                                total: passwords.total,
+                                from: sshs.from || 0,
+                                to: sshs.to || 0,
+                                total: sshs.total,
                             })}
                         </span>
                     </div>
@@ -191,9 +193,9 @@ export default function Index() {
                         <Button
                             size="icon"
                             variant="outline"
-                            disabled={!passwords.links[0].url}
+                            disabled={!sshs.links[0].url}
                             onClick={() => {
-                                router.visit(passwords.links[0].url!);
+                                router.visit(sshs.links[0].url!);
                             }}
                         >
                             <ChevronsLeft />
@@ -201,8 +203,8 @@ export default function Index() {
                         <Button
                             size="icon"
                             variant="outline"
-                            disabled={!passwords.links[passwords.links.length - 1].url}
-                            onClick={() => router.visit(passwords.links[passwords.links.length - 1].url!)}
+                            disabled={!sshs.links[sshs.links.length - 1].url}
+                            onClick={() => router.visit(sshs.links[sshs.links.length - 1].url!)}
                         >
                             <ChevronsRight />
                         </Button>

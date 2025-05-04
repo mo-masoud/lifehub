@@ -5,36 +5,38 @@ import { Label } from '@/components/ui/label';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { __ } from '@/lib/i18n';
 import { generatePassword } from '@/lib/utils';
-import { Password } from '@/types/models';
+import { SSH } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { Dices, Eye, EyeOff, FilePenLine } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 import { toast } from 'sonner';
 
-type PasswordForm = {
+type SSHForm = {
     name: string;
-    username: string;
-    url?: string;
+    username?: string;
+    ip?: string;
+    prompt?: string;
     password?: string;
 };
 
-export const UpdatePassword = ({ password }: { password: Password }) => {
+export const UpdateSsh = ({ ssh }: { ssh: SSH }) => {
     const [showSheet, setShowSheet] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<PasswordForm>>({
-        name: password.name || '',
-        username: password.username || '',
-        url: password.url || '',
-        password: password.password || '',
+    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<SSHForm>>({
+        name: ssh.name || '',
+        username: ssh.username || '',
+        ip: ssh.ip || '',
+        prompt: ssh.prompt || '',
+        password: ssh.password || '',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('dashboard.passwords.update', password.id), {
+        patch(route('dashboard.sshs.update', ssh.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
@@ -53,7 +55,7 @@ export const UpdatePassword = ({ password }: { password: Password }) => {
             </SheetTrigger>
             <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
                 <SheetHeader>
-                    <SheetTitle>{__('passwords.update_password')}</SheetTitle>
+                    <SheetTitle>{__('ssh.update_password')}</SheetTitle>
                     <SheetDescription className="sr-only"></SheetDescription>
                 </SheetHeader>
 
@@ -67,26 +69,57 @@ export const UpdatePassword = ({ password }: { password: Password }) => {
                             value={data.name}
                             onChange={(e) => setData('name', e.target.value)}
                             className="mt-1 block w-full placeholder:text-xs"
-                            placeholder={__('passwords.name_placeholder')}
+                            placeholder={__('ssh.name_placeholder')}
                             autoComplete="off"
                         />
                         <InputError className="mt-1 text-xs" message={errors.name} />
                     </div>
 
                     <div className="grid gap-2">
+                        <Label htmlFor="prompt" className="truncate">
+                            {__('ssh.prompt')}
+                        </Label>
+                        <Input
+                            id="prompt"
+                            value={data.prompt}
+                            onChange={(e) => setData('prompt', e.target.value)}
+                            className="mt-1 block w-full placeholder:text-xs"
+                            placeholder={__('ssh.prompt_placeholder')}
+                            autoComplete="off"
+                        />
+                        <InputError className="mt-1 text-xs" message={errors.prompt} />
+                    </div>
+
+                    <div className="grid gap-2">
                         <Label htmlFor="username" className="truncate">
-                            {__('fields.username')} <span className="mx-1 text-lg text-red-500">*</span>
+                            {__('fields.username')}
                         </Label>
                         <Input
                             id="username"
                             value={data.username}
                             onChange={(e) => setData('username', e.target.value)}
                             className="mt-1 block w-full placeholder:text-xs"
-                            placeholder={__('passwords.username_placeholder')}
+                            placeholder={__('ssh.username_placeholder')}
                             autoComplete="off"
                         />
                         <InputError className="mt-1 text-xs" message={errors.username} />
                     </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="ip" className="truncate">
+                            {__('fields.ip')}
+                        </Label>
+                        <Input
+                            id="url"
+                            value={data.ip}
+                            onChange={(e) => setData('ip', e.target.value)}
+                            className="mt-1 block w-full placeholder:text-xs"
+                            placeholder={__('ssh.ip_placeholder')}
+                            autoComplete="off"
+                        />
+                        <InputError className="mt-1 text-xs" message={errors.ip} />
+                    </div>
+
                     <div className="grid gap-2">
                         <Label htmlFor="password" className="truncate">
                             {__('fields.password')} <span className="mx-1 text-lg text-red-500">*</span>
@@ -98,7 +131,7 @@ export const UpdatePassword = ({ password }: { password: Password }) => {
                                 onChange={(e) => setData('password', e.target.value)}
                                 type={showPassword ? 'text' : 'password'}
                                 className="block w-full placeholder:text-xs"
-                                placeholder={__('passwords.password_placeholder')}
+                                placeholder={__('ssh.password_placeholder')}
                                 autoComplete="off"
                             />
                             <Button variant="ghost" size="icon" onClick={() => setShowPassword((prev) => !prev)} type="button">
@@ -116,21 +149,6 @@ export const UpdatePassword = ({ password }: { password: Password }) => {
                             </Button>
                         </div>
                         <InputError className="mt-1 text-xs" message={errors.password} />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="url" className="truncate">
-                            {__('fields.url')}
-                        </Label>
-                        <Input
-                            id="url"
-                            value={data.url}
-                            onChange={(e) => setData('url', e.target.value)}
-                            type="url"
-                            className="mt-1 block w-full placeholder:text-xs"
-                            placeholder={__('passwords.url_placeholder')}
-                            autoComplete="off"
-                        />
-                        <InputError className="mt-1 text-xs" message={errors.url} />
                     </div>
 
                     <div className="mt-4 flex items-center justify-end gap-4">
