@@ -38,7 +38,7 @@ export default function InitialSavings() {
     const [showCreateSheet, setShowCreateSheet] = useState(false);
     const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
 
-    const destroy = (id: number) => {
+    const destroy = (id: string) => {
         router.delete(route('dashboard.savings.initial.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
