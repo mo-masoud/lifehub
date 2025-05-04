@@ -9,7 +9,7 @@ return [
         'settings' => 'Settings',
         'password_manager' => 'Passwords',
         'search' => 'Search for anything...',
-        'ssh_manager' => 'SSH',
+        'ssh_manager' => 'SSHs',
     ],
 
     'messages' => [
