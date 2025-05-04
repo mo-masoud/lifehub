@@ -10,6 +10,7 @@ return [
         'password_manager' => 'Passwords',
         'search' => 'Search for anything...',
         'ssh_manager' => 'SSHs',
+        'savings' => 'Savings',
     ],
 
     'messages' => [
@@ -122,5 +123,26 @@ return [
 
     'words' => [
         'actions' => 'Actions'
-    ]
+    ],
+
+    'savings' => [
+        'initial_balance' => 'Initial balance',
+        'no_balances_founds' => 'Their are no balances founds.',
+        'type' => 'Type',
+        'amount' => 'Amount',
+        'storage' => 'Storage',
+        'create_balance' => 'Create balance',
+        'type_placeholder' => 'Type of the balance.',
+        'amount_placeholder' => 'Amount of the balance.',
+        'storage_placeholder' => 'Storage of the balance.',
+        'USD' => 'USD',
+        'EGP' => 'EGP',
+        'GOLD24' => 'Gold 24',
+        'GOLD21' => 'Gold 21',
+        'create_new_storage' => 'Create new storage',
+        'storage_name_placeholder' => 'Name of the storage.',
+    ],
+
+    'home' => 'Home',
+    'bank' => 'Bank',
 ];

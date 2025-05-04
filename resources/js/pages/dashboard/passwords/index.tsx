@@ -1,6 +1,6 @@
 import Heading from '@/components/dashboard/heading';
 import { Card } from '@/components/ui/card';
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import { CreatePassword } from '@/pages/dashboard/passwords/create-password';
@@ -119,13 +119,13 @@ export default function Index() {
                         <TableBody>
                             {passwords.data.map((password) => (
                                 <TableRow key={password.id}>
-                                    <TableHead className="text-start text-sm">{password.name}</TableHead>
-                                    <TableHead className="text-start text-sm">
+                                    <TableCell className="text-start text-sm">{password.name}</TableCell>
+                                    <TableCell className="text-start text-sm">
                                         <span className="cursor-pointer" onClick={() => copyToClipboard(password.username)}>
                                             {password.username}
                                         </span>
-                                    </TableHead>
-                                    <TableHead className="flex w-40 items-center gap-2 text-start text-sm">
+                                    </TableCell>
+                                    <TableCell className="flex w-40 items-center gap-2 text-start text-sm">
                                         <span className="cursor-pointer" onClick={() => copyToClipboard(password.password)}>
                                             {showingPasswords.includes(password.id) ? password.password : '**************'}
                                         </span>
@@ -136,8 +136,8 @@ export default function Index() {
                                                 <Eye className="size-4 text-blue-400" />
                                             )}
                                         </Button>
-                                    </TableHead>
-                                    <TableHead className="text-start text-sm">
+                                    </TableCell>
+                                    <TableCell className="text-start text-sm">
                                         {password.url ? (
                                             <a href={password.url} target="_blank">
                                                 <ExternalLink className="size-4 text-blue-500" />
@@ -145,8 +145,8 @@ export default function Index() {
                                         ) : (
                                             'N\\A'
                                         )}
-                                    </TableHead>
-                                    <TableHead className="flex items-center justify-end text-sm">
+                                    </TableCell>
+                                    <TableCell className="flex items-center justify-end text-sm">
                                         <UpdatePassword password={password} />
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
@@ -170,7 +170,7 @@ export default function Index() {
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
-                                    </TableHead>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

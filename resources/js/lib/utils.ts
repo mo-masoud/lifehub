@@ -14,3 +14,7 @@ export const generatePassword = () => {
     }
     return password;
 };
+
+export const formatNumber = (num: number) => {
+    return new Intl.NumberFormat().format(num);
+};

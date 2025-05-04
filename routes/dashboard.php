@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\Auth\NewPasswordController;
 use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
+use App\Http\Controllers\Dashboard\InitialSavingController;
 use App\Http\Controllers\Dashboard\PasswordManagerController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
@@ -90,5 +91,10 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         Route::resource('sshs', SSHController::class)
             ->only(['index', 'store', 'destroy', 'update'])
             ->parameters(['sshs' => 'ssh']);
+
+        Route::resource('savings/initial', InitialSavingController::class)
+            ->only(['index', 'store', 'destroy', 'update'])
+            ->names('savings.initial')
+            ->parameters(['initial' => 'initialSaving']);
     });
 });

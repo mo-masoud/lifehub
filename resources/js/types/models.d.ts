@@ -20,3 +20,21 @@ export interface SSH {
     created_at: string;
     updated_at: string;
 }
+
+export type BalanceType = 'USD' | 'EGP' | 'GOLD24' | 'GOLD21';
+
+export interface StorageLocation {
+    id: string;
+    name: string;
+    created_at: string;
+}
+
+export interface Balance {
+    id: string;
+    user_id: number;
+    amount: number;
+    type: BalanceType;
+    storage_location: StorageLocation;
+    created_at: string;
+    updated_at: string;
+}

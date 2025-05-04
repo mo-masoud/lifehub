@@ -1,6 +1,6 @@
 import Heading from '@/components/dashboard/heading';
 import { Card } from '@/components/ui/card';
-import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
@@ -120,23 +120,23 @@ export default function Index() {
                         <TableBody>
                             {sshs.data.map((ssh) => (
                                 <TableRow key={ssh.id}>
-                                    <TableHead className="text-start text-sm">{ssh.name}</TableHead>
-                                    <TableHead className="text-start text-sm">
+                                    <TableCell className="text-start text-sm">{ssh.name}</TableCell>
+                                    <TableCell className="text-start text-sm">
                                         <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.username)}>
                                             {ssh.username}
                                         </span>
-                                    </TableHead>
-                                    <TableHead className="text-start text-sm">
+                                    </TableCell>
+                                    <TableCell className="text-start text-sm">
                                         <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.ip)}>
                                             {ssh.ip}
                                         </span>
-                                    </TableHead>
-                                    <TableHead className="text-start text-sm">
+                                    </TableCell>
+                                    <TableCell className="text-start text-sm">
                                         <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.prompt)}>
                                             {ssh.prompt}
                                         </span>
-                                    </TableHead>
-                                    <TableHead className="w-40 text-start text-sm">
+                                    </TableCell>
+                                    <TableCell className="w-40 text-start text-sm">
                                         <span className="cursor-pointer ltr:mr-2 rtl:ml-2" onClick={() => copyToClipboard(ssh.password)}>
                                             {showingPasswords.includes(ssh.id) ? ssh.password : '**************'}
                                         </span>
@@ -147,8 +147,8 @@ export default function Index() {
                                                 <Eye className="size-4 text-blue-400" />
                                             )}
                                         </Button>
-                                    </TableHead>
-                                    <TableHead className="flex items-center justify-end text-sm">
+                                    </TableCell>
+                                    <TableCell className="flex items-center justify-end text-sm">
                                         <UpdateSsh ssh={ssh} />
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
@@ -172,7 +172,7 @@ export default function Index() {
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
-                                    </TableHead>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

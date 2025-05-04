@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Computer, KeyRound, LayoutGrid } from 'lucide-react';
+import { Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -26,13 +26,21 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
+const savingsNavItems: NavItem[] = [
+    {
+        title: __('savings.initial_balance'),
+        href: route('dashboard.savings.initial.index'),
+        icon: Scale,
+    },
+];
+
 const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
-    const { dir } = usePage<SharedData>().props;
+    const page = usePage<SharedData>();
 
     return (
-        <Sidebar collapsible="icon" variant="inset" side={dir === 'rtl' ? 'right' : 'left'}>
+        <Sidebar collapsible="icon" variant="inset" side={page.props.dir === 'rtl' ? 'right' : 'left'}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -46,7 +54,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} savingsItems={savingsNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
