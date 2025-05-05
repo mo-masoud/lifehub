@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\Auth\NewPasswordController;
 use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
+use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\InitialSavingController;
 use App\Http\Controllers\Dashboard\PasswordManagerController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
@@ -68,9 +69,7 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
     });
 
     Route::middleware(['dashboard.auth', 'verified'])->group(function () {
-        Route::get('/', static function () {
-            return Inertia::render('dashboard/home');
-        })->name('home');
+        Route::get('/', HomeController::class)->name('home');
 
         Route::redirect('settings', 'settings/profile');
 
