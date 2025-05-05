@@ -5,9 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { __ } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
-import { StorageLocation } from '@/types/models';
+import { StorageLocation, Transaction } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
@@ -27,18 +28,18 @@ type TransactionForm = {
     date?: string;
 };
 
-export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) => void }) => {
+export const TransactionForm = ({ transaction, onSave }: { transaction?: Transaction; onSave: (form: TransactionForm) => void }) => {
     const [locations, setLocations] = useState<StorageLocation[]>([]);
 
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<TransactionForm>>({
-        type: '',
-        amount: '',
-        direction: 'in',
-        storage_location_id: '',
-        from_type: '',
-        from_amount: '',
-        notes: '',
-        date: '',
+    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<TransactionForm>>({
+        type: transaction?.type || '',
+        amount: String(transaction?.amount || ''),
+        direction: transaction?.direction || 'out',
+        storage_location_id: transaction?.storage_location?.id.toString() || '',
+        from_type: transaction?.from_type || '',
+        from_amount: transaction?.from_amount || '',
+        notes: transaction?.notes || '',
+        date: transaction?.date || new Date().toDateString(),
     });
 
     const fetchLocations = async () => {
@@ -57,11 +58,24 @@ export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) =>
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('dashboard.savings.transactions.store'), {
+        if (!transaction) {
+            post(route('dashboard.savings.transactions.store'), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    toast.success(__('messages.created_successfully'));
+                    onSave(data);
+                },
+            });
+
+            return;
+        }
+
+        patch(route('dashboard.savings.transactions.update', transaction.id), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success(__('messages.created_successfully'));
+                toast.success(__('messages.updated_successfully'));
                 onSave(data);
             },
         });
@@ -248,6 +262,21 @@ export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) =>
                     </SelectContent>
                 </Select>
                 <InputError className="mt-1 text-xs" message={errors.storage_location_id} />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="notes" className="truncate">
+                    {__('savings.notes')}
+                </Label>
+                <Textarea
+                    id="notes"
+                    value={data.notes}
+                    onChange={(e) => setData('notes', e.target.value)}
+                    className="mt-1 block w-full placeholder:text-xs"
+                    placeholder={__('savings.notes_placeholder')}
+                    autoComplete="off"
+                />
+                <InputError className="mt-1 text-xs" message={errors.notes} />
             </div>
 
             <div className="mt-4 flex items-center justify-end gap-4">

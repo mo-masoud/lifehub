@@ -1,6 +1,17 @@
 import Heading from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import { Button } from '@/components/ui/button';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
@@ -9,7 +20,7 @@ import { formatNumber } from '@/lib/utils';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Snapshot } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Aperture, Eye, EyeOff, PlusCircle } from 'lucide-react';
+import { Aperture, Eye, EyeOff, PlusCircle, Trash2 } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -39,6 +50,15 @@ export default function Snapshots() {
                 },
             },
         );
+    };
+
+    const destroy = (id: string) => {
+        router.delete(route('dashboard.savings.snapshots.destroy', id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success(__('messages.deleted_successfully'));
+            },
+        });
     };
 
     function renderChange(current: number, prev: number | null) {
@@ -149,6 +169,29 @@ export default function Snapshots() {
                                                         <Eye className="size-4 text-blue-500" />
                                                     )}
                                                 </Button>
+
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="ghost" size="icon">
+                                                            <Trash2 className="size-4 text-red-500" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
+                                                            <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
+                                                            <AlertDialogAction
+                                                                className={buttonVariants({ variant: 'destructive' })}
+                                                                onClick={() => destroy(snapshot.id)}
+                                                            >
+                                                                {__('messages.delete')}
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </TableCell>
                                         </TableRow>
 

@@ -35,10 +35,10 @@ class Transaction extends Model
 
                 $monthName = __('shared.' . $createdAt->format('F'));
 
-                $day   = $createdAt->day;
-                $year  = $createdAt->year;
+                $day = $createdAt->day;
+                $year = $createdAt->year;
 
-                return "{$day} - {$monthName} - {$year}";
+                return "{$day} {$monthName} {$year}";
             },
         );
     }

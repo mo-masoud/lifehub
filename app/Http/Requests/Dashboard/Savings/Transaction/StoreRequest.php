@@ -33,7 +33,6 @@ class StoreRequest extends FormRequest
                 'storage_location_id' => ['required', 'exists:savings_storage_locations,id'],
                 'notes' => ['nullable', 'string'],
 
-                // فقط إذا direction = transfer
                 'from_type' => ['nullable', 'required_if:direction,transfer', Rule::in(SavingType::values())],
                 'from_amount' => ['nullable', 'required_if:direction,transfer', 'numeric', 'gt:0'],
             ];

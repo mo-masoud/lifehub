@@ -4,12 +4,23 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\Transaction\StoreRequest;
+use App\Http\Requests\Dashboard\Savings\Transaction\UpdateRequest;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function destroy(Transaction $transaction)
+    {
+        if (auth()->id() !== $transaction->user_id) {
+            return back()->with('error', 'You do not have permission to delete this transaction.');
+        }
+        $transaction->delete();
+
+        return back()->with('success', 'Transaction deleted successfully.');
+    }
+
     public function index(Request $request)
     {
         $filters['direction'] = $request->direction;
@@ -47,5 +58,16 @@ class TransactionController extends Controller
         Transaction::create($data);
 
         return back()->with('success', 'Transaction created successfully.');
+    }
+
+    public function update(Transaction $transaction, UpdateRequest $request)
+    {
+        $data = $request->validated();
+        $data['from_type'] = $data['direction'] === 'transfer' ? $data['from_type'] : null;
+        $data['from_amount'] = $data['direction'] === 'transfer' ? $data['from_amount'] : null;
+
+        $transaction->update($data);
+
+        return back()->with('success', 'Transaction updated successfully.');
     }
 }

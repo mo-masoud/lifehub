@@ -1,6 +1,17 @@
 import Heading from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import { Button } from '@/components/ui/button';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -11,9 +22,10 @@ import { FiltersFrom } from '@/pages/dashboard/savings/transactions/filters-from
 import { TransactionForm } from '@/pages/dashboard/savings/transactions/transaction-form';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Transaction } from '@/types/models';
-import { Head, usePage } from '@inertiajs/react';
-import { ArrowDown, ArrowLeftRight, ArrowUp, Filter, PlusCircle, Repeat } from 'lucide-react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { ArrowDown, ArrowLeftRight, ArrowUp, FilePenLine, Filter, PlusCircle, Repeat, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -53,6 +65,16 @@ export default function Index() {
     const { transactions, filters } = usePage<{ transactions: Pagination<Transaction>; filters: Record<string, any> }>().props;
 
     const [showCreateSheet, setShowCreateSheet] = useState(false);
+    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
+
+    const destroy = (id: string) => {
+        router.delete(route('dashboard.savings.transactions.destroy', id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success(__('messages.deleted_successfully'));
+            },
+        });
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -108,7 +130,10 @@ export default function Index() {
                                 <TableHead className="text-start text-xs">{__('savings.storage')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.from_type')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.from_amount')}</TableHead>
-                                <TableHead className="text-end text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">{__('savings.notes')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('savings.notes')}</TableHead>
+                                <TableHead className="text-start text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">
+                                    <span className="sr-only">{__('words.actions')}</span>
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -123,7 +148,51 @@ export default function Index() {
                                     <TableCell className="text-start text-sm">{__(tr.storage_location.name)}</TableCell>
                                     <TableCell className="text-start text-sm">{tr.from_type}</TableCell>
                                     <TableCell className="text-start text-sm">{tr.from_amount}</TableCell>
-                                    <TableCell className="text-end text-sm">{tr.notes}</TableCell>
+                                    <TableCell className="text-start text-sm">{tr.notes}</TableCell>
+                                    <TableCell className="flex items-center justify-end text-sm">
+                                        <Sheet
+                                            open={showUpdateSheet === tr.id}
+                                            onOpenChange={(isOpen) => {
+                                                setShowUpdateSheet(isOpen ? tr.id : undefined);
+                                            }}
+                                        >
+                                            <SheetTrigger asChild>
+                                                <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(tr.id)}>
+                                                    <FilePenLine className="size-4 text-green-500" />
+                                                </Button>
+                                            </SheetTrigger>
+                                            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                                                <SheetHeader>
+                                                    <SheetTitle>{__('savings.update_transaction')}</SheetTitle>
+                                                    <SheetDescription className="sr-only"></SheetDescription>
+                                                </SheetHeader>
+
+                                                <TransactionForm transaction={tr} onSave={() => setShowUpdateSheet(undefined)} />
+                                            </SheetContent>
+                                        </Sheet>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="ghost" size="icon">
+                                                    <Trash2 className="size-4 text-red-500" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
+                                                    <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        className={buttonVariants({ variant: 'destructive' })}
+                                                        onClick={() => destroy(tr.id)}
+                                                    >
+                                                        {__('messages.delete')}
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

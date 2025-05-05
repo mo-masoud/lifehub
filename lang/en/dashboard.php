@@ -179,6 +179,9 @@ return [
         'usd_rate_fallback_placeholder' => 'USD Rate of the transaction.',
         'gold24_rate_fallback_placeholder' => 'Gold 24 Price of the transaction.',
         'gold21_rate_fallback_placeholder' => 'Gold 21 Price of the transaction.',
+        'notes_placeholder' => 'Notes of the transaction.',
+        'update_balance' => 'Update initial savings',
+        'update_transaction' => 'Update transaction',
     ],
 
     'home' => 'Home',

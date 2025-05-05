@@ -110,7 +110,7 @@ export default function InitialSavings() {
                                             </SheetTrigger>
                                             <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
                                                 <SheetHeader>
-                                                    <SheetTitle>{__('savings.create_balance')}</SheetTitle>
+                                                    <SheetTitle>{__('savings.update_balance')}</SheetTitle>
                                                     <SheetDescription className="sr-only"></SheetDescription>
                                                 </SheetHeader>
 

@@ -102,12 +102,12 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->parameters(['initial' => 'initialSaving']);
 
         Route::resource('savings/snapshots', SnapshotController::class)
-            ->only(['index', 'store'])
+            ->only(['index', 'store', 'destroy'])
             ->names('savings.snapshots')
             ->parameters(['initial' => 'snapshot']);
 
         Route::resource('savings/transactions', TransactionController::class)
-            ->only(['index', 'store'])
+            ->only(['index', 'store', 'update', 'destroy'])
             ->names('savings.transactions')
             ->parameters(['initial' => 'transaction']);
     });
