@@ -173,6 +173,12 @@ return [
         'max_amount' => 'Max amount',
         'min_amount_placeholder' => 'Min amount of the transaction.',
         'max_amount_placeholder' => 'Max amount of the transaction.',
+        'usd_rate_fallback' => 'USD Rate fallback',
+        'gold24_rate_fallback' => 'Gold 24 Price fallback',
+        'gold21_rate_fallback' => 'Gold 21 Price fallback',
+        'usd_rate_fallback_placeholder' => 'USD Rate of the transaction.',
+        'gold24_rate_fallback_placeholder' => 'Gold 24 Price of the transaction.',
+        'gold21_rate_fallback_placeholder' => 'Gold 21 Price of the transaction.',
     ],
 
     'home' => 'Home',

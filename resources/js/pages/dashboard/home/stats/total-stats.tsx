@@ -5,6 +5,7 @@ export const TotalStats = ({ savingsStats }: { savingsStats: Record<string, any>
     const totalUSD = (savingsStats.total_usd as number).toFixed(2);
 
     const renderChangeValue = (value: number) => {
+        if (value === null) return 'N/A';
         if (value > 0) {
             return <span className="text-green-500">{value} % ▲</span>;
         } else if (value < 0) {
@@ -23,7 +24,7 @@ export const TotalStats = ({ savingsStats }: { savingsStats: Record<string, any>
                     <div className="truncate text-sm font-semibold md:text-lg">{renderChangeValue(savingsStats.change_percent as number)}</div>
                 </div>
                 <StatCard label="Current month" value={savingsStats.current_month} />
-                <StatCard label="Latest snapshot" value={savingsStats.latest_snapshot_date} />
+                <StatCard label="Latest snapshot" value={savingsStats.latest_snapshot_date || 'N/A'} />
                 <StatCard label="Snapshots" value={savingsStats.snapshot_count} />
             </div>
         </div>

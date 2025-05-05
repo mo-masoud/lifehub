@@ -17,6 +17,7 @@ use App\Http\Controllers\Dashboard\Settings\ProfileController;
 use App\Http\Controllers\Dashboard\SnapshotController;
 use App\Http\Controllers\Dashboard\SSHController;
 use App\Http\Controllers\Dashboard\TransactionController;
+use App\Http\Controllers\Dashboard\UserSettingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -85,6 +86,8 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         })->name('appearance');
 
         Route::get('settings/locale', LocaleController::class)->name('settings.locale');
+
+        Route::patch('settings/savings/rate-fallback', [UserSettingController::class, 'updateRateFallback'])->name('settings.savings.rate-fallback.update');
 
         Route::resource('passwords', PasswordManagerController::class)
             ->only(['index', 'store', 'destroy', 'update']);

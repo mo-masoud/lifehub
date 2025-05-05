@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Snapshot;
 use App\Models\SnapshotItem;
 use App\Models\User;
+use App\Models\UserSetting;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +69,7 @@ class CreateSnapshotService
         $response = Http::get('https://api.exchangerate-api.com/v4/latest/USD');
         $data = $response->json();
 
-        return isset($data['rates']['EGP']) ? (float) $data['rates']['EGP'] : 50.0;
+        return isset($data['rates']['EGP']) ? (float) $data['rates']['EGP'] : UserSetting::get(auth()->user(), 'usd_rate_fallback', 50);
     }
 
     /**
@@ -77,8 +78,8 @@ class CreateSnapshotService
     protected function getGoldPrice(int $karat): float
     {
         return match ($karat) {
-            24 => 4000.00,
-            21 => 3700.00,
+            24 => UserSetting::get(auth()->user(), 'gold24_rate_fallback', 4000),
+            21 => UserSetting::get(auth()->user(), 'gold21_rate_fallback', 3700),
             default => throw new Exception("Unsupported karat"),
         };
     }

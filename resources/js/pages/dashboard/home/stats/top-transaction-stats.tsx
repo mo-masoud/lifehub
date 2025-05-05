@@ -1,4 +1,5 @@
 import { __ } from '@/lib/i18n';
+import { formatNumber } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, Repeat } from 'lucide-react';
 
 export const TopTransactionStats = ({
@@ -49,7 +50,7 @@ export const TopTransactionStats = ({
         if (dir === 'out') {
             return stat ? (
                 <div className="inline-flex items-center text-xs font-semibold">
-                    ({stat?.amount}){' '}
+                    ({formatNumber(stat?.amount)}){' '}
                     <span className="inline-flex items-center text-red-500">
                         <ArrowLeft className="size-4" /> {__(stat?.location)}
                     </span>

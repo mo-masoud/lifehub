@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasMany(Password::class);
     }
 
+    public function settings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class);
+    }
+
     /**
      * The attributes that should be appended to the model's array form.
      *
