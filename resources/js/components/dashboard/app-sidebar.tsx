@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
+import { Aperture, Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -31,6 +31,11 @@ const savingsNavItems: NavItem[] = [
         title: __('savings.initial_balance'),
         href: route('dashboard.savings.initial.index'),
         icon: Scale,
+    },
+    {
+        title: __('savings.snapshots'),
+        href: route('dashboard.savings.snapshots.index'),
+        icon: Aperture,
     },
 ];
 

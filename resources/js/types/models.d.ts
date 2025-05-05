@@ -38,3 +38,27 @@ export interface Balance {
     created_at: string;
     updated_at: string;
 }
+
+export interface SnapshotItem {
+    id: string;
+    type: string;
+    amount: number;
+    rate: number;
+    storage_location: StorageLocation;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Snapshot {
+    id: string;
+    user_id: number;
+    usd_rate: number;
+    gold24_price: number;
+    gold21_price: number;
+    date: string;
+    total_egp: number;
+    total_usd: number;
+    created_at: string;
+    updated_at: string;
+    items: SnapshotItem[];
+}

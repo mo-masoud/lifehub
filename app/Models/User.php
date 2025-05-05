@@ -36,6 +36,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function initialSavings(): HasMany
+    {
+        return $this->hasMany(InitialSaving::class);
+    }
+
     public function passwords(): HasMany
     {
         return $this->hasMany(Password::class);

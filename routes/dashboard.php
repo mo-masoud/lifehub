@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\PasswordManagerController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
+use App\Http\Controllers\Dashboard\SnapshotController;
 use App\Http\Controllers\Dashboard\SSHController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -96,5 +97,10 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->only(['index', 'store', 'destroy', 'update'])
             ->names('savings.initial')
             ->parameters(['initial' => 'initialSaving']);
+
+        Route::resource('savings/snapshots', SnapshotController::class)
+            ->only(['index', 'store'])
+            ->names('savings.snapshots')
+            ->parameters(['initial' => 'snapshot']);
     });
 });

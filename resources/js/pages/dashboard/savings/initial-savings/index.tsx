@@ -1,4 +1,5 @@
 import Heading from '@/components/dashboard/heading';
+import { TablePagination } from '@/components/dashboard/table-pagination';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -144,6 +145,8 @@ export default function InitialSavings() {
                         </TableBody>
                     </Table>
                 </Card>
+
+                <TablePagination pagination={balances} />
             </div>
         </AppLayout>
     );
