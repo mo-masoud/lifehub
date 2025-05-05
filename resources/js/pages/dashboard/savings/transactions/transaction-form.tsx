@@ -90,7 +90,7 @@ export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) =>
                         />
                     </PopoverContent>
                 </Popover>
-                <InputError className="mt-1 text-xs" message={errors.amount} />
+                <InputError className="mt-1 text-xs" message={errors.date} />
             </div>
 
             <div className="grid gap-2">
@@ -125,7 +125,7 @@ export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) =>
                     id="amount"
                     value={data.amount}
                     type="text"
-                    onChange={(e) => setData('amount', e.target.value.replace(/[^0-9]/g, '') as any)}
+                    onChange={(e) => setData('amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                     className="mt-1 block w-full placeholder:text-xs"
                     placeholder={__('savings.amount_placeholder')}
                     autoComplete="off"
@@ -216,7 +216,7 @@ export const TransactionForm = ({ onSave }: { onSave: (form: TransactionForm) =>
                             id="from_amount"
                             value={data.from_amount}
                             type="text"
-                            onChange={(e) => setData('from_amount', e.target.value.replace(/[^0-9]/g, '') as any)}
+                            onChange={(e) => setData('from_amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                             className="mt-1 block w-full placeholder:text-xs"
                             placeholder={__('savings.from_amount_placeholder')}
                             autoComplete="off"

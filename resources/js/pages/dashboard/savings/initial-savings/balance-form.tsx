@@ -133,7 +133,7 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
                     id="amount"
                     value={data.amount}
                     type="text"
-                    onChange={(e) => setData('amount', e.target.value.replace(/[^0-9]/g, '') as any)}
+                    onChange={(e) => setData('amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                     className="mt-1 block w-full placeholder:text-xs"
                     placeholder={__('savings.amount_placeholder')}
                     autoComplete="off"

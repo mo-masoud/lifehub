@@ -46,6 +46,9 @@ export default function Snapshots() {
 
         const diff = current - prev;
         const percent = (diff / prev) * 100;
+
+        if (percent === 0) return null;
+
         const isUp = diff > 0;
 
         return (
@@ -110,6 +113,8 @@ export default function Snapshots() {
                                             {isIncrease ? '▲' : '▼'} {Math.abs(percent).toFixed(2)}%
                                         </span>
                                     );
+
+                                    if (percent === 0) change = null;
                                 }
 
                                 return (

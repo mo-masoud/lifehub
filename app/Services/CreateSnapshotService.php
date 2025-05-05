@@ -18,6 +18,8 @@ class CreateSnapshotService
      */
     public function handle(User $user): Snapshot
     {
+        $user->load('initialSavings', 'transactions');
+
         return DB::transaction(function () use ($user) {
             // Step 1: Get current rates
             $usdRate = $this->getUsdRate();
@@ -36,7 +38,7 @@ class CreateSnapshotService
             $balances = $this->calculateUserBalance($user);
 
             foreach ($balances as $balance) {
-                $type = $balance['type']->name;
+                $type = $balance['type'];
                 $rate = match ($type) {
                     'USD' => $usdRate,
                     'GOLD24' => $gold24,
@@ -64,7 +66,9 @@ class CreateSnapshotService
     protected function getUsdRate(): float
     {
         $response = Http::get('https://api.exchangerate-api.com/v4/latest/USD');
-        return $response->json()['rates']['EGP'] ?? 50;
+        $data = $response->json();
+
+        return isset($data['rates']['EGP']) ? (float) $data['rates']['EGP'] : 50.0;
     }
 
     /**
@@ -81,15 +85,65 @@ class CreateSnapshotService
 
     protected function calculateUserBalance(User $user): array
     {
-        return $user->initialSavings()
-            ->selectRaw('type, storage_location_id, SUM(amount) as amount')
-            ->groupBy('type', 'storage_location_id')
-            ->get()
-            ->map(fn ($item) => [
-                'type' => $item->type,
-                'storage_location_id' => $item->storage_location_id,
-                'amount' => $item->amount,
-            ])
-            ->toArray();
+        $final = [];
+
+        // Step 1: Initial savings
+        foreach ($user->initialSavings as $saving) {
+            $key = $saving->type->value . '-' . $saving->storage_location_id;
+            $final[$key] = [
+                'type' => $saving->type->value,
+                'storage_location_id' => $saving->storage_location_id,
+                'amount' => $saving->amount,
+            ];
+        }
+
+        // Step 2: Transactions
+        foreach ($user->transactions as $tx) {
+            if ($tx->direction === 'in') {
+                $key = $tx->type . '-' . $tx->storage_location_id;
+                if (!isset($final[$key])) {
+                    $final[$key] = [
+                        'type' => $tx->type,
+                        'storage_location_id' => $tx->storage_location_id,
+                        'amount' => 0,
+                    ];
+                }
+                $final[$key]['amount'] += $tx->amount;
+            } elseif ($tx->direction === 'out') {
+                $key = $tx->type . '-' . $tx->storage_location_id;
+                if (!isset($final[$key])) {
+                    $final[$key] = [
+                        'type' => $tx->type,
+                        'storage_location_id' => $tx->storage_location_id,
+                        'amount' => 0,
+                    ];
+                }
+                $final[$key]['amount'] -= $tx->amount;
+            } elseif ($tx->direction === 'transfer') {
+                $fromKey = $tx->from_type . '-' . $tx->storage_location_id;
+                if (!isset($final[$fromKey])) {
+                    $final[$fromKey] = [
+                        'type' => $tx->from_type,
+                        'storage_location_id' => $tx->storage_location_id,
+                        'amount' => 0,
+                    ];
+                }
+                $final[$fromKey]['amount'] -= $tx->from_amount;
+
+                $toKey = $tx->type . '-' . $tx->storage_location_id;
+                if (!isset($final[$toKey])) {
+                    $final[$toKey] = [
+                        'type' => $tx->type,
+                        'storage_location_id' => $tx->storage_location_id,
+                        'amount' => 0,
+                    ];
+                }
+                $final[$toKey]['amount'] += $tx->amount;
+            }
+        }
+
+        // Remove zero balances
+        return array_values(array_filter($final, fn ($item) => $item['amount'] != 0));
     }
 }
+

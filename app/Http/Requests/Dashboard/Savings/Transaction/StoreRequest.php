@@ -34,8 +34,8 @@ class StoreRequest extends FormRequest
                 'notes' => ['nullable', 'string'],
 
                 // فقط إذا direction = transfer
-                'from_type' => ['required_if:direction,transfer', Rule::in(SavingType::values())],
-                'from_amount' => ['required_if:direction,transfer', 'numeric', 'gt:0'],
+                'from_type' => ['nullable', 'required_if:direction,transfer', Rule::in(SavingType::values())],
+                'from_amount' => ['nullable', 'required_if:direction,transfer', 'numeric', 'gt:0'],
             ];
     }
 }

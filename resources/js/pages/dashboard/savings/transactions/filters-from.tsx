@@ -184,7 +184,7 @@ export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
                     id="min_amount"
                     value={data.min_amount || ''}
                     type="text"
-                    onChange={(e) => setData('min_amount', e.target.value.replace(/[^0-9]/g, '') as any)}
+                    onChange={(e) => setData('min_amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                     className="col-span-2 mt-1 block w-full placeholder:text-xs"
                     placeholder={__('savings.min_amount_placeholder')}
                     autoComplete="off"
@@ -199,7 +199,7 @@ export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
                     id="max_amount"
                     value={data.max_amount || ''}
                     type="text"
-                    onChange={(e) => setData('max_amount', e.target.value.replace(/[^0-9]/g, '') as any)}
+                    onChange={(e) => setData('max_amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                     className="col-span-2 mt-1 block w-full placeholder:text-xs"
                     placeholder={__('savings.max_amount_placeholder')}
                     autoComplete="off"
