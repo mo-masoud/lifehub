@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
 use App\Http\Controllers\Dashboard\SnapshotController;
 use App\Http\Controllers\Dashboard\SSHController;
+use App\Http\Controllers\Dashboard\TransactionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -102,5 +103,10 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->only(['index', 'store'])
             ->names('savings.snapshots')
             ->parameters(['initial' => 'snapshot']);
+
+        Route::resource('savings/transactions', TransactionController::class)
+            ->only(['index', 'store'])
+            ->names('savings.transactions')
+            ->parameters(['initial' => 'transaction']);
     });
 });

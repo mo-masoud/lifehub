@@ -62,3 +62,18 @@ export interface Snapshot {
     updated_at: string;
     items: SnapshotItem[];
 }
+
+export interface Transaction {
+    id: string;
+    user_id: number;
+    amount: number;
+    direction: string;
+    type: string;
+    storage_location: StorageLocation;
+    from_type: string;
+    from_amount: string;
+    notes: string;
+    date: string;
+    created_at: string;
+    updated_at: string;
+}
