@@ -1,17 +1,14 @@
 import InputError from '@/components/dashboard/input-error';
+import { SelectOrCreate } from '@/components/dashboard/select-or-create';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { __ } from '@/lib/i18n';
-import { cn } from '@/lib/utils';
 import { Balance, BalanceType, StorageLocation } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { Check, ChevronsUpDown, Plus, X } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -29,11 +26,7 @@ type BalanceFormProps = {
 const BALANCE_TYPES: BalanceType[] = ['USD', 'EGP', 'GOLD24', 'GOLD21'];
 
 export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
-    const [openSelectLocation, setOpenSelectLocation] = useState(false);
     const [locations, setLocations] = useState<StorageLocation[]>([]);
-    const [creatingNewStorage, setCreatingNewStorage] = useState(false);
-    const [newLocation, setNewLocation] = useState('');
-    const [newLocationError, setNewLocationError] = useState('');
 
     const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<BalanceForm>>({
         type: balance?.type || ('' as BalanceType),
@@ -50,29 +43,17 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
         }
     };
 
-    const handleSaveNewLocation = async () => {
-        if (!newLocation.trim()) return;
-        try {
-            const response = await axios.post('/api/savings/storage-locations', {
-                name: newLocation,
-            });
-            const added = response.data;
-            setLocations((prev) => [...prev, added]);
-            setData('storage_location_id', String(added.id));
-            setCreatingNewStorage(false);
-            setNewLocation('');
-            setNewLocationError('');
-            setOpenSelectLocation(false);
-        } catch (err: any) {
-            setNewLocationError(err.response.data.message);
-        }
+    const handleCreateLocation = async (name: string) => {
+        const response = await axios.post('/api/savings/storage-locations', {
+            name,
+        });
+
+        return response.data;
     };
 
     useEffect(() => {
         fetchLocations();
     }, []);
-
-    const selectedLocationName = locations.find((location) => location.id == data.storage_location_id)?.name || 'savings.storage_placeholder';
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -146,80 +127,17 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
                     {__('savings.storage')} <span className="mx-1 text-lg text-red-500">*</span>
                 </Label>
 
-                <Popover open={openSelectLocation} onOpenChange={setOpenSelectLocation}>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={openSelectLocation}
-                            className={cn('mt-1 w-full justify-between', !data.storage_location_id && 'text-muted-foreground text-xs')}
-                        >
-                            {__(selectedLocationName)}
-                            <ChevronsUpDown className="text-muted-foreground ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[567px] p-0">
-                        <Command>
-                            {creatingNewStorage ? (
-                                <>
-                                    <div className="flex items-center gap-2 px-3 py-2">
-                                        <Input
-                                            className="flex-1"
-                                            value={newLocation}
-                                            placeholder={__('savings.storage_name_placeholder')}
-                                            onChange={(e) => setNewLocation(e.target.value)}
-                                            autoFocus
-                                        />
-                                        <Button type="button" size="icon" variant="ghost" onClick={handleSaveNewLocation}>
-                                            <Check className="h-4 w-4" />
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            size="icon"
-                                            variant="ghost"
-                                            onClick={() => {
-                                                setCreatingNewStorage(false);
-                                                setNewLocationError('');
-                                            }}
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-
-                                    {newLocationError && <InputError className="mx-2 mt-0.5 mb-2 text-xs" message={newLocationError} />}
-                                </>
-                            ) : (
-                                <Button variant="ghost" className="m-1 flex items-center justify-between" onClick={() => setCreatingNewStorage(true)}>
-                                    <h6 className="text-muted-foreground px-2 text-xs">Choose from the list or create a new one</h6>
-                                    <Plus />
-                                </Button>
-                            )}
-
-                            <CommandSeparator />
-
-                            <CommandList>
-                                <CommandEmpty>No framework found.</CommandEmpty>
-                                <CommandGroup>
-                                    {locations.map((location) => (
-                                        <CommandItem
-                                            key={location.id}
-                                            value={location.id}
-                                            onSelect={() => {
-                                                setData('storage_location_id', location.id);
-                                                setOpenSelectLocation(false);
-                                            }}
-                                        >
-                                            <Check
-                                                className={cn('mr-2 h-4 w-4', data.storage_location_id == location.id ? 'opacity-100' : 'opacity-0')}
-                                            />
-                                            {__(location.name)}
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </PopoverContent>
-                </Popover>
+                <SelectOrCreate
+                    selectedOption={data.storage_location_id}
+                    placeholder={__('savings.storage_placeholder')}
+                    options={locations}
+                    onCreate={(location) => {
+                        setLocations((prev) => [...prev, location]);
+                        setData('storage_location_id', String(location.id));
+                    }}
+                    onChange={(category) => setData('storage_location_id', category.id)}
+                    create={handleCreateLocation}
+                />
             </div>
 
             <div className="mt-4 flex items-center justify-end gap-4">

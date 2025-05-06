@@ -32,7 +32,7 @@ class TransactionController extends Controller
         $filters['minDate'] = $request->min_date;
         $filters['maxDate'] = $request->max_date;
 
-        $transactions = Transaction::with('storageLocation')
+        $transactions = Transaction::with('storageLocation', 'category')
             ->where('user_id', auth()->id())
             ->when($filters['direction'], fn($q) => $q->where('direction', $filters['direction']))
             ->when($filters['type'], fn($q) => $q->where('type', $filters['type']))

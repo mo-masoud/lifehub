@@ -1,4 +1,5 @@
 import InputError from '@/components/dashboard/input-error';
+import { SelectOrCreate } from '@/components/dashboard/select-or-create';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { __ } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
-import { StorageLocation, Transaction } from '@/types/models';
+import { StorageLocation, Transaction, TransactionCategory } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
@@ -26,10 +27,12 @@ type TransactionForm = {
     storage_location_id: string;
     notes?: string;
     date?: string;
+    transaction_category_id?: string;
 };
 
 export const TransactionForm = ({ transaction, onSave }: { transaction?: Transaction; onSave: (form: TransactionForm) => void }) => {
     const [locations, setLocations] = useState<StorageLocation[]>([]);
+    const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
     const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<TransactionForm>>({
         type: transaction?.type || '',
@@ -40,7 +43,17 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
         from_amount: transaction?.from_amount || '',
         notes: transaction?.notes || '',
         date: transaction?.date || new Date().toDateString(),
+        transaction_category_id: transaction?.category?.id || '',
     });
+
+    const handleCreateCategory = async (name: string) => {
+        const response = await axios.post('/api/savings/transaction-categories', {
+            name,
+            direction: data.direction,
+        });
+
+        return response.data;
+    };
 
     const fetchLocations = async () => {
         try {
@@ -51,8 +64,18 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('/api/savings/transaction-categories'); // adjust route as needed
+            setCategories(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
         fetchLocations();
+        fetchCategories();
     }, []);
 
     const submit: FormEventHandler = (e) => {
@@ -238,6 +261,27 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
                         <InputError className="mt-1 text-xs" message={errors.amount} />
                     </div>
                 </>
+            )}
+
+            {data.direction !== 'transfer' && (
+                <div className="grid gap-2">
+                    <Label htmlFor="transaction_category_id" className="truncate">
+                        {__('savings.category')} <span className="mx-1 text-lg text-red-500">*</span>
+                    </Label>
+
+                    <SelectOrCreate
+                        selectedOption={data.transaction_category_id}
+                        placeholder={__('savings.category_placeholder')}
+                        options={categories}
+                        filter={(category) => category.direction === data.direction}
+                        onCreate={(category) => {
+                            setCategories((prev) => [...prev, category]);
+                            setData('transaction_category_id', String(category.id));
+                        }}
+                        onChange={(category) => setData('transaction_category_id', category.id)}
+                        create={handleCreateCategory}
+                    />
+                </div>
             )}
 
             <div className="grid gap-2">

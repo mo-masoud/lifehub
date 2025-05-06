@@ -33,6 +33,7 @@ return [
         'history' => 'History',
         'showing_pagination' => 'Showing :from to :to of :total results.',
         'filter' => 'Filter',
+        'choose_from_list_or_create_new' => 'Choose from the list or create a new one'
     ],
 
     'auth' => [
@@ -182,6 +183,10 @@ return [
         'notes_placeholder' => 'Notes of the transaction.',
         'update_balance' => 'Update initial savings',
         'update_transaction' => 'Update transaction',
+        'category' => 'Category',
+        'category_placeholder' => 'Category of the transaction.',
+        'category_name_placeholder' => 'Name of the category.',
+        'category_direction_placeholder' => 'Direction of the category.',
     ],
 
     'home' => 'Home',

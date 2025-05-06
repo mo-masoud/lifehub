@@ -63,6 +63,13 @@ export interface Snapshot {
     items: SnapshotItem[];
 }
 
+export interface TransactionCategory {
+    id: string;
+    name: string;
+    direction: string;
+    created_at: string;
+}
+
 export interface Transaction {
     id: string;
     user_id: number;
@@ -70,6 +77,7 @@ export interface Transaction {
     direction: string;
     type: string;
     storage_location: StorageLocation;
+    category: TransactionCategory;
     from_type: string;
     from_amount: string;
     notes: string;

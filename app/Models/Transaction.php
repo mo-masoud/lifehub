@@ -15,6 +15,7 @@ class Transaction extends Model
         'amount',
         'direction',
         'storage_location_id',
+        'transaction_category_id',
         'from_type',
         'from_amount',
         'notes',
@@ -26,6 +27,11 @@ class Transaction extends Model
     ];
 
     protected $appends = ['date'];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(TransactionCategory::class, 'transaction_category_id');
+    }
 
     public function date(): Attribute
     {

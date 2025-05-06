@@ -30,6 +30,7 @@ class UpdateRequest extends FormRequest
             'amount' => ['required', 'numeric', 'gt:0'],
             'direction' => ['required', Rule::in(TransactionDirection::values())],
             'storage_location_id' => ['required', 'exists:savings_storage_locations,id'],
+            'transaction_category_id' => ['required', 'exists:transaction_categories,id'],
             'notes' => ['nullable', 'string'],
 
             'from_type' => ['nullable', 'required_if:direction,transfer', Rule::in(SavingType::values())],
