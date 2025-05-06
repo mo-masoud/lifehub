@@ -25,8 +25,13 @@ export type BalanceType = 'USD' | 'EGP' | 'GOLD24' | 'GOLD21';
 
 export interface StorageLocation {
     id: string;
+    user_id: string;
     name: string;
     created_at: string;
+    balances?: {
+        [key in BalanceType]: number;
+    };
+    total_egp?: number;
 }
 
 export interface Balance {

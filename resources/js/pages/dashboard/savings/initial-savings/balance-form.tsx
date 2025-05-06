@@ -36,7 +36,7 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
 
     const fetchLocations = async () => {
         try {
-            const response = await axios.get('/api/savings/storage-locations'); // adjust route as needed
+            const response = await axios.get(route('api.dashboard.savings.storage-locations.index'));
             setLocations(response.data);
         } catch (err) {
             console.error(err);
@@ -44,7 +44,7 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
     };
 
     const handleCreateLocation = async (name: string) => {
-        const response = await axios.post('/api/savings/storage-locations', {
+        const response = await axios.post(route('api.dashboard.savings.storage-locations.store'), {
             name,
         });
 

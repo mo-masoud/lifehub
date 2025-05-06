@@ -187,6 +187,13 @@ return [
         'category_placeholder' => 'Category of the transaction.',
         'category_name_placeholder' => 'Name of the category.',
         'category_direction_placeholder' => 'Direction of the category.',
+        'storage_locations' => 'Storage locations',
+        'create_storage_location' => 'Create storage location',
+        'no_storage_locations_founds' => 'Their are no storage locations founds.',
+        'usd' => 'USD',
+        'egp' => 'EGP',
+        'gold24' => 'Gold 24',
+        'gold21' => 'Gold 21',
     ],
 
     'home' => 'Home',

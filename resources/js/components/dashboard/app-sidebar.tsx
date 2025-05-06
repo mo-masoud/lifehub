@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Aperture, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
+import { Aperture, Archive, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -41,6 +41,11 @@ const savingsNavItems: NavItem[] = [
         title: __('savings.transactions'),
         href: route('dashboard.savings.transactions.index'),
         icon: ArrowLeftRight,
+    },
+    {
+        title: __('savings.storage_locations'),
+        href: route('dashboard.savings.storage-locations.index'),
+        icon: Archive,
     },
 ];
 

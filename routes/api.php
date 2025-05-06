@@ -1,25 +1,27 @@
 <?php
 
-use App\Http\Controllers\Api\SavingsStorageLocationController;
-use App\Http\Controllers\Api\TransactionCategoryController;
+use App\Http\Controllers\API\Dashboard\Savings\SavingsStorageLocationController;
+use App\Http\Controllers\API\Dashboard\Savings\TransactionCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    Route::prefix('savings')->group(function () {
-
-        Route::prefix('transaction-categories')->group(function () {
-            Route::get('/', [TransactionCategoryController::class, 'index']);
-            Route::post('/', [TransactionCategoryController::class, 'store']);
+Route::as('api.')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
         });
 
-        Route::prefix('storage-locations')->group(function () {
-            Route::get('/', [SavingsStorageLocationController::class, 'index']);
-            Route::post('/', [SavingsStorageLocationController::class, 'store']);
+        // dashboard apis
+        Route::as('dashboard.')->prefix('dashboard')->group(function () {
+            Route::as('savings.')->prefix('savings')->group(function () {
+
+                Route::apiResource('transaction-categories', TransactionCategoryController::class)
+                    ->only(['index', 'store']);
+
+                Route::apiResource('storage-locations', SavingsStorageLocationController::class)
+                    ->only(['index', 'store']);
+
+            });
         });
     });
 });

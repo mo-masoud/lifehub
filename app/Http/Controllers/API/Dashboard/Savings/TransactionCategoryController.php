@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Models\SavingsStorageLocation;
 use App\Models\TransactionCategory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TransactionCategoryController extends Controller
@@ -27,9 +29,9 @@ class TransactionCategoryController extends Controller
             'direction' => ['required', 'string', 'in:in,out'],
         ]);
 
-        $existing = TransactionCategory::where('user_id', $request->user()->id)
-            ->where('name', $request->name)
-            ->where('direction', $request->direction)
+        $existing = SavingsStorageLocation::where(function (Builder $query) {
+            $query->where('user_id', auth()->id())->orWhereNull('user_id');
+        })->where('name', $request->name)
             ->first();
 
         if ($existing) {

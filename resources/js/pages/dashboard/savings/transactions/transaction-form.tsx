@@ -47,7 +47,7 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
     });
 
     const handleCreateCategory = async (name: string) => {
-        const response = await axios.post('/api/savings/transaction-categories', {
+        const response = await axios.post(route('api.dashboard.savings.transaction-categories.index'), {
             name,
             direction: data.direction,
         });
@@ -57,7 +57,7 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
 
     const fetchLocations = async () => {
         try {
-            const response = await axios.get('/api/savings/storage-locations'); // adjust route as needed
+            const response = await axios.get(route('api.dashboard.savings.storage-locations.index')); // adjust route as needed
             setLocations(response.data);
         } catch (err) {
             console.error(err);
@@ -66,7 +66,7 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('/api/savings/transaction-categories'); // adjust route as needed
+            const response = await axios.get(route('api.dashboard.savings.transaction-categories.index')); // adjust route as needed
             setCategories(response.data);
         } catch (err) {
             console.error(err);

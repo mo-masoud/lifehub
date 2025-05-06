@@ -9,15 +9,16 @@ use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
 use App\Http\Controllers\Dashboard\HomeController;
-use App\Http\Controllers\Dashboard\InitialSavingController;
 use App\Http\Controllers\Dashboard\PasswordManagerController;
+use App\Http\Controllers\Dashboard\Savings\InitialSavingController;
+use App\Http\Controllers\Dashboard\Savings\SnapshotController;
+use App\Http\Controllers\Dashboard\Savings\StorageLocationController;
+use App\Http\Controllers\Dashboard\Savings\TransactionController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
-use App\Http\Controllers\Dashboard\SnapshotController;
+use App\Http\Controllers\Dashboard\Settings\UserSettingController;
 use App\Http\Controllers\Dashboard\SSHController;
-use App\Http\Controllers\Dashboard\TransactionController;
-use App\Http\Controllers\Dashboard\UserSettingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -110,5 +111,10 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->only(['index', 'store', 'update', 'destroy'])
             ->names('savings.transactions')
             ->parameters(['initial' => 'transaction']);
+
+        Route::resource('savings/storage-locations', StorageLocationController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('savings.storage-locations')
+            ->parameters(['initial' => 'storage-location']);
     });
 });
