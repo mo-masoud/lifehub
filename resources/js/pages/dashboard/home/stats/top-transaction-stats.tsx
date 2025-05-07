@@ -79,19 +79,19 @@ export const TopTransactionStats = ({
 
                 <div className="grid w-full flex-1 grid-cols-2 grid-rows-2">
                     <div className="bg-card hover:bg-muted flex w-full flex-col items-center justify-center border p-4 transition-colors duration-300 ease-out">
-                        <div className="mb-2 text-xs font-bold lg:text-lg">USD</div>
+                        <div className="mb-2 text-xs font-bold lg:text-lg">{__('savings.usd')}</div>
                         {renderSingleStat(stats?.USD)}
                     </div>
                     <div className="bg-card hover:bg-muted flex w-full flex-col items-center justify-center border p-4 transition-colors duration-300 ease-out">
-                        <div className="mb-2 text-xs font-bold lg:text-lg">EGP</div>
+                        <div className="mb-2 text-xs font-bold lg:text-lg">{__('savings.egp')}</div>
                         {renderSingleStat(stats?.EGP)}
                     </div>
                     <div className="bg-card hover:bg-muted flex w-full flex-col items-center justify-center border p-4 transition-colors duration-300 ease-out">
-                        <div className="mb-2 text-xs font-bold lg:text-lg">Gold 24</div>
+                        <div className="mb-2 text-xs font-bold lg:text-lg">{__('savings.gold24')}</div>
                         {renderSingleStat(stats?.GOLD24)}
                     </div>
                     <div className="bg-card hover:bg-muted flex w-full flex-col items-center justify-center border p-4 transition-colors duration-300 ease-out">
-                        <div className="mb-2 text-xs font-bold lg:text-lg">Gold 21</div>
+                        <div className="mb-2 text-xs font-bold lg:text-lg">{__('savings.gold21')}</div>
                         {renderSingleStat(stats?.GOLD21)}
                     </div>
                 </div>

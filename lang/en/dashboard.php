@@ -196,6 +196,11 @@ return [
         'gold21' => 'Gold 21',
     ],
 
+    'auth_layout' => [
+        'title_placeholder' => 'Title of the page',
+        'description_placeholder' => 'Description of the page',
+    ],
+
     'home' => 'Home',
     'bank' => 'Bank',
 ];
