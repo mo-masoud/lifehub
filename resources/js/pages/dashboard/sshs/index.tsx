@@ -82,7 +82,7 @@ export default function Index() {
 
                 <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
                     <SheetTrigger asChild>
-                        <Button onClick={() => setShowCreateSheet(true)}>
+                        <Button onClick={() => setShowCreateSheet(true)} className="mb-8">
                             <span>{__('messages.new')}</span>
                             <PlusCircle />
                         </Button>

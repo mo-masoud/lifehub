@@ -81,7 +81,7 @@ export default function Snapshots() {
                     <Heading title={__('savings.snapshots')} />
                 </div>
 
-                <Button onClick={newSnapshot}>
+                <Button onClick={newSnapshot} className="mb-8">
                     <span>{__('messages.new')}</span>
                     <PlusCircle />
                 </Button>
