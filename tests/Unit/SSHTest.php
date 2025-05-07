@@ -3,23 +3,21 @@
 namespace Tests\Unit;
 
 use App\Models\SSH;
-use Illuminate\Support\Facades\Crypt;
+use function Pest\Laravel\assertDatabaseHas;
 use Tests\TestCase;
 
-class SSHTest extends TestCase
-{
-    public function test_ssh_password_encryption_and_decryption()
-    {
-        $plainPassword = 'sshPassword456';
+uses(TestCase::class);
 
-        // Create an SSH instance
-        $ssh = new SSH();
-        $ssh->password = $plainPassword;
+test('ssh password encryption and decryption', function () {
+    $plainPassword = 'sshPassword456';
 
-        // Assert the password is encrypted in the database
-        $this->assertNotEquals($plainPassword, $ssh->getAttributes()['password']);
+    // Create an SSH instance
+    $ssh = new SSH();
+    $ssh->password = $plainPassword;
 
-        // Assert the password can be decrypted correctly
-        $this->assertEquals($plainPassword, $ssh->password);
-    }
-}
+    // Assert the password is encrypted in the database
+    expect($ssh->getAttributes()['password'])->not->toBe($plainPassword);
+
+    // Assert the password can be decrypted correctly
+    expect($ssh->password)->toBe($plainPassword);
+});

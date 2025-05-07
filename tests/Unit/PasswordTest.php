@@ -1,25 +1,21 @@
 <?php
 
-namespace Tests\Unit;
-
+use function Pest\Laravel\assertDatabaseHas;
 use App\Models\Password;
-use Illuminate\Support\Facades\Crypt;
 use Tests\TestCase;
 
-class PasswordTest extends TestCase
-{
-    public function test_password_encryption_and_decryption()
-    {
-        $plainPassword = 'securePassword123';
+uses(TestCase::class);
 
-        // Create a Password instance
-        $password = new Password();
-        $password->password = $plainPassword;
+test('password encryption and decryption', function () {
+    $plainPassword = 'securePassword123';
 
-        // Assert the password is encrypted in the database
-        $this->assertNotEquals($plainPassword, $password->getAttributes()['password']);
+    // Create a Password instance
+    $password = new Password();
+    $password->password = $plainPassword;
 
-        // Assert the password can be decrypted correctly
-        $this->assertEquals($plainPassword, $password->password);
-    }
-}
+    // Assert the password is encrypted in the database
+    expect($password->getAttributes()['password'])->not->toBe($plainPassword);
+
+    // Assert the password can be decrypted correctly
+    expect($password->password)->toBe($plainPassword);
+});
