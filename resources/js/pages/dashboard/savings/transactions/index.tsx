@@ -1,10 +1,10 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
+import { CreateItem } from '@/components/dashboard/create-item';
 import Heading from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
@@ -13,8 +13,7 @@ import { TransactionForm } from '@/pages/dashboard/savings/transactions/transact
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Transaction } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ArrowDown, ArrowLeftRight, ArrowUp, Filter, PlusCircle, Repeat } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowDown, ArrowLeftRight, ArrowUp, Filter, Repeat } from 'lucide-react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -54,9 +53,6 @@ const RenderTransactionDirection = ({ direction }: { direction: string }) => {
 export default function Index() {
     const { transactions, filters } = usePage<{ transactions: Pagination<Transaction>; filters: Record<string, any> }>().props;
 
-    const [showCreateSheet, setShowCreateSheet] = useState(false);
-    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
-
     const destroy = (id: string) => {
         router.delete(route('dashboard.savings.transactions.destroy', id), {
             preserveScroll: true,
@@ -76,22 +72,7 @@ export default function Index() {
                     <Heading title={__('savings.transactions')} />
                 </div>
 
-                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
-                    <SheetTrigger asChild>
-                        <Button onClick={() => setShowCreateSheet(true)} className="mb-8">
-                            <span>{__('messages.new')}</span>
-                            <PlusCircle />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                        <SheetHeader>
-                            <SheetTitle>{__('savings.create_transaction')}</SheetTitle>
-                            <SheetDescription className="sr-only"></SheetDescription>
-                        </SheetHeader>
-
-                        <TransactionForm onSave={() => setShowCreateSheet(false)} />
-                    </SheetContent>
-                </Sheet>
+                <CreateItem label={__('savings.create_transaction')} FormComponent={TransactionForm} />
             </div>
 
             <div className="mb-2 flex items-center justify-end px-4">

@@ -1,9 +1,8 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
+import { CreateItem } from '@/components/dashboard/create-item';
 import Heading from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
@@ -12,8 +11,7 @@ import { StorageLocationForm } from '@/pages/dashboard/savings/storage-locations
 import type { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { StorageLocation } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Archive, PlusCircle } from 'lucide-react';
-import { useState } from 'react';
+import { Archive } from 'lucide-react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -27,8 +25,6 @@ export default function StorageLocations() {
     const {
         auth: { user },
     } = usePage<SharedData>().props;
-
-    const [showCreateSheet, setShowCreateSheet] = useState(false);
 
     const destroy = (id: string) => {
         router.delete(route('dashboard.savings.storage-locations.destroy', id), {
@@ -52,22 +48,7 @@ export default function StorageLocations() {
                     <Heading title={__('savings.storage_locations')} />
                 </div>
 
-                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
-                    <SheetTrigger asChild>
-                        <Button onClick={() => setShowCreateSheet(true)} className="mb-8">
-                            <span>{__('messages.new')}</span>
-                            <PlusCircle />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                        <SheetHeader>
-                            <SheetTitle>{__('savings.create_storage_location')}</SheetTitle>
-                            <SheetDescription className="sr-only"></SheetDescription>
-                        </SheetHeader>
-
-                        <StorageLocationForm onSave={() => setShowCreateSheet(false)} />
-                    </SheetContent>
-                </Sheet>
+                <CreateItem label={__('savings.create_storage_location')} FormComponent={StorageLocationForm} />
             </div>
 
             <div className="px-4">

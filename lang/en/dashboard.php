@@ -112,8 +112,8 @@ return [
     ],
 
     'ssh' => [
-        'create_ssh' => 'Create a new ssh',
-        'update_ssh' => 'Update ssh',
+        'create_ssh' => 'Create a new SSH',
+        'update_ssh' => 'Update SSH',
         'name_placeholder' => 'Name of the SSH.',
         'username_placeholder' => 'Username for the SSH.',
         'password_placeholder' => 'Password for the SSH.',

@@ -6,7 +6,7 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ExternalLink, Eye, EyeOff, KeyRound, PlusCircle, Search } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff, KeyRound, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -14,8 +14,8 @@ import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
 
 import { ActionCell } from '@/components/dashboard/action-cell';
+import { CreateItem } from '@/components/dashboard/create-item';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { PasswordForm } from '@/pages/dashboard/passwords/password-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -27,8 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
-
-    const [showCreateSheet, setShowCreateSheet] = useState(false);
 
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
@@ -83,22 +81,7 @@ export default function Index() {
                     <Heading title={__('general.password_manager')} />
                 </div>
 
-                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
-                    <SheetTrigger asChild>
-                        <Button onClick={() => setShowCreateSheet(true)} className="mb-8">
-                            <span>{__('messages.new')}</span>
-                            <PlusCircle />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                        <SheetHeader>
-                            <SheetTitle>{__('passwords.create_password')}</SheetTitle>
-                            <SheetDescription className="sr-only"></SheetDescription>
-                        </SheetHeader>
-
-                        <PasswordForm onSave={() => setShowCreateSheet(false)} />
-                    </SheetContent>
-                </Sheet>
+                <CreateItem label={__('passwords.create_password')} FormComponent={PasswordForm} />
             </div>
 
             <div className="px-4">

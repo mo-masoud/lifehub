@@ -6,13 +6,13 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { SSH } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, PlusCircle, Search } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { ActionCell } from '@/components/dashboard/action-cell';
+import { CreateItem } from '@/components/dashboard/create-item';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { SSHForm } from '@/pages/dashboard/sshs/ssh-from';
 import { ChangeEvent, useState } from 'react';
 
@@ -26,7 +26,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Index() {
     const { sshs, filters } = usePage<{ sshs: Pagination<SSH>; filters: { keyword?: string } }>().props;
 
-    const [showCreateSheet, setShowCreateSheet] = useState(false);
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
 
@@ -80,22 +79,7 @@ export default function Index() {
                     <Heading title={__('general.ssh_manager')} />
                 </div>
 
-                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
-                    <SheetTrigger asChild>
-                        <Button onClick={() => setShowCreateSheet(true)} className="mb-8">
-                            <span>{__('messages.new')}</span>
-                            <PlusCircle />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                        <SheetHeader>
-                            <SheetTitle>{__('passwords.create_password')}</SheetTitle>
-                            <SheetDescription className="sr-only"></SheetDescription>
-                        </SheetHeader>
-
-                        <SSHForm onSave={() => setShowCreateSheet(false)} />
-                    </SheetContent>
-                </Sheet>
+                <CreateItem label={__('ssh.create_ssh')} FormComponent={SSHForm} />
             </div>
 
             <div className="px-4">
