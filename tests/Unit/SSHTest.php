@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Models\SSH;
-use function Pest\Laravel\assertDatabaseHas;
 use Tests\TestCase;
 
 uses(TestCase::class);

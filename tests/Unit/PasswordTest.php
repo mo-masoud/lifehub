@@ -1,6 +1,5 @@
 <?php
 
-use function Pest\Laravel\assertDatabaseHas;
 use App\Models\Password;
 use Tests\TestCase;
 
