@@ -6,25 +6,15 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ExternalLink, Eye, EyeOff, FilePenLine, KeyRound, PlusCircle, Search, Trash2 } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff, KeyRound, PlusCircle, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
 
+import { ActionCell } from '@/components/dashboard/action-cell';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { PasswordForm } from '@/pages/dashboard/passwords/password-form';
 
@@ -39,7 +29,6 @@ export default function Index() {
     const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
 
     const [showCreateSheet, setShowCreateSheet] = useState(false);
-    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
 
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
@@ -76,7 +65,7 @@ export default function Index() {
         );
     };
 
-    const destroy = (id: number) => {
+    const destroy = (id: string) => {
         router.delete(route('dashboard.passwords.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
@@ -165,50 +154,12 @@ export default function Index() {
                                             'N\\A'
                                         )}
                                     </TableCell>
-                                    <TableCell className="flex items-center justify-end text-sm">
-                                        <Sheet
-                                            open={showUpdateSheet === password.id}
-                                            onOpenChange={(isOpen) => {
-                                                setShowUpdateSheet(isOpen ? password.id : undefined);
-                                            }}
-                                        >
-                                            <SheetTrigger asChild>
-                                                <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(password.id)}>
-                                                    <FilePenLine className="size-4 text-green-500" />
-                                                </Button>
-                                            </SheetTrigger>
-                                            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                                                <SheetHeader>
-                                                    <SheetTitle>{__('savings.update_password')}</SheetTitle>
-                                                    <SheetDescription className="sr-only"></SheetDescription>
-                                                </SheetHeader>
-
-                                                <PasswordForm password={password} onSave={() => setShowUpdateSheet(undefined)} />
-                                            </SheetContent>
-                                        </Sheet>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="icon">
-                                                    <Trash2 className="size-4 text-red-500" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
-                                                    <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        className={buttonVariants({ variant: 'destructive' })}
-                                                        onClick={() => destroy(password.id)}
-                                                    >
-                                                        {__('messages.delete')}
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </TableCell>
+                                    <ActionCell
+                                        updateLabel={__('savings.update_password')}
+                                        item={{ password }}
+                                        FormComponent={PasswordForm}
+                                        onDestroy={destroy}
+                                    />
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -33,9 +33,9 @@ const savingsNavItems: NavItem[] = [
         icon: Scale,
     },
     {
-        title: __('savings.snapshots'),
-        href: route('dashboard.savings.snapshots.index'),
-        icon: Aperture,
+        title: __('savings.storage_locations'),
+        href: route('dashboard.savings.storage-locations.index'),
+        icon: Archive,
     },
     {
         title: __('savings.transactions'),
@@ -43,9 +43,9 @@ const savingsNavItems: NavItem[] = [
         icon: ArrowLeftRight,
     },
     {
-        title: __('savings.storage_locations'),
-        href: route('dashboard.savings.storage-locations.index'),
-        icon: Archive,
+        title: __('savings.snapshots'),
+        href: route('dashboard.savings.snapshots.index'),
+        icon: Aperture,
     },
 ];
 

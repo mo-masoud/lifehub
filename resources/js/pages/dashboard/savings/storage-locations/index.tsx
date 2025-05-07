@@ -1,28 +1,18 @@
+import { ActionCell } from '@/components/dashboard/action-cell';
 import Heading from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
-import { cn, formatNumber } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
 import { StorageLocationForm } from '@/pages/dashboard/savings/storage-locations/storage-location-form';
 import type { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { StorageLocation } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Archive, FilePenLine, PlusCircle, Trash2 } from 'lucide-react';
+import { Archive, PlusCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -39,7 +29,6 @@ export default function StorageLocations() {
     } = usePage<SharedData>().props;
 
     const [showCreateSheet, setShowCreateSheet] = useState(false);
-    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
 
     const destroy = (id: string) => {
         router.delete(route('dashboard.savings.storage-locations.destroy', id), {
@@ -107,59 +96,14 @@ export default function StorageLocations() {
                                     <TableCell className="text-start text-sm">{formatNumber(storage?.balances?.EGP || 0)}</TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(storage?.balances?.GOLD24 || 0)}</TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(storage?.balances?.GOLD21 || 0)}</TableCell>
-                                    <TableCell
-                                        className={cn(
-                                            'flex items-center justify-end text-sm',
-                                            String(user.id) !== String(storage.user_id) && 'min-h-11',
-                                        )}
-                                    >
-                                        {String(user.id) === String(storage.user_id) && (
-                                            <>
-                                                <Sheet
-                                                    open={showUpdateSheet === storage.id}
-                                                    onOpenChange={(isOpen) => {
-                                                        setShowUpdateSheet(isOpen ? storage.id : undefined);
-                                                    }}
-                                                >
-                                                    <SheetTrigger asChild>
-                                                        <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(storage.id)}>
-                                                            <FilePenLine className="size-4 text-green-500" />
-                                                        </Button>
-                                                    </SheetTrigger>
-                                                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                                                        <SheetHeader>
-                                                            <SheetTitle>{__('savings.update_transaction')}</SheetTitle>
-                                                            <SheetDescription className="sr-only"></SheetDescription>
-                                                        </SheetHeader>
-
-                                                        <StorageLocationForm storage={storage} onSave={() => setShowUpdateSheet(undefined)} />
-                                                    </SheetContent>
-                                                </Sheet>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <Trash2 className="size-4 text-red-500" />
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
-                                                            <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
-                                                            <AlertDialogAction
-                                                                className={buttonVariants({ variant: 'destructive' })}
-                                                                onClick={() => destroy(storage.id)}
-                                                            >
-                                                                {__('messages.delete')}
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </>
-                                        )}
-                                    </TableCell>
+                                    <ActionCell
+                                        updateLabel={__('savings.update_storage')}
+                                        item={{ storage }}
+                                        FormComponent={StorageLocationForm}
+                                        onDestroy={destroy}
+                                        canEdit={String(user.id) === String(storage.user_id)}
+                                        canDelete={String(user.id) === String(storage.user_id)}
+                                    />
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -6,26 +6,15 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { SSH } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, FilePenLine, PlusCircle, Search, Trash2 } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, PlusCircle, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { ActionCell } from '@/components/dashboard/action-cell';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChangeEvent, useState } from 'react';
-
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { SSHForm } from '@/pages/dashboard/sshs/ssh-from';
+import { ChangeEvent, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -38,7 +27,6 @@ export default function Index() {
     const { sshs, filters } = usePage<{ sshs: Pagination<SSH>; filters: { keyword?: string } }>().props;
 
     const [showCreateSheet, setShowCreateSheet] = useState(false);
-    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
 
@@ -74,7 +62,7 @@ export default function Index() {
         );
     };
 
-    const destroy = (id: number) => {
+    const destroy = (id: string) => {
         router.delete(route('dashboard.sshs.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
@@ -165,50 +153,7 @@ export default function Index() {
                                             )}
                                         </Button>
                                     </TableCell>
-                                    <TableCell className="flex items-center justify-end text-sm">
-                                        <Sheet
-                                            open={showUpdateSheet === ssh.id}
-                                            onOpenChange={(isOpen) => {
-                                                setShowUpdateSheet(isOpen ? ssh.id : undefined);
-                                            }}
-                                        >
-                                            <SheetTrigger asChild>
-                                                <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(ssh.id)}>
-                                                    <FilePenLine className="size-4 text-green-500" />
-                                                </Button>
-                                            </SheetTrigger>
-                                            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
-                                                <SheetHeader>
-                                                    <SheetTitle>{__('savings.update_ssh')}</SheetTitle>
-                                                    <SheetDescription className="sr-only"></SheetDescription>
-                                                </SheetHeader>
-
-                                                <SSHForm ssh={ssh} onSave={() => setShowUpdateSheet(undefined)} />
-                                            </SheetContent>
-                                        </Sheet>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="icon">
-                                                    <Trash2 className="size-4 text-red-500" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>{__('messages.delete_confirmation')}</AlertDialogTitle>
-                                                    <AlertDialogDescription>{__('messages.caution_cant_undone')}</AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        className={buttonVariants({ variant: 'destructive' })}
-                                                        onClick={() => destroy(ssh.id)}
-                                                    >
-                                                        {__('messages.delete')}
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </TableCell>
+                                    <ActionCell updateLabel={__('savings.update_ssh')} item={{ ssh }} FormComponent={SSHForm} onDestroy={destroy} />
                                 </TableRow>
                             ))}
                         </TableBody>
