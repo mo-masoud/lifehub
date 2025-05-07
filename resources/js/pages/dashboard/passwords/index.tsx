@@ -3,17 +3,17 @@ import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
-import { CreatePassword } from '@/pages/dashboard/passwords/create-password';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, ExternalLink, Eye, EyeOff, KeyRound, Search, Trash2 } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff, FilePenLine, KeyRound, PlusCircle, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
 
+import { TablePagination } from '@/components/dashboard/table-pagination';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,7 +25,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { UpdatePassword } from '@/pages/dashboard/passwords/update-password';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { PasswordForm } from '@/pages/dashboard/passwords/password-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,6 +37,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
+
+    const [showCreateSheet, setShowCreateSheet] = useState(false);
+    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
 
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
@@ -90,7 +94,22 @@ export default function Index() {
                     <Heading title={__('general.password_manager')} />
                 </div>
 
-                <CreatePassword />
+                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
+                    <SheetTrigger asChild>
+                        <Button onClick={() => setShowCreateSheet(true)}>
+                            <span>{__('messages.new')}</span>
+                            <PlusCircle />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                        <SheetHeader>
+                            <SheetTitle>{__('passwords.create_password')}</SheetTitle>
+                            <SheetDescription className="sr-only"></SheetDescription>
+                        </SheetHeader>
+
+                        <PasswordForm onSave={() => setShowCreateSheet(false)} />
+                    </SheetContent>
+                </Sheet>
             </div>
 
             <div className="px-4">
@@ -147,7 +166,26 @@ export default function Index() {
                                         )}
                                     </TableCell>
                                     <TableCell className="flex items-center justify-end text-sm">
-                                        <UpdatePassword password={password} />
+                                        <Sheet
+                                            open={showUpdateSheet === password.id}
+                                            onOpenChange={(isOpen) => {
+                                                setShowUpdateSheet(isOpen ? password.id : undefined);
+                                            }}
+                                        >
+                                            <SheetTrigger asChild>
+                                                <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(password.id)}>
+                                                    <FilePenLine className="size-4 text-green-500" />
+                                                </Button>
+                                            </SheetTrigger>
+                                            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                                                <SheetHeader>
+                                                    <SheetTitle>{__('savings.update_password')}</SheetTitle>
+                                                    <SheetDescription className="sr-only"></SheetDescription>
+                                                </SheetHeader>
+
+                                                <PasswordForm password={password} onSave={() => setShowUpdateSheet(undefined)} />
+                                            </SheetContent>
+                                        </Sheet>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button variant="ghost" size="icon">
@@ -177,37 +215,7 @@ export default function Index() {
                     </Table>
                 </Card>
 
-                <div className="mt-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="text-muted-foreground text-xs">
-                            {__('messages.showing_pagination', {
-                                from: passwords.from || 0,
-                                to: passwords.to || 0,
-                                total: passwords.total,
-                            })}
-                        </span>
-                    </div>
-                    <div className="flex items-center justify-end gap-2 rtl:flex-row-reverse">
-                        <Button
-                            size="icon"
-                            variant="outline"
-                            disabled={!passwords.links[0].url}
-                            onClick={() => {
-                                router.visit(passwords.links[0].url!);
-                            }}
-                        >
-                            <ChevronsLeft />
-                        </Button>
-                        <Button
-                            size="icon"
-                            variant="outline"
-                            disabled={!passwords.links[passwords.links.length - 1].url}
-                            onClick={() => router.visit(passwords.links[passwords.links.length - 1].url!)}
-                        >
-                            <ChevronsRight />
-                        </Button>
-                    </div>
-                </div>
+                <TablePagination pagination={passwords} />
             </div>
         </AppLayout>
     );

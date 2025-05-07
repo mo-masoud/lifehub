@@ -6,7 +6,7 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { SSH } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, Search, Trash2 } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, FilePenLine, PlusCircle, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -24,8 +24,8 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { CreateSsh } from '@/pages/dashboard/sshs/create-ssh';
-import { UpdateSsh } from '@/pages/dashboard/sshs/update-ssh';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { SSHForm } from '@/pages/dashboard/sshs/ssh-from';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,6 +37,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Index() {
     const { sshs, filters } = usePage<{ sshs: Pagination<SSH>; filters: { keyword?: string } }>().props;
 
+    const [showCreateSheet, setShowCreateSheet] = useState(false);
+    const [showUpdateSheet, setShowUpdateSheet] = useState<string | number>();
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
 
@@ -90,7 +92,22 @@ export default function Index() {
                     <Heading title={__('general.ssh_manager')} />
                 </div>
 
-                <CreateSsh />
+                <Sheet open={showCreateSheet} onOpenChange={setShowCreateSheet}>
+                    <SheetTrigger asChild>
+                        <Button onClick={() => setShowCreateSheet(true)}>
+                            <span>{__('messages.new')}</span>
+                            <PlusCircle />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                        <SheetHeader>
+                            <SheetTitle>{__('passwords.create_password')}</SheetTitle>
+                            <SheetDescription className="sr-only"></SheetDescription>
+                        </SheetHeader>
+
+                        <SSHForm onSave={() => setShowCreateSheet(false)} />
+                    </SheetContent>
+                </Sheet>
             </div>
 
             <div className="px-4">
@@ -149,7 +166,26 @@ export default function Index() {
                                         </Button>
                                     </TableCell>
                                     <TableCell className="flex items-center justify-end text-sm">
-                                        <UpdateSsh ssh={ssh} />
+                                        <Sheet
+                                            open={showUpdateSheet === ssh.id}
+                                            onOpenChange={(isOpen) => {
+                                                setShowUpdateSheet(isOpen ? ssh.id : undefined);
+                                            }}
+                                        >
+                                            <SheetTrigger asChild>
+                                                <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(ssh.id)}>
+                                                    <FilePenLine className="size-4 text-green-500" />
+                                                </Button>
+                                            </SheetTrigger>
+                                            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                                                <SheetHeader>
+                                                    <SheetTitle>{__('savings.update_ssh')}</SheetTitle>
+                                                    <SheetDescription className="sr-only"></SheetDescription>
+                                                </SheetHeader>
+
+                                                <SSHForm ssh={ssh} onSave={() => setShowUpdateSheet(undefined)} />
+                                            </SheetContent>
+                                        </Sheet>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button variant="ghost" size="icon">

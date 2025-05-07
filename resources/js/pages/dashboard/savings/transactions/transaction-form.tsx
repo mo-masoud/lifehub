@@ -81,24 +81,15 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        if (!transaction) {
-            post(route('dashboard.savings.transactions.store'), {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    toast.success(__('messages.created_successfully'));
-                    onSave(data);
-                },
-            });
+        const method = transaction ? patch : post;
+        const url = transaction ? route('dashboard.savings.transactions.update', transaction.id) : route('dashboard.savings.transactions.store');
+        const message = transaction ? __('messages.updated_successfully') : __('messages.created_successfully');
 
-            return;
-        }
-
-        patch(route('dashboard.savings.transactions.update', transaction.id), {
+        method(url, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success(__('messages.updated_successfully'));
+                toast.success(message);
                 onSave(data);
             },
         });

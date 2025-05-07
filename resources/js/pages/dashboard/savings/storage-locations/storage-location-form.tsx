@@ -21,24 +21,15 @@ export const StorageLocationForm = ({ storage, onSave }: { storage?: StorageLoca
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        if (!storage) {
-            post(route('dashboard.savings.storage-locations.store'), {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    toast.success(__('messages.created_successfully'));
-                    onSave(data);
-                },
-            });
+        const method = storage ? patch : post;
+        const url = storage ? route('dashboard.savings.storage-locations.update', storage.id) : route('dashboard.savings.storage-locations.store');
+        const message = storage ? __('messages.updated_successfully') : __('messages.created_successfully');
 
-            return;
-        }
-
-        patch(route('dashboard.savings.storage-locations.update', storage.id), {
+        method(url, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success(__('messages.updated_successfully'));
+                toast.success(message);
                 onSave(data);
             },
         });

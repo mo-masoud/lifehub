@@ -58,23 +58,15 @@ export const BalanceForm = ({ balance, onSave }: BalanceFormProps) => {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        if (!balance) {
-            post(route('dashboard.savings.initial.store'), {
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    toast.success(__('messages.created_successfully'));
-                    onSave(data);
-                },
-            });
-            return;
-        }
+        const method = balance ? patch : post;
+        const url = balance ? route('dashboard.savings.initial.update', balance.id) : route('dashboard.savings.initial.store');
+        const message = balance ? __('messages.updated_successfully') : __('messages.created_successfully');
 
-        patch(route('dashboard.savings.initial.update', balance.id), {
+        method(url, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                toast.success(__('messages.updated_successfully'));
+                toast.success(message);
                 onSave(data);
             },
         });
