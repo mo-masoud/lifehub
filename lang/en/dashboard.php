@@ -74,6 +74,8 @@ return [
         'save_password' => 'Save password',
         'locale_settings' => 'Locale settings',
         'locale_settings_description' => 'Update your account\'s locale settings',
+        'price_rate_fallback' => 'Price rate fallback',
+        'price_rate_fallback_description' => 'Update your price rate values.',
     ],
 
     'profile' => [

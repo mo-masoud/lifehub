@@ -63,7 +63,7 @@ export default function InitialSavings() {
                         <TableBody>
                             {balances.data.map((balance) => (
                                 <TableRow key={balance.id}>
-                                    <TableCell className="text-start text-sm">{balance.type}</TableCell>
+                                    <TableCell className="text-start text-sm">{__(`savings.${balance.type}`)}</TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(balance.amount)}</TableCell>
                                     <TableCell className="text-start text-sm">{__(balance.storage_location.name)}</TableCell>
                                     <ActionCell

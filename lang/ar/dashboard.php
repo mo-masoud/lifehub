@@ -75,6 +75,8 @@ return [
         'save_password' => 'حفظ كلمة المرور',
         'locale_settings' => 'إعدادات اللغة',
         'locale_settings_description' => 'تحديث إعدادات لغة الحساب',
+        'price_rate_fallback' => 'سعر الصرف الاحتياطي',
+        'price_rate_fallback_description' => 'تحديث قيم سعر الصرف الاحتياطي.',
     ],
 
     'profile' => [
@@ -177,6 +179,10 @@ return [
         'storage_locations' => 'مواقع التخزين',
         'create_storage_location' => 'إنشاء موقع تخزين',
         'no_storage_locations_founds' => 'لا توجد مواقع تخزين.',
+        'usd' => 'دولار أمريكي',
+        'egp' => 'جنيه مصري',
+        'gold24' => 'ذهب 24',
+        'gold21' => 'ذهب 21',
     ],
 
     'ssh' => [
@@ -195,4 +201,7 @@ return [
         'title_placeholder' => 'عنوان الصفحة',
         'description_placeholder' => 'وصف الصفحة',
     ],
+
+    'home' => 'البيت',
+    'bank' => 'البنك',
 ];

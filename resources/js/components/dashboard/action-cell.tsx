@@ -13,6 +13,8 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { TableCell } from '@/components/ui/table';
 import { __ } from '@/lib/i18n';
+import { SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 import { FilePenLine, Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
 
@@ -34,26 +36,28 @@ export const ActionCell = ({
     onDestroy,
     asChild,
 }: Props) => {
-    const [showUpdateSheet, setShowUpdateSheet] = useState(false);
+    const { dir } = usePage<SharedData>().props;
+
+    const [show, setShow] = useState(false);
 
     const Container = asChild ? 'span' : TableCell;
 
     return (
         <Container className="flex items-center justify-end text-sm">
             {canEdit && FormComponent && (
-                <Sheet open={showUpdateSheet} onOpenChange={setShowUpdateSheet}>
+                <Sheet open={show} onOpenChange={setShow}>
                     <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={() => setShowUpdateSheet(true)}>
+                        <Button variant="ghost" size="icon" onClick={() => setShow(true)}>
                             <FilePenLine className="size-4 text-green-500" />
                         </Button>
                     </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()}>
+                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
                         <SheetHeader>
                             <SheetTitle>{updateLabel}</SheetTitle>
                             <SheetDescription className="sr-only"></SheetDescription>
                         </SheetHeader>
 
-                        <FormComponent {...item} onSave={() => setShowUpdateSheet(false)} />
+                        <FormComponent {...item} onSave={() => setShow(false)} />
                     </SheetContent>
                 </Sheet>
             )}

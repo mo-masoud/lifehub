@@ -37,8 +37,8 @@ export const PriceRateFallback = ({ usd_rate_fallback, gold24_rate_fallback, gol
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Price rate fallback</CardTitle>
-                <CardDescription>Update your price rate values.</CardDescription>
+                <CardTitle>{__('settings.price_rate_fallback')}</CardTitle>
+                <CardDescription>{__('settings.price_rate_fallback_description')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <form className="flex flex-col gap-4" onSubmit={submit}>
