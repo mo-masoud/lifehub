@@ -16,29 +16,11 @@ class Snapshot extends Model
 
     protected $appends = ['date', 'total_egp', 'total_usd'];
 
-//    protected static function booted(): void
-//    {
-//        static::updating(function () {
-//            throw new Exception('Snapshots are immutable.');
-//        });
-//
-//        static::deleting(function () {
-//            throw new Exception('Snapshots cannot be deleted.');
-//        });
-//    }
-
     public function date(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $createdAt = Carbon::parse($this->created_at);
-
-                $monthName = __('shared.' . $createdAt->format('F'));
-
-                $day   = $createdAt->day;
-                $year  = $createdAt->year;
-
-                return "{$day} - {$monthName} - {$year}";
+                return $this->created_at->format('d M Y');
             },
         );
     }
