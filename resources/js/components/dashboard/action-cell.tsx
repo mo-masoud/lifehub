@@ -42,6 +42,9 @@ export const ActionCell = ({
 
     const Container = asChild ? 'span' : TableCell;
 
+    const nested = Object.values(item)[0];
+    const record: Record<string, any> = nested ? { ...nested } : {};
+
     return (
         <Container className="flex items-center justify-end text-sm">
             {canEdit && FormComponent && (
@@ -75,7 +78,7 @@ export const ActionCell = ({
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>{__('messages.cancel')}</AlertDialogCancel>
-                            <AlertDialogAction className={buttonVariants({ variant: 'destructive' })} onClick={() => onDestroy(item.id)}>
+                            <AlertDialogAction className={buttonVariants({ variant: 'destructive' })} onClick={() => onDestroy(record.id)}>
                                 {__('messages.delete')}
                             </AlertDialogAction>
                         </AlertDialogFooter>

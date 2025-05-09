@@ -18,7 +18,7 @@ class SavingsStorageLocation extends Model
 
     public function initialSavings(): HasMany
     {
-        return $this->hasMany(InitialSaving::class);
+        return $this->hasMany(InitialSaving::class, 'storage_location_id');
     }
 
     /**
@@ -43,7 +43,7 @@ class SavingsStorageLocation extends Model
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class, 'storage_location_id');
     }
 
     /**

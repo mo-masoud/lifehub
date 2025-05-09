@@ -11,7 +11,7 @@ class StorageLocationController extends Controller
 {
     public function destroy(SavingsStorageLocation $storageLocation) {
 
-        if ($storageLocation->has('transactions') || $storageLocation->has('initialSavings')) {
+        if ($storageLocation->transactions()->exists() || $storageLocation->initialSavings()->exists()) {
             return back()->withErrors('You can not delete this storage location because it has transactions or initial savings.');
         }
 
