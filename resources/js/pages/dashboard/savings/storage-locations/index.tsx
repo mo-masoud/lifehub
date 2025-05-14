@@ -42,16 +42,16 @@ export default function StorageLocations() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('savings.storage_locations')} />
 
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Archive className="mb-8 size-5" />
+                    <Archive className="text-primary size-5" />
                     <Heading title={__('savings.storage_locations')} />
                 </div>
 
                 <CreateItem label={__('savings.create_storage_location')} FormComponent={StorageLocationForm} />
             </div>
 
-            <div className="px-4">
+            <div className="mt-4 px-4">
                 <Card className="p-0 pb-2">
                     <Table>
                         {storageLocations.data.length === 0 && <TableCaption>{__('savings.no_storage_locations_founds')}</TableCaption>}

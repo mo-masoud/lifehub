@@ -37,16 +37,16 @@ export default function InitialSavings() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('savings.initial_balance')} />
 
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Scale className="mb-8 size-5" />
+                    <Scale className="text-primary size-5" />
                     <Heading title={__('savings.initial_balance')} />
                 </div>
 
                 <CreateItem label={__('savings.create_balance')} FormComponent={BalanceForm} />
             </div>
 
-            <div className="px-4">
+            <div className="mt-4 px-4">
                 <Card className="p-0 pb-2">
                     <Table>
                         {balances.data.length === 0 && <TableCaption>{__('savings.no_balances_founds')}</TableCaption>}

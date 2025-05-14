@@ -75,19 +75,19 @@ export default function Snapshots() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('savings.snapshots')} />
 
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Aperture className="mb-8 size-5" />
+                    <Aperture className="text-primary size-5" />
                     <Heading title={__('savings.snapshots')} />
                 </div>
 
-                <Button onClick={newSnapshot} className="mb-8">
+                <Button onClick={newSnapshot}>
                     <span>{__('messages.new')}</span>
                     <PlusCircle />
                 </Button>
             </div>
 
-            <div className="px-4">
+            <div className="mt-4 px-4">
                 <Card className="p-0 pb-2">
                     <Table>
                         {snapshots.data.length === 0 && <TableCaption>{__('savings.no_snapshots_founds')}</TableCaption>}
@@ -154,9 +154,9 @@ export default function Snapshots() {
                                                     onClick={() => (snapshotOpen ? setSnapshotOpen(undefined) : setSnapshotOpen(snapshot.id))}
                                                 >
                                                     {snapshotOpen == snapshot.id ? (
-                                                        <EyeOff className="size-4 text-blue-300" />
+                                                        <EyeOff className="text-primary/70 size-4" />
                                                     ) : (
-                                                        <Eye className="size-4 text-blue-500" />
+                                                        <Eye className="text-primary size-4" />
                                                     )}
                                                 </Button>
                                                 <ActionCell item={{ snapshot }} onDestroy={destroy} canEdit={false} asChild />

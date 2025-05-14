@@ -14,7 +14,7 @@ export const CreateItem = ({ label, FormComponent }: { label: string; FormCompon
     return (
         <Sheet open={show} onOpenChange={setShow}>
             <SheetTrigger asChild>
-                <Button onClick={() => setShow(true)} className="mb-8">
+                <Button onClick={() => setShow(true)}>
                     <span>{__('messages.new')}</span>
                     <PlusCircle />
                 </Button>

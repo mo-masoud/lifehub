@@ -66,16 +66,16 @@ export default function Index() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('savings.transactions')} />
 
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <ArrowLeftRight className="mb-8 size-5" />
+                    <ArrowLeftRight className="text-primary size-5" />
                     <Heading title={__('savings.transactions')} />
                 </div>
 
                 <CreateItem label={__('savings.create_transaction')} FormComponent={TransactionForm} />
             </div>
 
-            <div className="mb-2 flex items-center justify-end px-4">
+            <div className="mt-4 mb-2 flex items-center justify-end px-4">
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button variant="ghost" size="icon">

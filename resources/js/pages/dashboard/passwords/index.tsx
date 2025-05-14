@@ -75,16 +75,16 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('general.password_manager')} />
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <KeyRound className="mb-8 size-5" />
+                    <KeyRound className="text-primary size-5" />
                     <Heading title={__('general.password_manager')} />
                 </div>
 
                 <CreateItem label={__('passwords.create_password')} FormComponent={PasswordForm} />
             </div>
 
-            <div className="px-4">
+            <div className="mt-4 px-4">
                 <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
                     <div className="relative">
                         <Input placeholder={__('general.search')} className="pl-9" value={keyword} onChange={search} />

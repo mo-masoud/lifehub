@@ -73,16 +73,16 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('general.ssh_manager')} />
-            <div className="mt-12 flex items-center justify-between p-4">
+            <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Computer className="mb-8 size-5" />
+                    <Computer className="text-primary size-5" />
                     <Heading title={__('general.ssh_manager')} />
                 </div>
 
                 <CreateItem label={__('ssh.create_ssh')} FormComponent={SSHForm} />
             </div>
 
-            <div className="px-4">
+            <div className="mt-4 px-4">
                 <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4">
                     <div className="relative">
                         <Input placeholder={__('general.search')} className="pl-9" value={keyword} onChange={search} />
