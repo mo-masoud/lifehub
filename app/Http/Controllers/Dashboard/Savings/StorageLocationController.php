@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\SavingsStorageLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StorageLocationController extends Controller
 {
-    public function destroy(SavingsStorageLocation $storageLocation) {
-
+    public function destroy(SavingsStorageLocation $storageLocation)
+    {
         if ($storageLocation->transactions()->exists() || $storageLocation->initialSavings()->exists()) {
             return back()->withErrors('You can not delete this storage location because it has transactions or initial savings.');
         }
@@ -23,7 +24,7 @@ class StorageLocationController extends Controller
     public function index()
     {
         $storageLocations = SavingsStorageLocation::whereNull('user_id')
-            ->orWhere('user_id', auth()->id())
+            ->orWhere('user_id', Auth::id())
             ->latest()
             ->paginate();
 
@@ -61,7 +62,7 @@ class StorageLocationController extends Controller
         ]);
 
         $existing = SavingsStorageLocation::where(function (Builder $query) {
-            $query->where('user_id', auth()->id())->orWhereNull('user_id');
+            $query->where('user_id', Auth::id())->orWhereNull('user_id');
         })->where('name', $request->name)
             ->first();
 
@@ -70,7 +71,7 @@ class StorageLocationController extends Controller
         }
 
         SavingsStorageLocation::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'name' => $request->name,
         ]);
 
@@ -84,7 +85,7 @@ class StorageLocationController extends Controller
         ]);
 
         $existing = SavingsStorageLocation::where(function (Builder $query) {
-            $query->where('user_id', auth()->id())->orWhereNull('user_id');
+            $query->where('user_id', Auth::id())->orWhereNull('user_id');
         })->where('id', '!=', $storageLocation->id)
             ->where('name', $request->name)
             ->first();
