@@ -16,6 +16,10 @@ import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: __('general.dashboard'),
+        href: route('dashboard.home'),
+    },
+    {
         title: __('savings.storage_locations'),
         href: route('dashboard.savings.storage-locations.index'),
     },

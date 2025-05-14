@@ -18,6 +18,10 @@ import { ChangeEvent, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: __('general.dashboard'),
+        href: route('dashboard.home'),
+    },
+    {
         title: __('general.ssh_manager'),
         href: route('dashboard.sshs.index'),
     },

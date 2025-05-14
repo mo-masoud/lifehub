@@ -20,6 +20,10 @@ import { PasswordForm } from '@/pages/dashboard/passwords/password-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: __('general.dashboard'),
+        href: route('dashboard.home'),
+    },
+    {
         title: __('general.password_manager'),
         href: route('dashboard.passwords.index'),
     },

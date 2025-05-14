@@ -19,7 +19,7 @@ export const CreateItem = ({ label, FormComponent }: { label: string; FormCompon
                     <PlusCircle />
                 </Button>
             </SheetTrigger>
-            <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
+            <SheetContent onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
                 <SheetHeader>
                     <SheetTitle>{label}</SheetTitle>
                     <SheetDescription className="sr-only"></SheetDescription>
