@@ -55,20 +55,31 @@ class StorageLocationController extends Controller
         return inertia('dashboard/savings/storage-locations/index', compact('storageLocations'));
     }
 
-    public function store(Request $request)
+    private function validateAndCheckExisting(Request $request, ?SavingsStorageLocation $storageLocation = null): void
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
         ]);
 
-        $existing = SavingsStorageLocation::where(function (Builder $query) {
+        $query = SavingsStorageLocation::where(function (Builder $query) {
             $query->where('user_id', Auth::id())->orWhereNull('user_id');
-        })->where('name', $request->name)
-            ->first();
+        })
+            ->whereRaw('LOWER(name) = ?', [strtolower($request->name)]);
 
-        if ($existing) {
-            return back()->withErrors(['name' => 'Storage location already exists.']);
+        if ($storageLocation) {
+            $query->where('id', '!=', $storageLocation->id);
         }
+
+        if ($query->exists()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'name' => 'Storage location already exists.',
+            ]);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        $this->validateAndCheckExisting($request);
 
         SavingsStorageLocation::create([
             'user_id' => Auth::id(),
@@ -80,19 +91,7 @@ class StorageLocationController extends Controller
 
     public function update(Request $request, SavingsStorageLocation $storageLocation)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ]);
-
-        $existing = SavingsStorageLocation::where(function (Builder $query) {
-            $query->where('user_id', Auth::id())->orWhereNull('user_id');
-        })->where('id', '!=', $storageLocation->id)
-            ->where('name', $request->name)
-            ->first();
-
-        if ($existing) {
-            return back()->withErrors(['name' => 'Storage location already exists.']);
-        }
+        $this->validateAndCheckExisting($request, $storageLocation);
 
         $storageLocation->update([
             'name' => $request->name,

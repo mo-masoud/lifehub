@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
 use App\Http\Controllers\Dashboard\Settings\UserSettingController;
 use App\Http\Controllers\Dashboard\SSHController;
+use App\Http\Controllers\Dashboard\Savings\TransactionCategoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -104,17 +105,18 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
 
         Route::resource('savings/snapshots', SnapshotController::class)
             ->only(['index', 'store', 'destroy'])
-            ->names('savings.snapshots')
-            ->parameters(['initial' => 'snapshot']);
+            ->names('savings.snapshots');
 
         Route::resource('savings/transactions', TransactionController::class)
             ->only(['index', 'store', 'update', 'destroy'])
-            ->names('savings.transactions')
-            ->parameters(['initial' => 'transaction']);
+            ->names('savings.transactions');
 
         Route::resource('savings/storage-locations', StorageLocationController::class)
             ->only(['index', 'store', 'update', 'destroy'])
-            ->names('savings.storage-locations')
-            ->parameters(['initial' => 'storage-location']);
+            ->names('savings.storage-locations');
+
+        Route::resource('savings/transaction-categories', TransactionCategoryController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('savings.transaction-categories');
     });
 });

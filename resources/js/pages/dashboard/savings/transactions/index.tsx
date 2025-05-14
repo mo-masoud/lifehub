@@ -1,6 +1,7 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
 import Heading from '@/components/dashboard/heading';
+import { ShowSavingsDirection } from '@/components/dashboard/show-savings-direction';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -13,7 +14,7 @@ import { TransactionForm } from '@/pages/dashboard/savings/transactions/transact
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Transaction } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ArrowDown, ArrowLeftRight, ArrowUp, Filter, Repeat } from 'lucide-react';
+import { ArrowLeftRight, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,33 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('dashboard.savings.transactions.index'),
     },
 ];
-
-const RenderTransactionDirection = ({ direction }: { direction: string }) => {
-    if (direction === 'in') {
-        return (
-            <span className="inline-flex items-center gap-x-1 text-green-500">
-                <ArrowDown className="size-4" />
-                <span>{__('savings.in')} </span>
-            </span>
-        );
-    }
-
-    if (direction === 'out') {
-        return (
-            <span className="inline-flex items-center gap-x-1 text-red-500">
-                <ArrowUp className="size-4" />
-                <span>{__('savings.out')} </span>
-            </span>
-        );
-    }
-
-    return (
-        <span className="inline-flex items-center gap-x-1 text-blue-500">
-            <Repeat className="size-4" />
-            <span>{__('savings.transfer')} </span>
-        </span>
-    );
-};
 
 export default function Index() {
     const { transactions, filters } = usePage<{ transactions: Pagination<Transaction>; filters: Record<string, any> }>().props;
@@ -117,7 +91,7 @@ export default function Index() {
                                     <TableCell className="text-start text-sm">{transaction.date}</TableCell>
                                     <TableCell className="text-start text-sm">{transaction.amount}</TableCell>
                                     <TableCell className="text-start text-sm">
-                                        <RenderTransactionDirection direction={transaction.direction} />
+                                        <ShowSavingsDirection direction={transaction.direction} />
                                     </TableCell>
                                     <TableCell className="text-start text-sm">{transaction.type}</TableCell>
                                     <TableCell className="text-start text-sm">{__(transaction.storage_location.name)}</TableCell>

@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('dashboard.home'),
     },
     {
-        title: __('general.password_manager'),
+        title: __('general.passwords'),
         href: route('dashboard.passwords.index'),
     },
 ];
@@ -78,11 +78,11 @@ export default function Index() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={__('general.password_manager')} />
+            <Head title={__('general.passwords')} />
             <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
                     <KeyRound className="text-primary size-5" />
-                    <Heading title={__('general.password_manager')} />
+                    <Heading title={__('general.passwords')} />
                 </div>
 
                 <CreateItem label={__('passwords.create_password')} FormComponent={PasswordForm} />

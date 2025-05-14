@@ -5,47 +5,56 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Aperture, Archive, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Scale } from 'lucide-react';
+import { Aperture, Archive, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Scale, Tag } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const navItems: NavItem[] = [
     {
         title: __('general.dashboard'),
         href: route('dashboard.home'),
         icon: LayoutGrid,
     },
     {
-        title: __('general.password_manager'),
+        title: __('general.passwords'),
         href: route('dashboard.passwords.index'),
         icon: KeyRound,
+        category: __('general.password_manager'),
     },
     {
         title: __('general.ssh_manager'),
         href: route('dashboard.sshs.index'),
         icon: Computer,
+        category: __('general.password_manager'),
     },
-];
-
-const savingsNavItems: NavItem[] = [
     {
         title: __('savings.initial_balance'),
         href: route('dashboard.savings.initial.index'),
         icon: Scale,
+        category: __('general.savings'),
     },
     {
         title: __('savings.storage_locations'),
         href: route('dashboard.savings.storage-locations.index'),
         icon: Archive,
+        category: __('general.savings'),
+    },
+    {
+        title: __('savings.transaction_categories'),
+        href: route('dashboard.savings.transaction-categories.index'),
+        icon: Tag,
+        category: __('general.savings'),
     },
     {
         title: __('savings.transactions'),
         href: route('dashboard.savings.transactions.index'),
         icon: ArrowLeftRight,
+        category: __('general.savings'),
     },
     {
         title: __('savings.snapshots'),
         href: route('dashboard.savings.snapshots.index'),
         icon: Aperture,
+        category: __('general.savings'),
     },
 ];
 
@@ -69,7 +78,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} savingsItems={savingsNavItems} />
+                <NavMain items={navItems} />
             </SidebarContent>
 
             <SidebarFooter>

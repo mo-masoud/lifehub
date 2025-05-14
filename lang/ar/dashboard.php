@@ -8,7 +8,8 @@ return [
         'platform' => 'المنصة',
         'home' => 'الرئيسية',
         'settings' => 'الإعدادات',
-        'password_manager' => 'كلمات المرور',
+        'password_manager' => 'إدارة كلمات المرور',
+        'passwords' => 'كلمات المرور',
         'search' => 'ابحث عن أي شيء...',
         'ssh_manager' => 'إدارة SSH',
         'savings' => 'المدخرات',
@@ -100,6 +101,7 @@ return [
         'new_password' => 'كلمة المرور الجديدة',
         'preferred_locale' => 'اللغة المفضلة',
         'url' => 'الرابط',
+        'name_placeholder' => 'اسم العنصر.',
     ],
 
     'passwords' => [
@@ -183,6 +185,10 @@ return [
         'egp' => 'جنيه مصري',
         'gold24' => 'ذهب 24',
         'gold21' => 'ذهب 21',
+        'transaction_categories' => 'فئات المعاملات',
+        'no_transaction_categories_found' => 'لا توجد فئات معاملات.',
+        'create_transaction_category' => 'إنشاء فئة معاملة',
+        'update_transaction_category' => 'تحديث فئة المعاملة',
     ],
 
     'ssh' => [

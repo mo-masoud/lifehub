@@ -7,7 +7,8 @@ return [
         'platform' => 'Platform',
         'home' => 'Home',
         'settings' => 'Settings',
-        'password_manager' => 'Passwords',
+        'password_manager' => 'Passwords manager',
+        'passwords' => 'Passwords',
         'search' => 'Search for anything...',
         'ssh_manager' => 'SSHs',
         'savings' => 'Savings',
@@ -101,6 +102,7 @@ return [
         'preferred_locale' => 'Preferred locale',
         'url' => 'URL',
         'ip' => 'IP/Host',
+        'name_placeholder' => 'Name of the item.',
     ],
 
     'passwords' => [
@@ -196,6 +198,10 @@ return [
         'egp' => 'EGP',
         'gold24' => 'Gold 24',
         'gold21' => 'Gold 21',
+        'transaction_categories' => 'Transaction categories',
+        'no_transaction_categories_found' => 'No transaction categories found.',
+        'create_transaction_category' => 'Create transaction category',
+        'update_transaction_category' => 'Update transaction category',
     ],
 
     'auth_layout' => [
