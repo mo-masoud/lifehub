@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Snapshot;
 use App\Services\CreateSnapshotService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class SnapshotController extends Controller
 {
-    public function destroy(Snapshot $snapshot) {
+    public function destroy(Snapshot $snapshot)
+    {
         if ($snapshot->items->count() === 1) {
             return back()->withErrors('You can not delete this snapshot because it has only one item.');
         }
 
-        if (auth()->id() !== $snapshot->user_id) {
+        if (Auth::id() !== $snapshot->user_id) {
             return back()->withErrors('You can not delete this snapshot because it belongs to another user.');
         }
 
@@ -33,11 +35,11 @@ class SnapshotController extends Controller
 
     public function store(Request $request, CreateSnapshotService $service)
     {
-        try {
-            $service->handle($request->user());
-            return back()->with('success', 'Snapshot created successfully');
-        } catch (Throwable $th) {
-            return back()->withErrors(__('dashboard.messages.something_went_wrong'));
-        }
+        // try {
+        $service->handle($request->user());
+        return back()->with('success', 'Snapshot created successfully');
+        // } catch (Throwable $th) {
+        //     return back()->withErrors(__('dashboard.messages.something_went_wrong'));
+        // }
     }
 }

@@ -14,14 +14,18 @@ use Throwable;
 
 class CreateSnapshotService
 {
+    protected User $user;
+
     /**
      * @throws Throwable
      */
     public function handle(User $user): Snapshot
     {
-        $user->load('initialSavings', 'transactions');
+        $this->user = $user;
 
-        return DB::transaction(function () use ($user) {
+        $this->user->load('initialSavings', 'transactions', 'snapshots.items');
+
+        return DB::transaction(function () {
             // Step 1: Get current rates
             $usdRate = $this->getUsdRate();
             $gold24 = $this->getGoldPrice(24);
@@ -29,14 +33,14 @@ class CreateSnapshotService
 
             // Step 2: Create the snapshot
             $snapshot = Snapshot::create([
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
                 'usd_rate' => $usdRate,
                 'gold24_price' => $gold24,
                 'gold21_price' => $gold21,
             ]);
 
             // Step 3: Build full balance snapshot
-            $balances = $this->calculateUserBalance($user);
+            $balances = $this->calculateUserBalance();
 
             foreach ($balances as $balance) {
                 $type = $balance['type'];
@@ -69,7 +73,7 @@ class CreateSnapshotService
         $response = Http::get('https://api.exchangerate-api.com/v4/latest/USD');
         $data = $response->json();
 
-        return isset($data['rates']['EGP']) ? (float) $data['rates']['EGP'] : UserSetting::get(auth()->user(), 'usd_rate_fallback', 50);
+        return isset($data['rates']['EGP']) ? (float) $data['rates']['EGP'] : UserSetting::get($this->user, 'usd_rate_fallback', 50);
     }
 
     /**
@@ -78,28 +82,44 @@ class CreateSnapshotService
     protected function getGoldPrice(int $karat): float
     {
         return match ($karat) {
-            24 => UserSetting::get(auth()->user(), 'gold24_rate_fallback', 4000),
-            21 => UserSetting::get(auth()->user(), 'gold21_rate_fallback', 3700),
+            24 => UserSetting::get($this->user, 'gold24_rate_fallback', 4000),
+            21 => UserSetting::get($this->user, 'gold21_rate_fallback', 3700),
             default => throw new Exception("Unsupported karat"),
         };
     }
 
-    protected function calculateUserBalance(User $user): array
+    protected function calculateUserBalance(): array
     {
         $final = [];
 
-        // Step 1: Initial savings
-        foreach ($user->initialSavings as $saving) {
-            $key = $saving->type->value . '-' . $saving->storage_location_id;
-            $final[$key] = [
-                'type' => $saving->type->value,
-                'storage_location_id' => $saving->storage_location_id,
-                'amount' => $saving->amount,
-            ];
+        $lastSnapshot = $this->user->snapshots
+            ->sortByDesc('created_at')
+            ->first();
+
+        if ($lastSnapshot) {
+            // Use balances from the last snapshot as the baseline
+            foreach ($lastSnapshot->items as $item) {
+                $key = $item->type . '-' . $item->storage_location_id;
+                $final[$key] = [
+                    'type' => $item->type,
+                    'storage_location_id' => $item->storage_location_id,
+                    'amount' => $item->amount,
+                ];
+            }
+        } else {
+            // Use initial savings as the baseline for the first snapshot
+            foreach ($this->user->initialSavings as $saving) {
+                $key = $saving->type->value . '-' . $saving->storage_location_id;
+                $final[$key] = [
+                    'type' => $saving->type->value,
+                    'storage_location_id' => $saving->storage_location_id,
+                    'amount' => $saving->amount,
+                ];
+            }
         }
 
         // Step 2: Transactions
-        foreach ($user->transactions as $tx) {
+        foreach ($this->user->transactions as $tx) {
             if ($tx->direction === 'in') {
                 $key = $tx->type . '-' . $tx->storage_location_id;
                 if (!isset($final[$key])) {
@@ -144,7 +164,6 @@ class CreateSnapshotService
         }
 
         // Remove zero balances
-        return array_values(array_filter($final, fn ($item) => $item['amount'] != 0));
+        return array_values(array_filter($final, fn($item) => $item['amount'] != 0));
     }
 }
-

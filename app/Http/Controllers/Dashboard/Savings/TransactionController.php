@@ -8,12 +8,13 @@ use App\Http\Requests\Dashboard\Savings\Transaction\UpdateRequest;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
     public function destroy(Transaction $transaction)
     {
-        if (auth()->id() !== $transaction->user_id) {
+        if (Auth::id() !== $transaction->user_id) {
             return back()->with('error', 'You do not have permission to delete this transaction.');
         }
         $transaction->delete();
@@ -33,7 +34,7 @@ class TransactionController extends Controller
         $filters['maxDate'] = $request->max_date;
 
         $transactions = Transaction::with('storageLocation', 'category')
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->when($filters['direction'], fn($q) => $q->where('direction', $filters['direction']))
             ->when($filters['type'], fn($q) => $q->where('type', $filters['type']))
             ->when($filters['fromType'], fn($q) => $q->where('from_type', $filters['fromType']))
@@ -51,7 +52,7 @@ class TransactionController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = Auth::id();
         $data['from_type'] = $data['direction'] === 'transfer' ? $data['from_type'] : null;
         $data['from_amount'] = $data['direction'] === 'transfer' ? $data['from_amount'] : null;
 

@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function snapshots(): HasMany
+    {
+        return $this->hasMany(Snapshot::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
