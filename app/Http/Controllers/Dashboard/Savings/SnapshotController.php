@@ -35,11 +35,11 @@ class SnapshotController extends Controller
 
     public function store(Request $request, CreateSnapshotService $service)
     {
-        // try {
-        $service->handle($request->user());
-        return back()->with('success', 'Snapshot created successfully');
-        // } catch (Throwable $th) {
-        //     return back()->withErrors(__('dashboard.messages.something_went_wrong'));
-        // }
+        try {
+            $service->handle($request->user());
+            return back()->with('success', 'Snapshot created successfully');
+        } catch (Throwable $th) {
+            return back()->withErrors(__('dashboard.messages.something_went_wrong'));
+        }
     }
 }
