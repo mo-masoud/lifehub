@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { __ } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
-import { StorageLocation } from '@/types/models';
+import { StorageLocation, TransactionCategory } from '@/types/models';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { format } from 'date-fns';
@@ -16,12 +16,14 @@ import { FormEventHandler, useEffect, useState } from 'react';
 
 export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
     const [locations, setLocations] = useState<StorageLocation[]>([]);
+    const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
     const { data, setData, get, processing, reset } = useForm({
         min_date: filters.min_date,
         max_date: filters.max_date,
         direction: filters.direction,
         storage_location: filters.storage_location,
+        category: filters.category,
         type: filters.type,
         from_type: filters.fromType,
         min_amount: filters.minAmount,
@@ -37,8 +39,18 @@ export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(route('api.dashboard.savings.transaction-categories.index'));
+            setCategories(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
         fetchLocations();
+        fetchCategories();
     }, []);
 
     const submit: FormEventHandler = (e) => {
@@ -230,6 +242,30 @@ export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
                 </Select>
             </div>
 
+            <div className="grid grid-cols-3 gap-4">
+                <Label htmlFor="category" className="mt-3 truncate">
+                    {__('savings.category')}
+                </Label>
+
+                <Select
+                    onValueChange={(value) => {
+                        setData('category', value);
+                    }}
+                    value={data.category}
+                >
+                    <SelectTrigger id="category" className="col-span-2 mt-1 w-full text-xs">
+                        <SelectValue placeholder={__('savings.category_placeholder')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id.toString()}>
+                                {__(category.name)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
             <Separator />
             <div className="grid grid-cols-6 gap-4">
                 <Button disabled={processing} className="col-span-5">
@@ -240,7 +276,9 @@ export const FiltersFrom = ({ filters }: { filters: Record<string, any> }) => {
                     variant="ghost"
                     className="col-span-1"
                     size="icon"
-                    onClick={() => reset('type', 'from_type', 'direction', 'min_amount', 'max_amount', 'min_date', 'max_date', 'storage_location')}
+                    onClick={() =>
+                        reset('type', 'from_type', 'direction', 'min_amount', 'max_amount', 'min_date', 'max_date', 'storage_location', 'category')
+                    }
                 >
                     <RotateCcw />
                 </Button>

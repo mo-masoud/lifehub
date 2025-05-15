@@ -28,6 +28,7 @@ class TransactionController extends Controller
         $filters['type'] = $request->type;
         $filters['fromType'] = $request->from_type;
         $filters['storage'] = $request->storage_location;
+        $filters['category'] = $request->category;
         $filters['minAmount'] = $request->min_amount;
         $filters['maxAmount'] = $request->max_amount;
         $filters['minDate'] = $request->min_date;
@@ -43,6 +44,7 @@ class TransactionController extends Controller
             ->when($filters['maxAmount'], fn($q) => $q->where('amount', '<=', $filters['maxAmount']))
             ->when($filters['minDate'], fn($q) => $q->whereDate('created_at', '>=', Carbon::parse($filters['minDate'])))
             ->when($filters['maxDate'], fn($q) => $q->whereDate('created_at', '<=', Carbon::parse($filters['maxDate'])))
+            ->when($filters['category'], fn($q) => $q->where('transaction_category_id', $filters['category']))
             ->latest()
             ->paginate();
 

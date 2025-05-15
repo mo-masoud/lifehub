@@ -192,6 +192,9 @@ return [
         'no_transaction_categories_found' => 'لا توجد فئات معاملات.',
         'create_transaction_category' => 'إنشاء فئة معاملة',
         'update_transaction_category' => 'تحديث فئة المعاملة',
+        'total' => 'الإجمالي',
+        'total_month' => 'الإجمالي الشهري',
+        'total_week' => 'الإجمالي الأسبوعي',
     ],
 
     'ssh' => [

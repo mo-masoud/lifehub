@@ -205,6 +205,9 @@ return [
         'no_transaction_categories_found' => 'No transaction categories found.',
         'create_transaction_category' => 'Create transaction category',
         'update_transaction_category' => 'Update transaction category',
+        'total' => 'Total',
+        'total_month' => 'Total month',
+        'total_week' => 'Total week',
     ],
 
     'auth_layout' => [

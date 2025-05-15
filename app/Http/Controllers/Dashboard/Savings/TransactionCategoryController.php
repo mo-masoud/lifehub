@@ -28,6 +28,16 @@ class TransactionCategoryController extends Controller
             ->latest()
             ->paginate();
 
+        foreach ($transactionCategories as $category) {
+            $category->total_amount = $category->transactions()->sum('amount');
+            $category->total_month = $category->transactions()
+                ->where('created_at', '>=', now()->subMonth())
+                ->sum('amount');
+            $category->total_week = $category->transactions()
+                ->where('created_at', '>=', now()->subWeek())
+                ->sum('amount');
+        }
+
         return inertia('dashboard/savings/transaction-categories/index', compact('transactionCategories'));
     }
 

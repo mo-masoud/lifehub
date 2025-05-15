@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
+import { formatNumber } from '@/lib/utils';
 import { TransactionCategoryForm } from '@/pages/dashboard/savings/transaction-categories/transaction-category-form';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { TransactionCategory } from '@/types/models';
@@ -58,6 +59,9 @@ export default function TransactionCategories() {
                             <TableRow>
                                 <TableHead className="text-start text-xs ltr:rounded-tl-xl rtl:rounded-tr-xl">{__('fields.name')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.direction')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('savings.total')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('savings.total_month')}</TableHead>
+                                <TableHead className="text-start text-xs">{__('savings.total_week')}</TableHead>
                                 <TableHead className="text-end text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">
                                     <span className="sr-only">{__('words.actions')}</span>
                                 </TableHead>
@@ -70,6 +74,9 @@ export default function TransactionCategories() {
                                     <TableCell className="text-start text-sm">
                                         <ShowSavingsDirection direction={category.direction} />
                                     </TableCell>
+                                    <TableCell className="text-start text-sm">{formatNumber(category.total_amount || 0)}</TableCell>
+                                    <TableCell className="text-start text-sm">{formatNumber(category.total_month || 0)}</TableCell>
+                                    <TableCell className="text-start text-sm">{formatNumber(category.total_week || 0)}</TableCell>
                                     <ActionCell
                                         updateLabel={__('savings.update_transaction_category')}
                                         item={{ category }}
