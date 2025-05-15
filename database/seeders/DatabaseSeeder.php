@@ -29,5 +29,9 @@ class DatabaseSeeder extends Seeder
                 'name' => $name,
             ]);
         }
+
+        $this->call([
+            TransactionCategoriesSeeder::class,
+        ]);
     }
 }

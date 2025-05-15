@@ -9,10 +9,10 @@ class UserSetting extends Model
 {
     protected $fillable = ['user_id', 'key', 'value'];
 
-    public static function get(User $user, string $key, $default = null): mixed
+    public static function get(?User $user, string $key, $default = null): mixed
     {
         return static::query()
-            ->where('user_id', $user->id)
+            ->where('user_id', $user?->id)
             ->where('key', $key)
             ->value('value') ?? $default;
     }
@@ -31,7 +31,7 @@ class UserSetting extends Model
      * @param User $user The user to check.
      * @return bool True if the user has completed initial savings, false otherwise.
      */
-    public static function hasCompletedInitialSavings(User $user): bool
+    public static function hasCompletedInitialSavings(?User $user): bool
     {
         return (bool) static::get($user, 'initial_savings_completed', false);
     }

@@ -61,21 +61,23 @@ export const InitialSavingsCard = ({ initialSavings }: { initialSavings: Balance
 
                     <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {initialSavings.length === 0 ? (
-                            <div className="text-muted-foreground col-span-full py-6 text-center text-sm">{__('savings.no_initial_balances')}</div>
+                            <div className="text-muted-foreground col-span-full py-6 text-center text-sm">{__('savings.no_balances_founds')}</div>
                         ) : (
                             initialSavings.map((balance) => <BalanceCard key={balance.id} balance={balance} />)
                         )}
                     </div>
 
-                    <div className="mt-4 flex flex-col items-start justify-center gap-4">
-                        <p className="text-muted-foreground inline-flex items-center gap-2 text-xs font-semibold">
-                            <TriangleAlert className="size-5 text-yellow-500" />
-                            <span>{__('savings.save_initial_savings_warning')}</span>
-                        </p>
-                        <Button onClick={complete}>
-                            <span>{__('savings.save_initial_savings')}</span>
-                        </Button>
-                    </div>
+                    {initialSavings.length > 0 && (
+                        <div className="mt-4 flex flex-col items-start justify-center gap-4">
+                            <p className="text-muted-foreground inline-flex items-center gap-2 text-xs font-semibold">
+                                <TriangleAlert className="size-5 text-yellow-500" />
+                                <span>{__('savings.save_initial_savings_warning')}</span>
+                            </p>
+                            <Button onClick={complete}>
+                                <span>{__('savings.save_initial_savings')}</span>
+                            </Button>
+                        </div>
+                    )}
                 </CollapsibleContent>
             </Collapsible>
         </Card>

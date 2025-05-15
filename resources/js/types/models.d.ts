@@ -72,6 +72,7 @@ export interface TransactionCategory {
     id: string;
     name: string;
     total_amount?: number;
+    total_year?: number;
     total_month?: number;
     total_week?: number;
     direction: string;

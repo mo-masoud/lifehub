@@ -12,7 +12,7 @@ import { TransactionCategoryForm } from '@/pages/dashboard/savings/transaction-c
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { TransactionCategory } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Tag } from 'lucide-react';
+import { ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,14 +26,39 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+const sortIcon = (column: string, currentOrder: string, currentDirection: string) => {
+    if (currentOrder === column) {
+        return currentDirection === 'asc' ? <ChevronUp className="inline-block h-4 w-4" /> : <ChevronDown className="inline-block h-4 w-4" />;
+    }
+    return null;
+};
+
+const handleSort = (column: string) => {
+    const currentOrder = new URLSearchParams(window.location.search).get('order_by') || 'name';
+    const currentDirection = new URLSearchParams(window.location.search).get('order_direction') || 'asc';
+
+    const newDirection = currentOrder === column && currentDirection === 'asc' ? 'desc' : 'asc';
+
+    router.get(route('dashboard.savings.transaction-categories.index'), {
+        order_by: column,
+        order_direction: newDirection,
+    });
+};
+
 export default function TransactionCategories() {
     const { transactionCategories } = usePage<{ transactionCategories: Pagination<TransactionCategory> }>().props;
+
+    const currentOrder = new URLSearchParams(window.location.search).get('order_by') || 'name';
+    const currentDirection = new URLSearchParams(window.location.search).get('order_direction') || 'desc';
 
     const destroy = (id: string) => {
         router.delete(route('dashboard.savings.transaction-categories.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success(__('messages.deleted_successfully'));
+            },
+            onError: (e) => {
+                toast.error(e[0]);
             },
         });
     };
@@ -57,11 +82,27 @@ export default function TransactionCategories() {
                         {transactionCategories.data.length === 0 && <TableCaption>{__('savings.no_transaction_categories_found')}</TableCaption>}
                         <TableHeader className="bg-muted">
                             <TableRow>
-                                <TableHead className="text-start text-xs ltr:rounded-tl-xl rtl:rounded-tr-xl">{__('fields.name')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.direction')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.total')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.total_month')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.total_week')}</TableHead>
+                                <TableHead
+                                    className="cursor-pointer text-start text-xs ltr:rounded-tl-xl rtl:rounded-tr-xl"
+                                    onClick={() => handleSort('name')}
+                                >
+                                    {__('fields.name')} {sortIcon('name', currentOrder, currentDirection)}
+                                </TableHead>
+                                <TableHead className="cursor-pointer text-start text-xs" onClick={() => handleSort('direction')}>
+                                    {__('savings.direction')} {sortIcon('direction', currentOrder, currentDirection)}
+                                </TableHead>
+                                <TableHead className="cursor-pointer text-start text-xs" onClick={() => handleSort('total_amount')}>
+                                    {__('savings.total')} {sortIcon('total_amount', currentOrder, currentDirection)}
+                                </TableHead>
+                                <TableHead className="cursor-pointer text-start text-xs" onClick={() => handleSort('total_year')}>
+                                    {__('savings.total_year')} {sortIcon('total_year', currentOrder, currentDirection)}
+                                </TableHead>
+                                <TableHead className="cursor-pointer text-start text-xs" onClick={() => handleSort('total_month')}>
+                                    {__('savings.total_month')} {sortIcon('total_month', currentOrder, currentDirection)}
+                                </TableHead>
+                                <TableHead className="cursor-pointer text-start text-xs" onClick={() => handleSort('total_week')}>
+                                    {__('savings.total_week')} {sortIcon('total_week', currentOrder, currentDirection)}
+                                </TableHead>
                                 <TableHead className="text-end text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">
                                     <span className="sr-only">{__('words.actions')}</span>
                                 </TableHead>
@@ -70,11 +111,12 @@ export default function TransactionCategories() {
                         <TableBody>
                             {transactionCategories.data.map((category) => (
                                 <TableRow key={category.id}>
-                                    <TableCell className="text-start text-sm">{category.name}</TableCell>
+                                    <TableCell className="text-start text-sm">{__(category.name)}</TableCell>
                                     <TableCell className="text-start text-sm">
                                         <ShowSavingsDirection direction={category.direction} />
                                     </TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(category.total_amount || 0)}</TableCell>
+                                    <TableCell className="text-start text-sm">{formatNumber(category.total_year || 0)}</TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(category.total_month || 0)}</TableCell>
                                     <TableCell className="text-start text-sm">{formatNumber(category.total_week || 0)}</TableCell>
                                     <ActionCell

@@ -7,6 +7,7 @@ use App\Http\Requests\Dashboard\Savings\InitialSavings\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\InitialSavings\UpdateRequest;
 use App\Models\InitialSaving;
 use App\Models\UserSetting;
+use App\Services\CreateSnapshotService;
 use Illuminate\Http\Request;
 
 class InitialSavingController extends Controller
@@ -41,6 +42,8 @@ class InitialSavingController extends Controller
     public function complete(Request $request)
     {
         UserSetting::markInitialSavingsCompleted($request->user());
+
+        new CreateSnapshotService()->handle($request->user());
 
         return back()->with('success', 'Initial saving marked as completed successfully.');
     }

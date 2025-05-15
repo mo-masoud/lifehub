@@ -21,22 +21,46 @@ class TransactionCategoryController extends Controller
         return back()->with('success', 'Transaction category deleted successfully');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $transactionCategories = TransactionCategory::whereNull('user_id')
+        $transactionCategories = TransactionCategory::with('transactions')
+            ->whereNull('user_id')
             ->orWhere('user_id', Auth::id())
-            ->latest()
-            ->paginate();
+            ->get();
 
         foreach ($transactionCategories as $category) {
-            $category->total_amount = $category->transactions()->sum('amount');
-            $category->total_month = $category->transactions()
+            $category->total_amount = $category->transactions->sum('amount');
+            $category->total_month = $category->transactions
                 ->where('created_at', '>=', now()->subMonth())
                 ->sum('amount');
-            $category->total_week = $category->transactions()
+            $category->total_week = $category->transactions
                 ->where('created_at', '>=', now()->subWeek())
                 ->sum('amount');
+            $category->total_year = $category->transactions
+                ->where('created_at', '>=', now()->subYear())
+                ->sum('amount');
         }
+
+        $orderBy = $request->get('order_by', 'name');
+        $orderDirection = $request->get('order_direction', 'asc');
+        $perPage = $request->get('per_page', 15); // Default items per page
+        $currentPage = $request->get('page', 1); // Current page
+
+        $transactionCategories = $transactionCategories->sortBy(
+            $orderBy,
+            SORT_REGULAR,
+            $orderDirection === 'desc'
+        );
+
+        $paginatedCategories = $transactionCategories->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $transactionCategories = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedCategories,
+            $transactionCategories->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         return inertia('dashboard/savings/transaction-categories/index', compact('transactionCategories'));
     }
