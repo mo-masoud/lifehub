@@ -22,7 +22,10 @@ export const TablePagination = ({ pagination }: { pagination: Pagination<any> })
                     variant="outline"
                     disabled={!pagination.links[0].url}
                     onClick={() => {
-                        router.visit(pagination.links[0].url!);
+                        router.visit(pagination.links[0].url!, {
+                            preserveScroll: true,
+                            preserveState: true,
+                        });
                     }}
                 >
                     <ChevronsLeft />
@@ -31,7 +34,12 @@ export const TablePagination = ({ pagination }: { pagination: Pagination<any> })
                     size="icon"
                     variant="outline"
                     disabled={!pagination.links[pagination.links.length - 1].url}
-                    onClick={() => router.visit(pagination.links[pagination.links.length - 1].url!)}
+                    onClick={() =>
+                        router.visit(pagination.links[pagination.links.length - 1].url!, {
+                            preserveScroll: true,
+                            preserveState: true,
+                        })
+                    }
                 >
                     <ChevronsRight />
                 </Button>

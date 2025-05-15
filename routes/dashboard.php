@@ -99,9 +99,12 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->parameters(['sshs' => 'ssh']);
 
         Route::resource('savings/initial', InitialSavingController::class)
-            ->only(['index', 'store', 'destroy', 'update'])
+            ->only(['store', 'destroy', 'update'])
             ->names('savings.initial')
             ->parameters(['initial' => 'initialSaving']);
+
+        Route::post('savings/initial/complete', [InitialSavingController::class, 'complete'])
+            ->name('savings.initial.complete');
 
         Route::resource('savings/snapshots', SnapshotController::class)
             ->only(['index', 'store', 'destroy'])

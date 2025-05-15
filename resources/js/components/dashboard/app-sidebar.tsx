@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Aperture, Archive, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Scale, Tag } from 'lucide-react';
+import { Aperture, Archive, ArrowLeftRight, Computer, KeyRound, LayoutGrid, Tag } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const navItems: NavItem[] = [
@@ -25,12 +25,6 @@ const navItems: NavItem[] = [
         href: route('dashboard.sshs.index'),
         icon: Computer,
         category: __('general.password_manager'),
-    },
-    {
-        title: __('savings.initial_balance'),
-        href: route('dashboard.savings.initial.index'),
-        icon: Scale,
-        category: __('general.savings'),
     },
     {
         title: __('savings.storage_locations'),

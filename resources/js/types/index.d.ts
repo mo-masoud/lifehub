@@ -30,6 +30,7 @@ export interface SharedData {
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
     locale: string;
+    initial_savings_completed: boolean;
     dir: 'ltr' | 'rtl';
 
     [key: string]: unknown;
@@ -48,21 +49,21 @@ export interface User {
 }
 
 export interface Pagination<T> {
-    current_page: number,
-    data: T[],
-    first_page_url: string,
-    from?: string,
-    last_page: number,
-    last_page_url: string,
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from?: string;
+    last_page: number;
+    last_page_url: string;
     links: {
-        url?: string,
-        label: string,
-        active: boolean
-    }[],
-    next_page_url?: string,
-    path?: string,
-    per_page: number,
-    prev_page_url?: string,
-    to?: string,
-    total: number
+        url?: string;
+        label: string;
+        active: boolean;
+    }[];
+    next_page_url?: string;
+    path?: string;
+    per_page: number;
+    prev_page_url?: string;
+    to?: string;
+    total: number;
 }

@@ -16,5 +16,5 @@ export const generatePassword = () => {
 };
 
 export const formatNumber = (num: number) => {
-    return new Intl.NumberFormat().format(num);
+    return new Intl.NumberFormat().format(num).replace(/,/g, ', ');
 };

@@ -25,6 +25,27 @@ class UserSetting extends Model
         ], ['value' => $value]);
     }
 
+    /**
+     * Checks if the user has completed their initial savings setup.
+     *
+     * @param User $user The user to check.
+     * @return bool True if the user has completed initial savings, false otherwise.
+     */
+    public static function hasCompletedInitialSavings(User $user): bool
+    {
+        return (bool) static::get($user, 'initial_savings_completed', false);
+    }
+
+    /**
+     * Marks the user's initial savings as completed.
+     *
+     * @param User $user The user to update.
+     */
+    public static function markInitialSavingsCompleted(User $user): void
+    {
+        static::set($user, 'initial_savings_completed', true);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

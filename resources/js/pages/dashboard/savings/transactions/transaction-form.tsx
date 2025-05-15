@@ -255,7 +255,7 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
             )}
 
             {data.direction !== 'transfer' && (
-                <div className="grid gap-2">
+                <div className="grid gap-2" id="transaction_category_id_container">
                     <Label htmlFor="transaction_category_id" className="truncate">
                         {__('savings.category')} <span className="mx-1 text-lg text-red-500">*</span>
                     </Label>

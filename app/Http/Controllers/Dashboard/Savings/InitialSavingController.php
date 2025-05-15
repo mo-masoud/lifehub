@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\InitialSavings\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\InitialSavings\UpdateRequest;
 use App\Models\InitialSaving;
-use Inertia\Inertia;
+use App\Models\UserSetting;
+use Illuminate\Http\Request;
 
 class InitialSavingController extends Controller
 {
@@ -14,33 +15,33 @@ class InitialSavingController extends Controller
     {
         $initialSaving->delete();
 
-        return redirect()->route('dashboard.savings.initial.index')->with('success', 'Initial saving deleted successfully.');
-    }
-
-    public function index()
-    {
-        $balances = InitialSaving::with('storageLocation')->latest()->paginate();
-
-        return Inertia::render('dashboard/savings/initial-savings/index', compact('balances'));
+        return back()->with('success', 'Initial saving deleted successfully.');
     }
 
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $request->user()->id;
 
         InitialSaving::create($data);
 
-        return redirect()->route('dashboard.savings.initial.index')->with('success', 'Initial saving created successfully.');
+        return back()->with('success', 'Initial saving created successfully.');
     }
 
     public function update(UpdateRequest $request, InitialSaving $initialSaving)
     {
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $request->user()->id;
 
         $initialSaving->update($data);
 
-        return redirect()->route('dashboard.savings.initial.index')->with('success', 'Initial saving updated successfully.');
+        return back()->with('success', 'Initial saving updated successfully.');
+    }
+
+    public function complete(Request $request)
+    {
+        UserSetting::markInitialSavingsCompleted($request->user());
+
+        return back()->with('success', 'Initial saving marked as completed successfully.');
     }
 }

@@ -118,6 +118,9 @@ return [
     ],
 
     'savings' => [
+        'save_initial_savings' => 'حفظ المدخرات الأولية',
+        'save_initial_savings_warning' => 'إذا قمت بحفظ المدخرات الأولية، فلن تتمكن من تغييرها لاحقًا.',
+        'initial_savings_completed' => 'تم إكمال المدخرات الأولية',
         'home' => 'المنزل',
         'bank' => 'البنك',
         'initial_balance' => 'الرصيد الأولي',

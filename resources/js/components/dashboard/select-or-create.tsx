@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { __ } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Plus, X } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface Props {
     options: any[];
@@ -20,6 +20,8 @@ interface Props {
 }
 
 export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeholder, onCreate, onChange, filter, create }: Props) => {
+    const triggerRef = useRef<HTMLButtonElement>(null);
+
     const [open, setOpen] = useState(false);
     const [creatingNewOption, setCreatingNewOption] = useState(false);
     const [newOption, setNewOption] = useState('');
@@ -52,6 +54,7 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
+                    ref={triggerRef}
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
@@ -61,7 +64,12 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                     <ChevronsUpDown className="text-muted-foreground ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[567px] p-0">
+            <PopoverContent
+                className="p-0"
+                style={{
+                    width: typeof window !== 'undefined' ? `${triggerRef.current?.offsetWidth || 0}px` : 'auto',
+                }}
+            >
                 <Command>
                     {creatingNewOption ? (
                         <>
@@ -69,7 +77,7 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                                 <Input
                                     className="flex-1"
                                     value={newOption}
-                                    placeholder={__('savings.category_name_placeholder')}
+                                    placeholder={__('fields.name')}
                                     onChange={(e) => setNewOption(e.target.value)}
                                     autoFocus
                                 />
@@ -93,7 +101,7 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                         </>
                     ) : (
                         <Button variant="ghost" className="m-1 flex items-center justify-between" onClick={() => setCreatingNewOption(true)}>
-                            <h6 className="text-muted-foreground px-2 text-xs">{__('messages.choose_from_list_or_create_new')}</h6>
+                            <h6 className="text-muted-foreground truncate px-2 text-xs">{__('messages.choose_from_list_or_create_new')}</h6>
                             <Plus />
                         </Button>
                     )}

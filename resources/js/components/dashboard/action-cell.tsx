@@ -68,7 +68,7 @@ export const ActionCell = ({
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="icon">
-                            <Trash2 className="size-4 text-red-500" />
+                            <Trash2 className="text-destructive size-4" />
                         </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
