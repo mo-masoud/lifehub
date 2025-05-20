@@ -14,6 +14,13 @@ return [
         'savings' => 'Savings',
     ],
 
+    'stats' => [
+        'current_savings' => 'Current Savings',
+        'as_of' => 'As of',
+        'no_snapshots' => 'No Snapshots Available',
+        'create_first_snapshot' => 'Create your first snapshot to see your savings stats.',
+    ],
+
     'messages' => [
         'save' => 'Save',
         'saved' => 'Saved',
