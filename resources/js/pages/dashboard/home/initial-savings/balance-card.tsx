@@ -26,11 +26,12 @@ export const BalanceCard = ({ balance }: { balance: Balance }) => {
                 <div
                     key={balance.id}
                     onClick={() => setShowForm(true)}
-                    className="flex cursor-pointer items-center justify-between rounded-md border p-3 shadow transition hover:shadow-md"
+                    className="flex cursor-pointer items-center justify-between rounded-md border p-3 transition hover:shadow-sm"
                 >
                     <div className="flex flex-1 flex-col gap-0.5">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-primary text-sm font-bold">{__(balance.type)}</span>
+                            <span className="text-primary text-sm font-bold">{__('savings.' + balance.type)}</span>
+                            <span className="bg-muted-foreground size-1 rounded-full" />
                             <span className="text-muted-foreground text-xs font-semibold">{__(balance.storage_location.name)}</span>
                         </div>
                         <span className="text-foreground text-base font-semibold">{formatNumber(balance.amount)}</span>

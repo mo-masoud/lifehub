@@ -6,18 +6,28 @@ import { usePage } from '@inertiajs/react';
 import { PlusCircle } from 'lucide-react';
 import { FC, useState } from 'react';
 
-export const CreateItem = ({ label, FormComponent }: { label: string; FormComponent: FC<any> }) => {
+interface CreateItemProps {
+    label: string;
+    FormComponent: FC<any>;
+    trigger?: React.ReactNode;
+}
+
+export const CreateItem = ({ label, FormComponent, trigger }: CreateItemProps) => {
     const { dir } = usePage<SharedData>().props;
 
     const [show, setShow] = useState(false);
 
     return (
         <Sheet open={show} onOpenChange={setShow}>
-            <SheetTrigger asChild>
-                <Button onClick={() => setShow(true)}>
-                    <span>{__('messages.new')}</span>
-                    <PlusCircle />
-                </Button>
+            <SheetTrigger asChild onClick={() => setShow(true)}>
+                {trigger ? (
+                    trigger
+                ) : (
+                    <Button>
+                        <span>{__('messages.new')}</span>
+                        <PlusCircle />
+                    </Button>
+                )}
             </SheetTrigger>
             <SheetContent onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
                 <SheetHeader>
