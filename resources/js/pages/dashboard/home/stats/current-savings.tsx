@@ -43,16 +43,16 @@ export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavi
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-3 rounded-md bg-amber-100 p-1">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full">
-                            <span className="text-xl font-medium">🇪🇬</span>
+                            <span className="flex size-7 items-center justify-center rounded-full bg-amber-400 text-xl font-medium">🇪🇬</span>
                         </div>
                         <div className="text-lg font-semibold text-black">{formatNumber(Math.floor(totalEgp))} £</div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-md bg-green-700 p-1">
+                    <div className="flex items-center gap-3 rounded-md bg-green-100 p-1">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full">
-                            <span className="text-xl font-medium">🇺🇸</span>
+                            <span className="flex size-7 items-center justify-center rounded-full bg-green-400 text-xl font-medium">🇺🇸</span>
                         </div>
-                        <div className="text-muted text-lg font-semibold">{formatNumber(Math.floor(totalUsd))} $</div>
+                        <div className="text-lg font-semibold text-black">{formatNumber(Math.floor(totalUsd))} $</div>
                     </div>
 
                     <div className="mt-1 flex items-center">
