@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { CurrentSavings, NoSnapshots } from './stats';
+import SavingsStats from './savings-stats';
 
 interface LatestSnapshotTotals {
     date: string;
@@ -10,8 +10,34 @@ interface LatestSnapshotTotals {
     total_usd: number;
 }
 
+interface Transaction {
+    amount: number;
+    date: string;
+    category: string | null;
+    category_id: number | null;
+    notes: string | null;
+    period: string;
+}
+
+interface TopTransactions {
+    week: Transaction | null;
+    month: Transaction | null;
+    quarter: Transaction | null;
+    year: Transaction | null;
+}
+
+interface TotalByPeriod {
+    week: number;
+    month: number;
+    quarter: number;
+    year: number;
+}
+
 interface IndexProps {
     latestSnapshotTotals: LatestSnapshotTotals | null;
+    topTransactions: TopTransactions;
+    totalExpenses: TotalByPeriod;
+    totalIncome: TotalByPeriod;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -21,22 +47,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ latestSnapshotTotals }: IndexProps) {
+export default function Index({ latestSnapshotTotals, topTransactions, totalExpenses, totalIncome }: IndexProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('general.home')} />
-
-            <div className="grid gap-6 p-4 md:grid-cols-2 lg:grid-cols-3">
-                {latestSnapshotTotals ? (
-                    <CurrentSavings
-                        date={latestSnapshotTotals.date}
-                        totalEgp={latestSnapshotTotals.total_egp}
-                        totalUsd={latestSnapshotTotals.total_usd}
-                    />
-                ) : (
-                    <NoSnapshots />
-                )}
-            </div>
+            <SavingsStats
+                latestSnapshotTotals={latestSnapshotTotals}
+                topTransactions={topTransactions}
+                totalExpenses={totalExpenses}
+                totalIncome={totalIncome}
+            />
         </AppLayout>
     );
 }

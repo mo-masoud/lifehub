@@ -17,9 +17,15 @@ class HomeController extends Controller
     public function __invoke()
     {
         $latestSnapshotTotals = $this->dashboardStatsService->getLatestSnapshotTotals();
+        $topTransactions = $this->dashboardStatsService->getTopTransactionsByPeriod();
+        $totalExpenses = $this->dashboardStatsService->getTotalExpensesByPeriod();
+        $totalIncome = $this->dashboardStatsService->getTotalIncomeByPeriod();
 
         return inertia('dashboard/home/index', [
             'latestSnapshotTotals' => $latestSnapshotTotals,
+            'topTransactions' => $topTransactions,
+            'totalExpenses' => $totalExpenses,
+            'totalIncome' => $totalIncome,
         ]);
     }
 }

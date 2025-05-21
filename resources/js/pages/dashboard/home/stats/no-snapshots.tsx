@@ -2,11 +2,11 @@ import { __ } from '@/lib/i18n';
 
 export default function NoSnapshots() {
     return (
-        <div className="overflow-hidden rounded-lg border bg-white dark:bg-zinc-950">
+        <div className="flex h-full flex-col overflow-hidden rounded-lg border bg-white dark:bg-zinc-950">
             <div className="border-b px-4 py-2">
                 <h3 className="text-primary text-sm font-bold">{__('stats.no_snapshots')}</h3>
             </div>
-            <div className="p-4">
+            <div className="flex-grow p-4">
                 <div className="flex items-center gap-3">
                     <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full">
                         <svg

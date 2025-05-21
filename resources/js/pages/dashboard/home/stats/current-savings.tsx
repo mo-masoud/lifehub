@@ -29,7 +29,7 @@ export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavi
     };
 
     return (
-        <div className="bg-background overflow-hidden rounded-lg border shadow-xs">
+        <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border shadow-xs">
             <div className="inline-flex w-full items-center justify-between border-b px-4 py-1">
                 <h3 className="inline-flex items-center gap-2 text-sm font-bold">
                     <Aperture className="text-primary size-4" />
@@ -39,7 +39,7 @@ export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavi
                     <PlusCircle className="text-primary stroke-3" />
                 </Button>
             </div>
-            <div className="p-4">
+            <div className="flex-grow p-4">
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-3 rounded-md bg-amber-100 p-1">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full">
