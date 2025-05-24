@@ -1,5 +1,6 @@
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
+import { DollarSign } from 'lucide-react';
 import { useState } from 'react';
 
 interface TotalIncomeProps {
@@ -27,20 +28,8 @@ export default function TotalIncome({ income }: TotalIncomeProps) {
     return (
         <div className="flex h-full flex-col overflow-hidden rounded-lg border bg-white dark:bg-zinc-950">
             <div className="flex items-center border-b px-4 py-2">
-                <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
+                <div className="mr-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                    <DollarSign className="size-4" />
                 </div>
                 <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{__('stats.total_income')}</h3>
             </div>

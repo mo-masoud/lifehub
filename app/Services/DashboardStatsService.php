@@ -4,10 +4,9 @@ namespace App\Services;
 
 use App\Models\Snapshot;
 use App\Models\Transaction;
-use App\Models\Category;
+use App\Models\UserSetting;
 use App\Enums\TransactionDirection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class DashboardStatsService
 {
@@ -77,20 +76,54 @@ class DashboardStatsService
             ->where('direction', TransactionDirection::OUT->value)
             ->where('date', '>=', $startDate->toDateString())
             ->orderByDesc('amount')
-            ->with('category')
+            ->with(['category', 'storageLocation'])
             ->first();
 
         if (!$transaction) {
             return null;
         }
 
+        // Get conversion rates from user settings
+        $usdRate = (float) UserSetting::get(Auth::user(), 'usd_rate_fallback', 1);
+        $gold24Rate = (float) UserSetting::get(Auth::user(), 'gold24_rate_fallback', 1);
+        $gold21Rate = (float) UserSetting::get(Auth::user(), 'gold21_rate_fallback', 1);
+
+        // Get transaction type from the storage location
+        $type = $transaction->type ?? 'EGP';
+
+        // Calculate amounts in EGP and USD
+        $amountEgp = $transaction->amount;
+        $amountUsd = $transaction->amount;
+
+        // Convert based on type
+        switch ($type) {
+            case 'USD':
+                $amountEgp = $transaction->amount * $usdRate;
+                break;
+            case 'GOLD24':
+                $amountEgp = $transaction->amount * $gold24Rate;
+                $amountUsd = $amountEgp / $usdRate;
+                break;
+            case 'GOLD21':
+                $amountEgp = $transaction->amount * $gold21Rate;
+                $amountUsd = $amountEgp / $usdRate;
+                break;
+            case 'EGP':
+            default:
+                $amountUsd = $transaction->amount / $usdRate;
+                break;
+        }
+
         return [
             'amount' => $transaction->amount,
+            'amount_egp' => $amountEgp,
+            'amount_usd' => $amountUsd,
             'date' => $transaction->date,
             'category' => $transaction->category?->name,
             'category_id' => $transaction->category?->id,
             'notes' => $transaction->notes,
             'period' => $periodName,
+            'type' => $type,
         ];
     }
 

@@ -1,5 +1,5 @@
 import { __ } from '@/lib/i18n';
-import { CurrentSavings, NoSnapshots, TopTransactions, TotalExpenses, TotalIncome } from './stats';
+import { CurrentSavings, TopTransactions, TotalExpenses, TotalIncome } from './stats';
 
 interface LatestSnapshotTotals {
     date: string;
@@ -9,11 +9,14 @@ interface LatestSnapshotTotals {
 
 interface Transaction {
     amount: number;
+    amount_egp: number;
+    amount_usd: number;
     date: string;
     category: string | null;
     category_id: number | null;
     notes: string | null;
     period: string;
+    type: string;
 }
 
 interface TopTransactions {
@@ -44,14 +47,12 @@ export default function SavingsStats({ latestSnapshotTotals, topTransactions, to
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
                 {/* Current Savings - First item on all screens */}
                 <div className="h-full">
-                    {latestSnapshotTotals ? (
+                    {latestSnapshotTotals && (
                         <CurrentSavings
                             date={latestSnapshotTotals.date}
                             totalEgp={latestSnapshotTotals.total_egp}
                             totalUsd={latestSnapshotTotals.total_usd}
                         />
-                    ) : (
-                        <NoSnapshots />
                     )}
                 </div>
 

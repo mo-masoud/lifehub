@@ -1,5 +1,6 @@
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
+import { Banknote } from 'lucide-react';
 import { useState } from 'react';
 
 interface TotalExpensesProps {
@@ -28,22 +29,8 @@ export default function TotalExpenses({ expenses }: TotalExpensesProps) {
     return (
         <div className="flex h-full flex-col overflow-hidden rounded-lg border bg-white dark:bg-zinc-950">
             <div className="flex items-center border-b px-4 py-2">
-                <div className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path>
-                    </svg>
+                <div className="mr-2 flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                    <Banknote className="size-4" />
                 </div>
                 <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{__('stats.total_expenses')}</h3>
             </div>

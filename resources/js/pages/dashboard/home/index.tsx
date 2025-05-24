@@ -12,11 +12,14 @@ interface LatestSnapshotTotals {
 
 interface Transaction {
     amount: number;
+    amount_egp: number;
+    amount_usd: number;
     date: string;
     category: string | null;
     category_id: number | null;
     notes: string | null;
     period: string;
+    type: string;
 }
 
 interface TopTransactions {
