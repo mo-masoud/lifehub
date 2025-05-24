@@ -80,6 +80,16 @@ return [
         'price_rate_fallback_description' => 'تحديث قيم سعر الصرف الاحتياطي.',
     ],
 
+    'home_page' => [
+        'savings_module_title' => 'إدارة المدخرات',
+        'savings_module_description' => 'تتبع وإدارة وتحليل مدخراتك بأدوات ورؤى شاملة.',
+        'savings_overview_title' => 'نظرة عامة على المدخرات',
+        'savings_setup_title' => 'إعداد المدخرات الأولية',
+        'savings_setup_description' => 'أكمل إعداد مدخراتك الأولية للبدء.',
+        'savings_settings_title' => 'إعدادات المدخرات',
+        'savings_settings_description' => 'قم بتكوين أسعار الصرف والإعدادات الأخرى المتعلقة بالمدخرات.',
+    ],
+
     'profile' => [
         'logout' => 'تسجيل الخروج',
         'delete_account' => 'حذف الحساب',

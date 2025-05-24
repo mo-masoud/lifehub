@@ -29,42 +29,39 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd }: CurrentSavingsProps
     };
 
     return (
-        <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border shadow-xs">
-            <div className="flex w-full items-center justify-between border-b px-4 py-2">
+        <div className="flex h-full flex-col overflow-hidden rounded-lg border bg-white dark:bg-zinc-950">
+            <div className="flex items-center justify-between border-b px-4 py-2">
                 <div className="flex items-center gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-600">
+                    <div className="mr-1 flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                         <HandCoins className="size-4" />
-                    </span>
-                    <h3 className="text-sm font-bold">{__('stats.current_savings')}</h3>
+                    </div>
+                    <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">{__('stats.current_savings')}</h3>
                 </div>
 
                 <Button size="icon" className="size-7" variant="outline" onClick={newSnapshot}>
-                    <PlusCircle />
+                    <PlusCircle className="size-4" />
                 </Button>
             </div>
 
-            <div className="mt-2 flex flex-col gap-3 p-4">
-                <div className="flex items-center gap-3 rounded-md bg-amber-100 p-1">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full">
-                        <span className="flex size-7 items-center justify-center rounded-full bg-amber-400 text-xl font-medium">🇪🇬</span>
-                    </div>
-                    <div className="text-lg font-semibold text-black">{formatNumber(Math.floor(totalEgp))} £</div>
+            <div className="flex flex-1 flex-col justify-center gap-4 p-6 xl:gap-3 xl:p-5">
+                {/* EGP Amount */}
+                <div className="text-center">
+                    <div className="mb-1 text-sm font-medium text-zinc-500 xl:mb-1 dark:text-zinc-400">EGP</div>
+                    <div className="text-2xl font-bold text-amber-600 xl:text-3xl dark:text-amber-400">{formatNumber(Math.floor(totalEgp))} £</div>
                 </div>
 
-                <div className="flex items-center gap-3 rounded-md bg-green-100 p-1">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full">
-                        <span className="flex size-7 items-center justify-center rounded-full bg-green-400 text-xl font-medium">🇺🇸</span>
-                    </div>
-                    <div className="text-lg font-semibold text-black">{formatNumber(Math.floor(totalUsd))} $</div>
+                {/* USD Amount */}
+                <div className="text-center">
+                    <div className="mb-1 text-sm font-medium text-zinc-500 xl:mb-1 dark:text-zinc-400">USD</div>
+                    <div className="text-2xl font-bold text-green-600 xl:text-3xl dark:text-green-400">{formatNumber(Math.floor(totalUsd))} $</div>
                 </div>
 
-                <div className="mt-2 flex items-center">
-                    <p className="inline-flex items-center gap-1">
-                        <CalendarDays className="text-primary size-4" />
-                        <span className="text-muted-foreground text-xs font-semibold">
-                            {__('stats.as_of')} {date}
-                        </span>
-                    </p>
+                {/* Date */}
+                <div className="mt-2 flex items-center justify-center gap-1 xl:mt-2">
+                    <CalendarDays className="text-primary size-4 xl:size-3" />
+                    <span className="text-muted-foreground text-xs font-medium xl:text-xs">
+                        {__('stats.as_of')} {date}
+                    </span>
                 </div>
             </div>
         </div>

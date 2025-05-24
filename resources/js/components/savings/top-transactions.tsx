@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
+import { Link } from '@inertiajs/react';
 import { ArrowDown, ArrowLeftRight, Calendar, Tag, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
@@ -49,8 +50,10 @@ export const TopTransactions = ({ transactions }: TopTransactionsProps) => {
                     <h3 className="text-sm font-bold">{__('stats.top_transaction')}</h3>
                 </div>
 
-                <Button size="icon" className="size-7" variant="outline">
-                    <ArrowLeftRight />
+                <Button size="icon" className="size-7" variant="outline" asChild>
+                    <Link href={route('dashboard.savings.transactions.index')}>
+                        <ArrowLeftRight />
+                    </Link>
                 </Button>
             </div>
             <div className="border-b bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950">

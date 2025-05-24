@@ -108,6 +108,16 @@ return [
         'price_rate_fallback_description' => 'Update your price rate values.',
     ],
 
+    'home_page' => [
+        'savings_module_title' => 'Savings Management',
+        'savings_module_description' => 'Track, manage, and analyze your savings with comprehensive tools and insights.',
+        'savings_overview_title' => 'Savings Overview',
+        'savings_setup_title' => 'Initial Savings Setup',
+        'savings_setup_description' => 'Complete your initial savings configuration to get started.',
+        'savings_settings_title' => 'Savings Configuration',
+        'savings_settings_description' => 'Configure exchange rates and other savings-related settings.',
+    ],
+
     'profile' => [
         'logout' => 'Log out',
         'delete_account' => 'Delete account',
