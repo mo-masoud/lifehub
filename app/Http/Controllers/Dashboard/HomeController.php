@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserSetting;
+use App\Models\User;
 use App\Services\DashboardStatsService;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -14,18 +17,33 @@ class HomeController extends Controller
         $this->dashboardStatsService = $dashboardStatsService;
     }
 
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $latestSnapshotTotals = $this->dashboardStatsService->getLatestSnapshotTotals();
-        $topTransactions = $this->dashboardStatsService->getTopTransactionsByPeriod();
-        $totalExpenses = $this->dashboardStatsService->getTotalExpensesByPeriod();
-        $totalIncome = $this->dashboardStatsService->getTotalIncomeByPeriod();
+        /** @var User $user */
+        $user = $request->user();
+        $hasCompletedInitialSavings = UserSetting::hasCompletedInitialSavings($user);
 
-        return inertia('dashboard/home/index', [
-            'latestSnapshotTotals' => $latestSnapshotTotals,
-            'topTransactions' => $topTransactions,
-            'totalExpenses' => $totalExpenses,
-            'totalIncome' => $totalIncome,
-        ]);
+        $data = [
+            'usd_rate_fallback' => UserSetting::get($user, 'usd_rate_fallback'),
+            'gold24_rate_fallback' => UserSetting::get($user, 'gold24_rate_fallback'),
+            'gold21_rate_fallback' => UserSetting::get($user, 'gold21_rate_fallback'),
+        ];
+
+        if ($hasCompletedInitialSavings) {
+            // User has completed initial savings, show regular stats
+            $data = array_merge($data, [
+                'latestSnapshotTotals' => $this->dashboardStatsService->getLatestSnapshotTotals(),
+                'topTransactions' => $this->dashboardStatsService->getTopTransactionsByPeriod(),
+                'totalExpenses' => $this->dashboardStatsService->getTotalExpensesByPeriod(),
+                'totalIncome' => $this->dashboardStatsService->getTotalIncomeByPeriod(),
+            ]);
+        } else {
+            // User hasn't completed initial savings, show initial savings data
+            $data = array_merge($data, [
+                'initialSavings' => $user->initialSavings()->with('storageLocation')->get(),
+            ]);
+        }
+
+        return inertia('dashboard/home/index', $data);
     }
 }

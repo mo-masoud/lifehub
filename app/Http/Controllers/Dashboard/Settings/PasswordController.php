@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,8 +19,11 @@ class PasswordController extends Controller
      */
     public function edit(Request $request): Response
     {
+        /** @var User $user */
+        $user = $request->user();
+
         return Inertia::render('dashboard/settings/password', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
         ]);
     }
@@ -34,7 +38,9 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        /** @var User $user */
+        $user = $request->user();
+        $user->update([
             'password' => Hash::make($validated['password']),
         ]);
 

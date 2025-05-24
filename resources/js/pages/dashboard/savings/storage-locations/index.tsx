@@ -1,6 +1,6 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
-import Heading from '@/components/dashboard/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';

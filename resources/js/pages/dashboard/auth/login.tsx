@@ -2,7 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import InputError from '@/components/dashboard/input-error';
+import { InputError } from '@/components/forms/input-error';
 import TextLink from '@/components/dashboard/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

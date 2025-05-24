@@ -1,6 +1,6 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
-import Heading from '@/components/dashboard/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { ShowSavingsDirection } from '@/components/dashboard/show-savings-direction';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Button } from '@/components/ui/button';

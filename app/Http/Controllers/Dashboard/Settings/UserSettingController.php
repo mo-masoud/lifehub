@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Dashboard\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Settings\SaveUserSettingRequest;
+use App\Models\User;
 use App\Models\UserSetting;
 
 class UserSettingController extends Controller
 {
-    public function updateRateFallback(SaveUserSettingRequest $request) {
-        $user = auth()->user();
+    public function updateRateFallback(SaveUserSettingRequest $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
 
         UserSetting::set($user, 'usd_rate_fallback', $request->usd_rate_fallback);
         UserSetting::set($user, 'gold24_rate_fallback', $request->gold24_rate_fallback);

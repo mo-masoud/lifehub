@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Dashboard\Savings;
 use App\Http\Controllers\Controller;
 use App\Models\SavingsStorageLocation;
 use App\Models\TransactionCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class TransactionCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $userId = $request->user()->id;
+        /** @var User $user */
+        $user = $request->user();
+        $userId = $user->id;
 
         $locations = TransactionCategory::whereNull('user_id')
             ->orWhere('user_id', $userId)
@@ -24,13 +27,16 @@ class TransactionCategoryController extends Controller
 
     public function store(Request $request)
     {
+        /** @var User $user */
+        $user = $request->user();
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'direction' => ['required', 'string', 'in:in,out'],
         ]);
 
-        $existing = SavingsStorageLocation::where(function (Builder $query) {
-            $query->where('user_id', auth()->id())->orWhereNull('user_id');
+        $existing = SavingsStorageLocation::where(function (Builder $query) use ($user) {
+            $query->where('user_id', $user->id)->orWhereNull('user_id');
         })->where('name', $request->name)
             ->first();
 
@@ -39,7 +45,7 @@ class TransactionCategoryController extends Controller
         }
 
         $location = TransactionCategory::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'name' => $request->name,
             'direction' => $request->direction,
         ]);

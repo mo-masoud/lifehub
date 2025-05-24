@@ -27,7 +27,7 @@ interface TopTransactionsProps {
 
 type PeriodType = 'week' | 'month' | 'quarter' | 'year';
 
-export default function TopTransactions({ transactions }: TopTransactionsProps) {
+export const TopTransactions = ({ transactions }: TopTransactionsProps) => {
     const [activePeriod, setActivePeriod] = useState<PeriodType>('week');
 
     const periodTitles = {
@@ -127,4 +127,4 @@ export default function TopTransactions({ transactions }: TopTransactionsProps) 
             </div>
         </div>
     );
-}
+};

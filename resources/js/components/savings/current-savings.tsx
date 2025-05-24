@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
 import { router } from '@inertiajs/react';
-import { HandCoins, PlusCircle } from 'lucide-react';
+import { CalendarDays, HandCoins, PlusCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CurrentSavingsProps {
@@ -11,7 +11,7 @@ interface CurrentSavingsProps {
     totalUsd: number;
 }
 
-export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavingsProps) {
+export const CurrentSavings = ({ date, totalEgp, totalUsd }: CurrentSavingsProps) => {
     const newSnapshot = () => {
         router.post(
             route('dashboard.savings.snapshots.store'),
@@ -60,7 +60,7 @@ export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavi
 
                 <div className="mt-2 flex items-center">
                     <p className="inline-flex items-center gap-1">
-                        <span className="text-sm">🗓️</span>{' '}
+                        <CalendarDays className="text-primary size-4" />
                         <span className="text-muted-foreground text-xs font-semibold">
                             {__('stats.as_of')} {date}
                         </span>
@@ -69,4 +69,4 @@ export default function CurrentSavings({ date, totalEgp, totalUsd }: CurrentSavi
             </div>
         </div>
     );
-}
+};

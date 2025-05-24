@@ -1,4 +1,4 @@
-import InputError from '@/components/dashboard/input-error';
+import { InputError } from '@/components/forms/input-error';
 import { SelectOrCreate } from '@/components/dashboard/select-or-create';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';

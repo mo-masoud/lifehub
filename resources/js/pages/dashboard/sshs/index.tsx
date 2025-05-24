@@ -1,4 +1,4 @@
-import Heading from '@/components/dashboard/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/dashboard/app-layout';

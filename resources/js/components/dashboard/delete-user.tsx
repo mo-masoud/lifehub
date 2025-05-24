@@ -1,16 +1,16 @@
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 
-import InputError from '@/components/dashboard/input-error';
+import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import HeadingSmall from '@/components/dashboard/heading-small';
+import { HeadingSmall } from '@/components/dashboard/heading-small';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
-export default function DeleteUser() {
+export const DeleteUser = () => {
     const passwordInput = useRef<HTMLInputElement>(null);
     const {
         data,

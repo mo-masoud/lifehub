@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\InitialSavings\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\InitialSavings\UpdateRequest;
 use App\Models\InitialSaving;
+use App\Models\User;
 use App\Models\UserSetting;
 use App\Services\CreateSnapshotService;
 use Illuminate\Http\Request;
@@ -21,8 +22,10 @@ class InitialSavingController extends Controller
 
     public function store(StoreRequest $request)
     {
+        /** @var User $user */
+        $user = $request->user();
         $data = $request->validated();
-        $data['user_id'] = $request->user()->id;
+        $data['user_id'] = $user->id;
 
         InitialSaving::create($data);
 
@@ -31,8 +34,10 @@ class InitialSavingController extends Controller
 
     public function update(UpdateRequest $request, InitialSaving $initialSaving)
     {
+        /** @var User $user */
+        $user = $request->user();
         $data = $request->validated();
-        $data['user_id'] = $request->user()->id;
+        $data['user_id'] = $user->id;
 
         $initialSaving->update($data);
 
@@ -41,9 +46,11 @@ class InitialSavingController extends Controller
 
     public function complete(Request $request)
     {
-        UserSetting::markInitialSavingsCompleted($request->user());
+        /** @var User $user */
+        $user = $request->user();
 
-        new CreateSnapshotService()->handle($request->user());
+        UserSetting::markInitialSavingsCompleted($user);
+        new CreateSnapshotService()->handle($user);
 
         return back()->with('success', 'Initial saving marked as completed successfully.');
     }

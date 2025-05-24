@@ -1,4 +1,4 @@
-import Heading from '@/components/dashboard/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Balance } from '@/types/models';
@@ -21,12 +21,15 @@ export const InitialSavingsCard = ({ initialSavings }: { initialSavings: Balance
                 onSuccess: () => {
                     toast.success(__('savings.initial_savings_completed'));
                 },
+                onError: () => {
+                    toast.error(__('messages.error_occurred'));
+                },
             },
         );
     };
 
     return (
-        <div className="gap-4 p-4">
+        <div className="bg-background flex flex-col justify-between gap-4 rounded-lg border p-4 shadow-xs">
             <div className="flex items-center justify-between px-2 pb-2">
                 <div className="flex items-center gap-4 px-0">
                     <Scale className="text-primary size-5" />
@@ -69,6 +72,8 @@ export const InitialSavingsCard = ({ initialSavings }: { initialSavings: Balance
                     </Button>
                 </div>
             )}
+
+            {initialSavings.length === 0 && <div />}
         </div>
     );
 };

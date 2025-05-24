@@ -1,5 +1,5 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
-import Heading from '@/components/dashboard/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

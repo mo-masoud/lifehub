@@ -1,4 +1,4 @@
-import InputError from '@/components/dashboard/input-error';
+import { InputError } from '@/components/forms/input-error';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import SettingsLayout from '@/layouts/dashboard/settings/layout';
 import { type BreadcrumbItem } from '@/types';
@@ -6,7 +6,7 @@ import { Transition } from '@headlessui/react';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 
-import HeadingSmall from '@/components/dashboard/heading-small';
+import { HeadingSmall } from '@/components/dashboard/heading-small';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

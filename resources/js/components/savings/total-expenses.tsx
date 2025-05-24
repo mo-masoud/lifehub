@@ -14,7 +14,7 @@ interface TotalExpensesProps {
 
 type PeriodType = 'week' | 'month' | 'quarter' | 'year';
 
-export default function TotalExpenses({ expenses }: TotalExpensesProps) {
+export const TotalExpenses = ({ expenses }: TotalExpensesProps) => {
     const [activePeriod, setActivePeriod] = useState<PeriodType>('week');
 
     const periodTitles = {
@@ -83,4 +83,4 @@ export default function TotalExpenses({ expenses }: TotalExpensesProps) {
             </div>
         </div>
     );
-}
+};

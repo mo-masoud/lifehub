@@ -1,5 +1,5 @@
-import HeadingSmall from '@/components/dashboard/heading-small';
-import InputError from '@/components/dashboard/input-error';
+import { HeadingSmall } from '@/components/dashboard/heading-small';
+import { InputError } from '@/components/forms/input-error';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/dashboard/app-layout';

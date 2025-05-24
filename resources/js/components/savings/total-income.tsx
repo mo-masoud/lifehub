@@ -14,7 +14,7 @@ interface TotalIncomeProps {
 
 type PeriodType = 'quarter' | 'year';
 
-export default function TotalIncome({ income }: TotalIncomeProps) {
+export const TotalIncome = ({ income }: TotalIncomeProps) => {
     const [activePeriod, setActivePeriod] = useState<PeriodType>('quarter');
 
     const periodTitles = {
@@ -82,4 +82,4 @@ export default function TotalIncome({ income }: TotalIncomeProps) {
             </div>
         </div>
     );
-}
+};

@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\SSHs\StoreSSHRequest;
 use App\Http\Requests\Dashboard\SSHs\UpdateSSHRequest;
 use App\Models\SSH;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class SSHController extends Controller
 {
-    public function destroy(SSH $ssh)
+    public function destroy(Request $request, SSH $ssh)
     {
-        if (auth()->user()->cannot('delete', $ssh)) {
+        /** @var User $user */
+        $user = $request->user();
+
+        if ($user->cannot('delete', $ssh)) {
             return redirect()->route('dashboard.sshs.index')
                 ->with('error', 'You do not have permission to delete this SSH.');
         }
@@ -20,10 +25,12 @@ class SSHController extends Controller
 
         return redirect()->route('dashboard.sshs.index')->with('success', 'SSH deleted successfully.');
     }
-
-    public function index()
+    public function index(Request $request)
     {
-        $sshs = SSH::where('user_id', auth()->id())
+        /** @var User $user */
+        $user = $request->user();
+
+        $sshs = SSH::where('user_id', $user->id)
             ->when(request('keyword'), function ($query) {
                 $query->where(function ($query) {
                     $keyword = request('keyword');
@@ -41,11 +48,13 @@ class SSHController extends Controller
             'filters' => request()->only(['keyword']),
         ]);
     }
-
     public function store(StoreSSHRequest $request)
     {
+        /** @var User $user */
+        $user = $request->user();
+
         $data = $request->validated();
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $user->id;
 
         if (isset($data['prompt'])) {
             $prompt = str_replace('ssh ', '', $data['prompt']);

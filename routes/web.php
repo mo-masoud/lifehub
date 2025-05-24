@@ -12,4 +12,4 @@ Route::get('/', function () {
 Route::put('/locale', LocaleController::class)
     ->name('locale');
 
-require __DIR__.'/dashboard.php';
+require __DIR__ . '/dashboard.php';
