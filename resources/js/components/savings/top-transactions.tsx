@@ -83,10 +83,10 @@ export const TopTransactions = ({ transactions }: TopTransactionsProps) => {
                             </div>
                             <div className="flex flex-col items-end">
                                 <span className="text-lg font-semibold text-rose-600 dark:text-rose-400">
-                                    {formatNumber(Math.floor(transaction.amount_egp))} {__('transactions.egp')}
+                                    {formatNumber(Math.floor(transaction.amount_egp))} {__('savings.egp')}
                                 </span>
-                                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                                    {formatNumber(Math.floor(transaction.amount_usd))} {__('transactions.usd')}
+                                <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                                    {formatNumber(Math.floor(transaction.amount_usd))} {__('savings.usd')}
                                 </span>
                             </div>
                         </div>
