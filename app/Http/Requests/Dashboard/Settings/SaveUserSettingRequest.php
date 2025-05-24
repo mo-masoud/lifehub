@@ -23,9 +23,9 @@ class SaveUserSettingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'usd_rate_fallback' => 'required|numeric|min:0',
-            'gold24_rate_fallback' => 'required|numeric|min:0',
-            'gold21_rate_fallback' => 'required|numeric|min:0',
+            'usdRateFallback' => 'required|numeric|min:0',
+            'gold24RateFallback' => 'required|numeric|min:0',
+            'gold21RateFallback' => 'required|numeric|min:0',
         ];
     }
 }

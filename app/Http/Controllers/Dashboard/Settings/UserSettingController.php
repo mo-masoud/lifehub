@@ -14,9 +14,9 @@ class UserSettingController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        UserSetting::set($user, 'usd_rate_fallback', $request->usd_rate_fallback);
-        UserSetting::set($user, 'gold24_rate_fallback', $request->gold24_rate_fallback);
-        UserSetting::set($user, 'gold21_rate_fallback', $request->gold21_rate_fallback);
+        UserSetting::set($user, 'usd_rate_fallback', $request->usdRateFallback);
+        UserSetting::set($user, 'gold24_rate_fallback', $request->gold24RateFallback);
+        UserSetting::set($user, 'gold21_rate_fallback', $request->gold21RateFallback);
 
         return back()->with('success', 'Settings updated successfully');
     }

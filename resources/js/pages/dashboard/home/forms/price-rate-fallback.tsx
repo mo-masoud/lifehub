@@ -10,16 +10,16 @@ import { FormEventHandler } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
-    usd_rate_fallback?: string;
-    gold24_rate_fallback?: string;
-    gold21_rate_fallback?: string;
+    usdRateFallback?: string;
+    gold24RateFallback?: string;
+    gold21RateFallback?: string;
 }
 
-export const PriceRateFallback = ({ usd_rate_fallback, gold24_rate_fallback, gold21_rate_fallback }: Props) => {
+export const PriceRateFallback = ({ usdRateFallback, gold24RateFallback, gold21RateFallback }: Props) => {
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        usd_rate_fallback: usd_rate_fallback || '',
-        gold24_rate_fallback: gold24_rate_fallback || '',
-        gold21_rate_fallback: gold21_rate_fallback || '',
+        usdRateFallback: usdRateFallback || '',
+        gold24RateFallback: gold24RateFallback || '',
+        gold21RateFallback: gold21RateFallback || '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -46,53 +46,49 @@ export const PriceRateFallback = ({ usd_rate_fallback, gold24_rate_fallback, gol
             <div className="mt-4">
                 <form className="flex flex-col gap-4" onSubmit={submit}>
                     <div className="flex items-center gap-2">
-                        <Label htmlFor="usd_rate_fallback" className="w-2/5 truncate">
+                        <Label htmlFor="usdRateFallback" className="w-2/5 truncate">
                             {__('savings.usd_rate_fallback')}
                         </Label>
                         <Input
-                            id="usd_rate_fallback"
-                            value={data.usd_rate_fallback}
+                            id="usdRateFallback"
+                            value={data.usdRateFallback}
                             type="text"
-                            onChange={(e) => setData('usd_rate_fallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
+                            onChange={(e) => setData('usdRateFallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                             className="placeholder:text-xs"
                             placeholder={__('savings.usd_rate_fallback_placeholder')}
                             autoComplete="off"
                         />
-                        <InputError className="mt-1 text-xs" message={errors.usd_rate_fallback} />
+                        <InputError className="mt-1 text-xs" message={errors.usdRateFallback} />
                     </div>
                     <div className="flex items-center gap-2">
-                        <Label htmlFor="gold24_rate_fallback" className="w-2/5 truncate">
+                        <Label htmlFor="gold24RateFallback" className="w-2/5 truncate">
                             {__('savings.gold24_rate_fallback')}
                         </Label>
                         <Input
-                            id="gold24_rate_fallback"
-                            value={data.gold24_rate_fallback}
+                            id="gold24RateFallback"
+                            value={data.gold24RateFallback}
                             type="text"
-                            onChange={(e) =>
-                                setData('gold24_rate_fallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)
-                            }
+                            onChange={(e) => setData('gold24RateFallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                             className="placeholder:text-xs"
                             placeholder={__('savings.gold24_rate_fallback_placeholder')}
                             autoComplete="off"
                         />
-                        <InputError className="mt-1 text-xs" message={errors.gold24_rate_fallback} />
+                        <InputError className="mt-1 text-xs" message={errors.gold24RateFallback} />
                     </div>
                     <div className="flex items-center gap-2">
-                        <Label htmlFor="gold21_rate_fallback" className="w-2/5 truncate">
+                        <Label htmlFor="gold21RateFallback" className="w-2/5 truncate">
                             {__('savings.gold21_rate_fallback')}
                         </Label>
                         <Input
-                            id="gold21_rate_fallback"
-                            value={data.gold21_rate_fallback}
+                            id="gold21RateFallback"
+                            value={data.gold21RateFallback}
                             type="text"
-                            onChange={(e) =>
-                                setData('gold21_rate_fallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)
-                            }
+                            onChange={(e) => setData('gold21RateFallback', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
                             className="placeholder:text-xs"
                             placeholder={__('savings.gold21_rate_fallback_placeholder')}
                             autoComplete="off"
                         />
-                        <InputError className="mt-1 text-xs" message={errors.gold21_rate_fallback} />
+                        <InputError className="mt-1 text-xs" message={errors.gold21RateFallback} />
                     </div>
 
                     <div className="mt-4 flex items-center justify-end gap-4">

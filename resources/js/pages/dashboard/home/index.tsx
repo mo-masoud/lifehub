@@ -14,9 +14,9 @@ interface IndexProps {
     totalExpenses?: TotalByPeriod;
     totalIncome?: TotalByPeriod;
     initialSavings?: Balance[];
-    usd_rate_fallback?: string;
-    gold24_rate_fallback?: string;
-    gold21_rate_fallback?: string;
+    usdRateFallback?: string;
+    gold24RateFallback?: string;
+    gold21RateFallback?: string;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,9 +32,9 @@ export default function Index({
     totalExpenses,
     totalIncome,
     initialSavings,
-    usd_rate_fallback,
-    gold24_rate_fallback,
-    gold21_rate_fallback,
+    usdRateFallback,
+    gold24RateFallback,
+    gold21RateFallback,
 }: IndexProps) {
     const { initial_savings_completed } = usePage<SharedData>().props;
 
@@ -57,9 +57,9 @@ export default function Index({
                     {!initial_savings_completed && <InitialSavingsCard initialSavings={initialSavings || []} />}
 
                     <PriceRateFallback
-                        usd_rate_fallback={usd_rate_fallback}
-                        gold24_rate_fallback={gold24_rate_fallback}
-                        gold21_rate_fallback={gold21_rate_fallback}
+                        usdRateFallback={usdRateFallback}
+                        gold24RateFallback={gold24RateFallback}
+                        gold21RateFallback={gold21RateFallback}
                     />
                 </div>
             </div>
