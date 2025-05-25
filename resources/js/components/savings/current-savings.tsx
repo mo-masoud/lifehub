@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
 import { router } from '@inertiajs/react';
-import { CalendarDays, HandCoins, PlusCircle } from 'lucide-react';
+import { CalendarDays, HandCoins, RefreshCcw } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CurrentSavingsProps {
@@ -39,7 +39,7 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd }: CurrentSavingsProps
                 </div>
 
                 <Button size="icon" className="size-7" variant="outline" onClick={newSnapshot}>
-                    <PlusCircle className="size-4" />
+                    <RefreshCcw className="size-4" />
                 </Button>
             </div>
 
