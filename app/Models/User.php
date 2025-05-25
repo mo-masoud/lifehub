@@ -72,6 +72,36 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the USD exchange rate fallback for this user.
+     *
+     * @return float
+     */
+    public function getUsdRateFallback(): float
+    {
+        return (float) UserSetting::get($this, 'usd_rate_fallback', 50);
+    }
+
+    /**
+     * Get the Gold 24k rate fallback for this user.
+     *
+     * @return float
+     */
+    public function getGold24RateFallback(): float
+    {
+        return (float) UserSetting::get($this, 'gold24_rate_fallback', 5000);
+    }
+
+    /**
+     * Get the Gold 21k rate fallback for this user.
+     *
+     * @return float
+     */
+    public function getGold21RateFallback(): float
+    {
+        return (float) UserSetting::get($this, 'gold21_rate_fallback', 4000);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

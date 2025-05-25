@@ -56,9 +56,9 @@ class CreateSnapshotService
     protected function getRates(): array
     {
         return [
-            'usd' => $this->getUsdRate(),
-            'gold24' => $this->getGoldPrice(24),
-            'gold21' => $this->getGoldPrice(21),
+            'usd' => $this->user->getUsdRateFallback(),
+            'gold24' => $this->user->getGold24RateFallback(),
+            'gold21' => $this->user->getGold21RateFallback(),
         ];
     }
 
@@ -98,35 +98,6 @@ class CreateSnapshotService
                 'rate' => $rate,
             ]);
         }
-    }
-
-    /**
-     * Retrieves the current USD exchange rate.
-     *
-     * @return float The current USD exchange rate.
-     */
-    protected function getUsdRate(): float
-    {
-        $response = Http::get('https://api.exchangerate-api.com/v4/latest/USD');
-        $data = $response->json();
-
-        return $data['rates']['EGP'] ?? UserSetting::get($this->user, 'usd_rate_fallback', 50);
-    }
-
-    /**
-     * Retrieves the current gold price for the given karat.
-     *
-     * @param int $karat The karat of gold (e.g., 24 or 21).
-     * @return float The current gold price for the given karat.
-     * @throws Exception If the karat is unsupported.
-     */
-    protected function getGoldPrice(int $karat): float
-    {
-        return match ($karat) {
-            24 => UserSetting::get($this->user, 'gold24_rate_fallback', 4000),
-            21 => UserSetting::get($this->user, 'gold21_rate_fallback', 3700),
-            default => throw new Exception("Unsupported karat"),
-        };
     }
 
     /**
