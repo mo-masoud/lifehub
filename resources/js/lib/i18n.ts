@@ -6,6 +6,7 @@ export function setTranslations(data: Record<string, any>) {
 }
 
 export function __(key: string, params: Record<string, string | number | undefined> = {}): string {
+    if (!key || typeof key !== 'string') return key;
     const parts = key.split('.');
     let value: any = (globalThis as any).translations || translations || {};
 

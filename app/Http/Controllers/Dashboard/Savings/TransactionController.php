@@ -55,8 +55,22 @@ class TransactionController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
-        $data['from_type'] = $data['direction'] === 'transfer' ? $data['from_type'] : null;
-        $data['from_amount'] = $data['direction'] === 'transfer' ? $data['from_amount'] : null;
+
+        if ($data['direction'] === 'transfer') {
+            // For transfers, set storage_location_id to source for backwards compatibility
+            $data['storage_location_id'] = $data['source_location_id'];
+
+            // Create or get a transfer category
+            $transferCategory = \App\Models\TransactionCategory::firstOrCreate([
+                'user_id' => Auth::id(),
+                'name' => 'Transfer',
+                'direction' => 'transfer'
+            ]);
+            $data['transaction_category_id'] = $transferCategory->id;
+        } else {
+            $data['source_location_id'] = null;
+            $data['destination_location_id'] = null;
+        }
 
         Transaction::create($data);
 
@@ -66,8 +80,22 @@ class TransactionController extends Controller
     public function update(Transaction $transaction, UpdateRequest $request)
     {
         $data = $request->validated();
-        $data['from_type'] = $data['direction'] === 'transfer' ? $data['from_type'] : null;
-        $data['from_amount'] = $data['direction'] === 'transfer' ? $data['from_amount'] : null;
+
+        if ($data['direction'] === 'transfer') {
+            // For transfers, set storage_location_id to source for backwards compatibility
+            $data['storage_location_id'] = $data['source_location_id'];
+
+            // Create or get a transfer category
+            $transferCategory = \App\Models\TransactionCategory::firstOrCreate([
+                'user_id' => Auth::id(),
+                'name' => 'Transfer',
+                'direction' => 'transfer'
+            ]);
+            $data['transaction_category_id'] = $transferCategory->id;
+        } else {
+            $data['source_location_id'] = null;
+            $data['destination_location_id'] = null;
+        }
 
         $transaction->update($data);
 

@@ -147,8 +147,10 @@ class CreateSnapshotService
         } elseif ($tx->direction === 'out') {
             $this->adjustBalance($final, $tx->type, $tx->storage_location_id, -$tx->amount);
         } elseif ($tx->direction === 'transfer') {
-            $this->adjustBalance($final, $tx->from_type, $tx->storage_location_id, -$tx->from_amount);
-            $this->adjustBalance($final, $tx->type, $tx->storage_location_id, $tx->amount);
+            // For transfers: subtract from source location, add to destination location
+            // Both amounts are in the same currency (tx->type) since conversion is handled in the model
+            $this->adjustBalance($final, $tx->type, $tx->source_location_id, -$tx->amount);
+            $this->adjustBalance($final, $tx->type, $tx->destination_location_id ?? $tx->storage_location_id, $tx->amount);
         }
     }
 

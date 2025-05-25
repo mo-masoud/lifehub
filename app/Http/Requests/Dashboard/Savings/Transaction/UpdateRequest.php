@@ -29,12 +29,12 @@ class UpdateRequest extends FormRequest
             'type' => ['required', 'string', Rule::in(SavingType::values())],
             'amount' => ['required', 'numeric', 'gt:0'],
             'direction' => ['required', Rule::in(TransactionDirection::values())],
-            'storage_location_id' => ['required', 'exists:savings_storage_locations,id'],
-            'transaction_category_id' => ['required', 'exists:transaction_categories,id'],
+            'storage_location_id' => ['nullable', 'required_unless:direction,transfer', 'exists:savings_storage_locations,id'],
+            'transaction_category_id' => ['nullable', 'required_unless:direction,transfer', 'exists:transaction_categories,id'],
             'notes' => ['nullable', 'string'],
 
-            'from_type' => ['nullable', 'required_if:direction,transfer', Rule::in(SavingType::values())],
-            'from_amount' => ['nullable', 'required_if:direction,transfer', 'numeric', 'gt:0'],
+            'source_location_id' => ['nullable', 'required_if:direction,transfer', 'exists:savings_storage_locations,id'],
+            'destination_location_id' => ['nullable', 'required_if:direction,transfer', 'exists:savings_storage_locations,id', 'different:source_location_id'],
         ];
     }
 }

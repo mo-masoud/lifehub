@@ -87,8 +87,10 @@ export interface Transaction {
     type: string;
     storage_location: StorageLocation;
     category: TransactionCategory;
-    from_type: string;
-    from_amount: string;
+    source_location_id: number | null;
+    destination_location_id: number | null;
+    source_location?: StorageLocation;
+    destination_location?: StorageLocation;
     notes: string;
     date: string;
     created_at: string;

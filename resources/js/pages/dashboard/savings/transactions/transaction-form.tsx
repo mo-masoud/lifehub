@@ -1,5 +1,5 @@
-import { InputError } from '@/components/forms/input-error';
 import { SelectOrCreate } from '@/components/dashboard/select-or-create';
+import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -22,9 +22,9 @@ type TransactionForm = {
     type: string;
     amount: string;
     direction: string;
-    from_type?: string;
-    from_amount?: string;
-    storage_location_id: string;
+    source_location_id?: string;
+    destination_location_id?: string;
+    storage_location_id?: string;
     notes?: string;
     date?: string;
     transaction_category_id?: string;
@@ -34,16 +34,16 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
     const [locations, setLocations] = useState<StorageLocation[]>([]);
     const [categories, setCategories] = useState<TransactionCategory[]>([]);
 
-    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<TransactionForm>>({
+    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<TransactionForm>({
         type: transaction?.type || '',
         amount: String(transaction?.amount || ''),
         direction: transaction?.direction || 'out',
-        storage_location_id: transaction?.storage_location?.id.toString() || '',
-        from_type: transaction?.from_type || '',
-        from_amount: transaction?.from_amount || '',
+        storage_location_id: transaction?.storage_location?.id?.toString() || '',
+        source_location_id: transaction?.source_location_id?.toString() || '',
+        destination_location_id: transaction?.destination_location_id?.toString() || '',
         notes: transaction?.notes || '',
         date: transaction?.date || new Date().toDateString(),
-        transaction_category_id: transaction?.category?.id || '',
+        transaction_category_id: transaction?.category?.id?.toString() || '',
     });
 
     const handleCreateCategory = async (name: string) => {
@@ -111,7 +111,7 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
                     <PopoverContent className="w-auto p-0">
                         <Calendar
                             mode="single"
-                            selected={new Date(data.date)}
+                            selected={data.date ? new Date(data.date) : undefined}
                             disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
                             onSelect={(date) => setData('date', date?.toDateString() || '')}
                             initialFocus
@@ -213,43 +213,51 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
             {data.direction === 'transfer' && (
                 <>
                     <div className="grid gap-2">
-                        <Label htmlFor="from_type" className="truncate">
-                            {__('savings.from_type')} <span className="mx-1 text-lg text-red-500">*</span>
+                        <Label htmlFor="source_location_id" className="truncate">
+                            {__('savings.from_location')} <span className="mx-1 text-lg text-red-500">*</span>
                         </Label>
                         <Select
                             onValueChange={(value) => {
-                                setData('from_type', value);
+                                setData('source_location_id', value);
                             }}
-                            value={data.from_type}
+                            value={data.source_location_id}
                         >
-                            <SelectTrigger id="from_type" className="mt-1 w-full text-xs">
-                                <SelectValue placeholder={__('savings.from_type_placeholder')} />
+                            <SelectTrigger id="source_location_id" className="mt-1 w-full text-xs">
+                                <SelectValue placeholder={__('savings.from_location_placeholder')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {['USD', 'EGP', 'GOLD24', 'GOLD21'].map((type) => (
-                                    <SelectItem key={type} value={type}>
-                                        {__(`savings.${type}`)}
+                                {locations.map((location) => (
+                                    <SelectItem key={location.id} value={location.id.toString()}>
+                                        {__(location.name)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        <InputError className="mt-1 text-xs" message={errors.type} />
+                        <InputError className="mt-1 text-xs" message={errors.source_location_id} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="from_amount" className="truncate">
-                            {__('savings.from_amount')} <span className="mx-1 text-lg text-red-500">*</span>
+                        <Label htmlFor="destination_location_id" className="truncate">
+                            {__('savings.to_location')} <span className="mx-1 text-lg text-red-500">*</span>
                         </Label>
-                        <Input
-                            id="from_amount"
-                            value={data.from_amount}
-                            type="text"
-                            onChange={(e) => setData('from_amount', e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1') as any)}
-                            className="mt-1 block w-full placeholder:text-xs"
-                            placeholder={__('savings.from_amount_placeholder')}
-                            autoComplete="off"
-                        />
-                        <InputError className="mt-1 text-xs" message={errors.amount} />
+                        <Select
+                            onValueChange={(value) => {
+                                setData('destination_location_id', value);
+                            }}
+                            value={data.destination_location_id}
+                        >
+                            <SelectTrigger id="destination_location_id" className="mt-1 w-full text-xs">
+                                <SelectValue placeholder={__('savings.to_location_placeholder')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {locations.map((location) => (
+                                    <SelectItem key={location.id} value={location.id.toString()}>
+                                        {__(location.name)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <InputError className="mt-1 text-xs" message={errors.destination_location_id} />
                     </div>
                 </>
             )}
@@ -275,29 +283,31 @@ export const TransactionForm = ({ transaction, onSave }: { transaction?: Transac
                 </div>
             )}
 
-            <div className="grid gap-2">
-                <Label htmlFor="storage_location_id" className="truncate">
-                    {__('savings.storage')} <span className="mx-1 text-lg text-red-500">*</span>
-                </Label>
-                <Select
-                    onValueChange={(value) => {
-                        setData('storage_location_id', value);
-                    }}
-                    value={data.storage_location_id}
-                >
-                    <SelectTrigger id="storage_location_id" className="mt-1 w-full text-xs">
-                        <SelectValue placeholder={__('savings.storage_placeholder')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {locations.map((location) => (
-                            <SelectItem key={location.id} value={location.id.toString()}>
-                                {__(location.name)}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <InputError className="mt-1 text-xs" message={errors.storage_location_id} />
-            </div>
+            {data.direction !== 'transfer' && (
+                <div className="grid gap-2">
+                    <Label htmlFor="storage_location_id" className="truncate">
+                        {__('savings.storage')} <span className="mx-1 text-lg text-red-500">*</span>
+                    </Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setData('storage_location_id', value);
+                        }}
+                        value={data.storage_location_id}
+                    >
+                        <SelectTrigger id="storage_location_id" className="mt-1 w-full text-xs">
+                            <SelectValue placeholder={__('savings.storage_placeholder')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {locations.map((location) => (
+                                <SelectItem key={location.id} value={location.id.toString()}>
+                                    {__(location.name)}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <InputError className="mt-1 text-xs" message={errors.storage_location_id} />
+                </div>
+            )}
 
             <div className="grid gap-2">
                 <Label htmlFor="notes" className="truncate">

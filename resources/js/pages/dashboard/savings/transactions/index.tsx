@@ -78,8 +78,6 @@ export default function Index() {
                                 <TableHead className="text-start text-xs">{__('savings.type')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.storage')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.category')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.from_type')}</TableHead>
-                                <TableHead className="text-start text-xs">{__('savings.from_amount')}</TableHead>
                                 <TableHead className="text-start text-xs">{__('savings.notes')}</TableHead>
                                 <TableHead className="text-start text-xs ltr:rounded-tr-xl rtl:rounded-tl-xl">
                                     <span className="sr-only">{__('words.actions')}</span>
@@ -96,10 +94,10 @@ export default function Index() {
                                     </TableCell>
                                     <TableCell className="text-start text-sm">{transaction.type}</TableCell>
                                     <TableCell className="text-start text-sm">{__(transaction.storage_location.name)}</TableCell>
-                                    <TableCell className="text-start text-sm">{__(transaction.category?.name)}</TableCell>
-                                    <TableCell className="text-start text-sm">{transaction.from_type}</TableCell>
-                                    <TableCell className="text-start text-sm">{transaction.from_amount}</TableCell>
-                                    <TableCell className="text-start text-sm">{transaction.notes}</TableCell>
+                                    <TableCell className="text-start text-sm">
+                                        {transaction.direction !== 'transfer' && __(transaction.category?.name)}
+                                    </TableCell>
+                                    <TableCell className="max-w-xs truncate text-start text-xs">{transaction.notes || 'N/A'}</TableCell>
                                     <ActionCell
                                         updateLabel={__('savings.update_transaction')}
                                         item={{ transaction }}

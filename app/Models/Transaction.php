@@ -16,8 +16,8 @@ class Transaction extends Model
         'direction',
         'storage_location_id',
         'transaction_category_id',
-        'from_type',
-        'from_amount',
+        'source_location_id',
+        'destination_location_id',
         'notes',
         'original_amount',
         'original_type',
@@ -25,7 +25,6 @@ class Transaction extends Model
 
     protected $casts = [
         'amount' => 'float',
-        'from_amount' => 'float',
         'original_amount' => 'float',
     ];
 
@@ -72,10 +71,37 @@ class Transaction extends Model
         return $this->belongsTo(SavingsStorageLocation::class);
     }
 
+    public function sourceLocation(): BelongsTo
+    {
+        return $this->belongsTo(SavingsStorageLocation::class, 'source_location_id');
+    }
+
+    public function destinationLocation(): BelongsTo
+    {
+        return $this->belongsTo(SavingsStorageLocation::class, 'destination_location_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * For transfers, calculate automatic currency conversion if needed
+     * The amount represents the source amount, and type represents destination currency
+     */
+    public function processTransfer(): void
+    {
+        if (!$this->isTransfer()) {
+            return;
+        }
+
+        // For transfers, we don't need automatic conversion here
+        // The user specifies the source amount and target currency type
+        // The conversion logic will be handled by the convertToEgp method
+        // which works on the final amount and type
+    }
+
     /**
      * Convert amount to EGP and store both original and converted values
      */
