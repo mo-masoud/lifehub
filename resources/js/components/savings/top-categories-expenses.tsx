@@ -102,10 +102,7 @@ const PieChart = ({ categories }: { categories: CategoryExpense[] }) => {
             </svg>
 
             {/* Center text */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-sm font-semibold text-white drop-shadow-md">{formatNumber(Math.floor(total))}</span>
-                <span className="text-xs text-white/90 drop-shadow-md">{__('savings.egp')}</span>
-            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center" />
         </div>
     );
 };

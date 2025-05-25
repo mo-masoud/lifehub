@@ -47,27 +47,19 @@ export default function Index({
             <div className="space-y-8 p-4 2xl:space-y-6 2xl:px-12">
                 {/* Savings Module Section */}
                 <div className="space-y-6 2xl:space-y-4">
-                    {/* Savings Module Header */}
-                    <div className="flex items-center gap-3 border-b pb-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-                            <PiggyBank className="h-6 w-6" />
-                        </div>
-                        <div>
-                            <h1 className="text-xl font-bold text-gray-900 2xl:text-lg dark:text-gray-100">{__('home_page.savings_module_title')}</h1>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{__('home_page.savings_module_description')}</p>
-                        </div>
-                    </div>
-
                     {/* Savings Stats Section */}
                     {initial_savings_completed && (
-                        <div className="space-y-4 2xl:space-y-3">
+                        <div className="space-y-4">
                             <div className="flex items-center gap-2">
-                                <div className="flex h-6 w-6 items-center justify-center rounded bg-emerald-100 text-emerald-600 2xl:h-5 2xl:w-5 dark:bg-emerald-900/30 dark:text-emerald-400">
-                                    <PiggyBank className="h-4 w-4 2xl:h-3 2xl:w-3" />
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                    <PiggyBank className="h-6 w-6" />
                                 </div>
-                                <h2 className="text-lg font-semibold text-gray-900 2xl:text-base dark:text-gray-100">
-                                    {__('home_page.savings_overview_title')}
-                                </h2>
+                                <div>
+                                    <h1 className="text-xl font-bold text-gray-900 2xl:text-lg dark:text-gray-100">
+                                        {__('home_page.savings_overview_title')}
+                                    </h1>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">{__('home_page.savings_module_description')}</p>
+                                </div>
                             </div>
                             <SavingsStats
                                 latestSnapshotTotals={latestSnapshotTotals!}
