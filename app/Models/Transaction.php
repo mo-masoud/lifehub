@@ -100,19 +100,19 @@ class Transaction extends Model
             case 'USD':
                 $this->original_amount = $this->amount;
                 $this->original_type = $this->type;
-                $this->amount = $this->amount * $user->getUsdRateFallback();
+                $this->amount = $this->amount * $user->getUsdRate();
                 $this->type = 'EGP';
                 break;
             case 'GOLD24':
                 $this->original_amount = $this->amount;
                 $this->original_type = $this->type;
-                $this->amount = $this->amount * $user->getGold24RateFallback();
+                $this->amount = $this->amount * $user->getGold24Rate();
                 $this->type = 'EGP';
                 break;
             case 'GOLD21':
                 $this->original_amount = $this->amount;
                 $this->original_type = $this->type;
-                $this->amount = $this->amount * $user->getGold21RateFallback();
+                $this->amount = $this->amount * $user->getGold21Rate();
                 $this->type = 'EGP';
                 break;
         }

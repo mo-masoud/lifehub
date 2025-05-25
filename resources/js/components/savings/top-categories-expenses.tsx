@@ -10,23 +10,6 @@ interface TopCategoriesExpensesProps {
 
 type PeriodType = 'week' | 'month' | 'quarter' | 'year' | 'overall';
 
-// Helper function to get chart colors
-const getChartColor = (index: number): string => {
-    const colors = [
-        'bg-purple-500',
-        'bg-pink-500',
-        'bg-indigo-500',
-        'bg-amber-500',
-        'bg-emerald-500',
-        'bg-red-500',
-        'bg-violet-500',
-        'bg-cyan-500',
-        'bg-orange-500',
-        'bg-lime-500',
-    ];
-    return colors[index] || 'bg-gray-500';
-};
-
 // Helper function to get chart stroke colors for SVG
 const getStrokeColor = (index: number): string => {
     const colors = [
@@ -47,15 +30,15 @@ const getStrokeColor = (index: number): string => {
 // Pie Chart Component (Filled Circle)
 const PieChart = ({ categories }: { categories: CategoryExpense[] }) => {
     const total = categories.reduce((sum, cat) => sum + cat.total_egp, 0);
-    const size = 140;
-    const radius = 65;
+    const size = 180;
+    const radius = 85;
     const centerX = size / 2;
     const centerY = size / 2;
 
-    // Show more categories and group small ones as "Other"
-    const maxCategories = 8;
-    const mainCategories = categories.slice(0, maxCategories - 1);
-    const otherCategories = categories.slice(maxCategories - 1);
+    // Show only top 3 categories and group all others as "Other"
+    const maxCategories = 3;
+    const mainCategories = categories.slice(0, maxCategories);
+    const otherCategories = categories.slice(maxCategories);
     const otherTotal = otherCategories.reduce((sum, cat) => sum + cat.total_egp, 0);
 
     const displayCategories = [
@@ -153,7 +136,7 @@ export const TopCategoriesExpenses = ({ topCategories }: TopCategoriesExpensesPr
             {/* Period Tabs */}
             <div className="border-b bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950">
                 <div className="flex">
-                    {(['week', 'month', 'quarter', 'year', 'overall'] as PeriodType[]).map((period) => (
+                    {(['overall', 'week', 'month', 'quarter', 'year'] as PeriodType[]).map((period) => (
                         <button
                             key={period}
                             onClick={() => setActivePeriod(period)}
@@ -210,28 +193,28 @@ export const TopCategoriesExpenses = ({ topCategories }: TopCategoriesExpensesPr
                 <div className="border-t sm:border-t-0 sm:border-l lg:border-t lg:border-l-0"></div>
 
                 {/* Second Section: Split into Chart and All Categories */}
-                <div className="flex flex-1 flex-col gap-4 lg:flex-row">
+                <div className="flex min-h-[300px] flex-1 flex-col gap-4 lg:flex-row">
                     {/* Chart Section */}
                     <div className="flex flex-1 flex-col">
                         <h4 className="mb-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400">{__('stats.expense_distribution')}</h4>
                         {categories && categories.length > 0 ? (
-                            <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-1 flex-col items-center justify-center">
                                 {/* Pie Chart */}
                                 <div className="relative mb-3">
                                     <PieChart categories={categories} />
                                 </div>
 
                                 {/* Compact Legend */}
-                                <div className="flex flex-wrap justify-center gap-1">
-                                    {categories.slice(0, 7).map((category, index) => (
-                                        <div key={category.id} className="flex items-center gap-1">
+                                <div className="grid w-full max-w-xs grid-cols-2 grid-rows-2 gap-2">
+                                    {categories.slice(0, 3).map((category, index) => (
+                                        <div key={category.id} className="flex items-center justify-start gap-1">
                                             <div className={`h-2 w-2 rounded-full`} style={{ backgroundColor: getStrokeColor(index) }} />
                                             <span className="text-xs text-zinc-600 dark:text-zinc-400">{__(category.name)}</span>
                                         </div>
                                     ))}
-                                    {categories.length > 7 && (
-                                        <div className="flex items-center gap-1">
-                                            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: getStrokeColor(7) }} />
+                                    {categories.length > 3 && (
+                                        <div className="flex items-center justify-start gap-1">
+                                            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: getStrokeColor(3) }} />
                                             <span className="text-xs text-zinc-600 dark:text-zinc-400">{__('stats.other_categories')}</span>
                                         </div>
                                     )}
@@ -240,41 +223,6 @@ export const TopCategoriesExpenses = ({ topCategories }: TopCategoriesExpensesPr
                         ) : (
                             <div className="flex items-center justify-center py-8">
                                 <p className="text-sm text-zinc-500">{__('stats.no_expenses')}</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Vertical Divider for Large Screens */}
-                    <div className="border-t lg:border-t-0 lg:border-l"></div>
-
-                    {/* All Categories Section */}
-                    <div className="flex flex-1 flex-col pt-4 lg:pt-0 lg:pl-4">
-                        <h4 className="mb-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400">{__('stats.all_categories')}</h4>
-                        {categories && categories.length > 0 ? (
-                            <div className="max-h-40 space-y-2 overflow-y-auto lg:max-h-48">
-                                {categories.map((category, index) => (
-                                    <div
-                                        key={category.id}
-                                        className="flex items-center justify-between rounded-md bg-zinc-50 p-2 dark:bg-zinc-900/50"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <div className="h-3 w-3 rounded-full" style={{ backgroundColor: getStrokeColor(index) }} />
-                                            <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{__(category.name)}</span>
-                                        </div>
-                                        <div className="flex flex-col items-end">
-                                            <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                                                {formatNumber(Math.floor(category.total_egp))} {__('savings.egp')}
-                                            </span>
-                                            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                                                {((category.total_egp / categories.reduce((sum, cat) => sum + cat.total_egp, 0)) * 100).toFixed(1)}%
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-center py-4">
-                                <p className="text-xs text-zinc-500">{__('stats.no_expenses')}</p>
                             </div>
                         )}
                     </div>

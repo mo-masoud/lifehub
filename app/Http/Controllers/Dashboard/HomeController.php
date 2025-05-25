@@ -24,9 +24,9 @@ class HomeController extends Controller
         $hasCompletedInitialSavings = UserSetting::hasCompletedInitialSavings($user);
 
         $data = [
-            'usdRateFallback' => $user->getUsdRateFallback(),
-            'gold24RateFallback' => $user->getGold24RateFallback(),
-            'gold21RateFallback' => $user->getGold21RateFallback(),
+            'usdRateFallback' => $user->getUsdRate(),
+            'gold24RateFallback' => $user->getGold24Rate(),
+            'gold21RateFallback' => $user->getGold21Rate(),
         ];
 
         if ($hasCompletedInitialSavings) {

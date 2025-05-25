@@ -5,10 +5,7 @@ namespace App\Services;
 use App\Models\Snapshot;
 use App\Models\SnapshotItem;
 use App\Models\User;
-use App\Models\UserSetting;
-use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Throwable;
 
 class CreateSnapshotService
@@ -56,9 +53,9 @@ class CreateSnapshotService
     protected function getRates(): array
     {
         return [
-            'usd' => $this->user->getUsdRateFallback(),
-            'gold24' => $this->user->getGold24RateFallback(),
-            'gold21' => $this->user->getGold21RateFallback(),
+            'usd' => $this->user->getUsdRate(),
+            'gold24' => $this->user->getGold24Rate(),
+            'gold21' => $this->user->getGold21Rate(),
         ];
     }
 

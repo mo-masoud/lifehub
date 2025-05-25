@@ -78,9 +78,9 @@ class DashboardStatsService
             return null;
         }
 
-        $usdRate = $user->getUsdRateFallback();
-        $gold24Rate = $user->getGold24RateFallback();
-        $gold21Rate = $user->getGold21RateFallback();
+        $usdRate = $user->getUsdRate();
+        $gold24Rate = $user->getGold24Rate();
+        $gold21Rate = $user->getGold21Rate();
 
         // Get all transactions for the period and convert to EGP for proper comparison
         $transactions = Transaction::where('user_id', $userId)
@@ -243,7 +243,7 @@ class DashboardStatsService
     }
 
     /**
-     * Get top 3 categories for a specific time period
+     * Get top categories for a specific time period (sorted by total amount)
      *
      * @param int $userId
      * @param \Carbon\Carbon|null $startDate
@@ -257,9 +257,9 @@ class DashboardStatsService
             return [];
         }
 
-        $usdRate = $user->getUsdRateFallback();
-        $gold24Rate = $user->getGold24RateFallback();
-        $gold21Rate = $user->getGold21RateFallback();
+        $usdRate = $user->getUsdRate();
+        $gold24Rate = $user->getGold24Rate();
+        $gold21Rate = $user->getGold21Rate();
 
         // Get all transactions for the period
         $query = Transaction::where('user_id', $userId)
@@ -300,27 +300,20 @@ class DashboardStatsService
             $categoryTotals[$categoryId]['total_egp'] += $amountEgp;
         }
 
-        // Sort by total and get top 3
+        // Sort by total and return all categories (component will handle top 3 + others)
         uasort($categoryTotals, function ($a, $b) {
             return $b['total_egp'] <=> $a['total_egp'];
         });
 
         $result = [];
-        $count = 0;
 
         foreach ($categoryTotals as $categoryData) {
-            if ($count >= 3) {
-                break;
-            }
-
             $result[] = [
                 'id' => $categoryData['category']->id,
                 'name' => $categoryData['category']->name,
                 'total_egp' => round($categoryData['total_egp'], 2),
                 'total_usd' => round($categoryData['total_egp'] / $usdRate, 2),
             ];
-
-            $count++;
         }
 
         return $result;

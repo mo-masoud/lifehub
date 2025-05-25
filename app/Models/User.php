@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -72,6 +73,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the USD exchange rate for this user.
+     *
+     * @return float
+     */
+    public function getUsdRate(): float
+    {
+        $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+        return $exchangeRateService->getUsdRate($this);
+    }
+
+    /**
      * Get the USD exchange rate fallback for this user.
      *
      * @return float
@@ -86,7 +98,7 @@ class User extends Authenticatable
      *
      * @return float
      */
-    public function getGold24RateFallback(): float
+    public function getGold24Rate(): float
     {
         return (float) UserSetting::get($this, 'gold24_rate_fallback', 5000);
     }
@@ -96,9 +108,62 @@ class User extends Authenticatable
      *
      * @return float
      */
-    public function getGold21RateFallback(): float
+    public function getGold21Rate(): float
     {
         return (float) UserSetting::get($this, 'gold21_rate_fallback', 4000);
+    }
+
+    /**
+     * Get the user's exchange rate fetch frequency setting
+     *
+     * @return string
+     */
+    public function getExchangeRateFrequency(): string
+    {
+        return UserSetting::get($this, 'exchange_rate_frequency', 'daily');
+    }
+
+    /**
+     * Set the user's exchange rate fetch frequency
+     *
+     * @param string $frequency
+     * @return void
+     */
+    public function setExchangeRateFrequency(string $frequency): void
+    {
+        $validFrequencies = array_keys(config('exchange_rates.fetch_frequencies', []));
+
+        if (!in_array($frequency, $validFrequencies)) {
+            throw new \InvalidArgumentException("Invalid frequency. Must be one of: " . implode(', ', $validFrequencies));
+        }
+
+        UserSetting::set($this, 'exchange_rate_frequency', $frequency);
+    }
+
+    /**
+     * Get exchange rates for this user
+     */
+    public function exchangeRates(): HasMany
+    {
+        return $this->hasMany(ExchangeRate::class);
+    }
+
+    /**
+     * Manually refresh exchange rate
+     */
+    public function refreshExchangeRate(): array
+    {
+        $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+        return $exchangeRateService->manualRefresh($this);
+    }
+
+    /**
+     * Get remaining manual API calls for today
+     */
+    public function getRemainingManualCalls(): int
+    {
+        $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+        return $exchangeRateService->getRemainingManualCalls($this);
     }
 
     /**
