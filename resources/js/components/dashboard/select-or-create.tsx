@@ -79,7 +79,7 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
             >
                 <Command onKeyDown={handleKeyDown}>
                     {!creatingNewOption && <CommandInput placeholder={__('Search...')} />}
-                    
+
                     {creatingNewOption ? (
                         <>
                             <div className="flex items-center gap-2 px-3 py-2">
@@ -114,7 +114,7 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                                 <h6 className="text-muted-foreground truncate px-2 text-xs">{__('messages.choose_from_list_or_create_new')}</h6>
                                 <Plus />
                             </Button>
-                            
+
                             <CommandSeparator />
 
                             <CommandList>
