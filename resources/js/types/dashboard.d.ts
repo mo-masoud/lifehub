@@ -29,3 +29,18 @@ export interface TotalByPeriod {
     quarter: number;
     year: number;
 }
+
+export interface CategoryExpense {
+    id: number;
+    name: string;
+    total_egp: number;
+    total_usd: number;
+}
+
+export interface TopCategoriesByPeriod {
+    week: CategoryExpense[];
+    month: CategoryExpense[];
+    quarter: CategoryExpense[];
+    year: CategoryExpense[];
+    overall: CategoryExpense[];
+}

@@ -2,7 +2,7 @@ import { SavingsStats } from '@/components/savings';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import { type LatestSnapshotTotals, type TopTransactions, type TotalByPeriod } from '@/types/dashboard';
+import { type LatestSnapshotTotals, type TopCategoriesByPeriod, type TopTransactions, type TotalByPeriod } from '@/types/dashboard';
 import { Balance } from '@/types/models';
 import { Head, usePage } from '@inertiajs/react';
 import { PiggyBank, Settings, Wallet } from 'lucide-react';
@@ -14,6 +14,7 @@ interface IndexProps {
     topTransactions?: TopTransactions;
     totalExpenses?: TotalByPeriod;
     totalIncome?: TotalByPeriod;
+    topCategories?: TopCategoriesByPeriod;
     initialSavings?: Balance[];
     usdRateFallback?: string;
     gold24RateFallback?: string;
@@ -32,6 +33,7 @@ export default function Index({
     topTransactions,
     totalExpenses,
     totalIncome,
+    topCategories,
     initialSavings,
     usdRateFallback,
     gold24RateFallback,
@@ -72,6 +74,7 @@ export default function Index({
                                 topTransactions={topTransactions!}
                                 totalExpenses={totalExpenses!}
                                 totalIncome={totalIncome!}
+                                topCategories={topCategories!}
                             />
                         </div>
                     )}

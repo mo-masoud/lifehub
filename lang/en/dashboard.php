@@ -28,6 +28,7 @@ return [
         'period_month' => 'Month',
         'period_quarter' => 'Quarter',
         'period_year' => 'Year',
+        'period_overall' => 'Overall',
         'no_transactions' => 'No transactions in this period',
         'amount' => 'Amount',
         'category' => 'Category',
@@ -40,6 +41,8 @@ return [
         'view_details' => 'View Details',
         'other_categories' => 'Other',
         'top_categories_expenses' => 'Top Categories Expenses',
+        'expense_distribution' => 'Expense Distribution',
+        'all_categories' => 'All Categories',
         'coming_soon' => 'Coming Soon',
     ],
 

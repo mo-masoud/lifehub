@@ -36,6 +36,7 @@ class HomeController extends Controller
                 'topTransactions' => $this->dashboardStatsService->getTopTransactionsByPeriod(),
                 'totalExpenses' => $this->dashboardStatsService->getTotalExpensesByPeriod(),
                 'totalIncome' => $this->dashboardStatsService->getTotalIncomeByPeriod(),
+                'topCategories' => $this->dashboardStatsService->getTopCategoriesByPeriod(),
             ]);
         } else {
             // User hasn't completed initial savings, show initial savings data
