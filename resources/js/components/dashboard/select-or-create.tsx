@@ -1,6 +1,6 @@
 import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
-import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { __ } from '@/lib/i18n';
@@ -44,6 +44,13 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && creatingNewOption) {
+            e.preventDefault();
+            handleSaveNewOption();
+        }
+    };
+
     if (filter) {
         options = options.filter(filter);
     }
@@ -70,7 +77,9 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                     width: typeof window !== 'undefined' ? `${triggerRef.current?.offsetWidth || 0}px` : 'auto',
                 }}
             >
-                <Command>
+                <Command onKeyDown={handleKeyDown}>
+                    {!creatingNewOption && <CommandInput placeholder={__('Search...')} />}
+                    
                     {creatingNewOption ? (
                         <>
                             <div className="flex items-center gap-2 px-3 py-2">
@@ -100,31 +109,34 @@ export const SelectOrCreate = ({ options, selectedOption, label = 'name', placeh
                             {newOptionError && <InputError className="mx-2 mt-0.5 mb-2 text-xs" message={newOptionError} />}
                         </>
                     ) : (
-                        <Button variant="ghost" className="m-1 flex items-center justify-between" onClick={() => setCreatingNewOption(true)}>
-                            <h6 className="text-muted-foreground truncate px-2 text-xs">{__('messages.choose_from_list_or_create_new')}</h6>
-                            <Plus />
-                        </Button>
+                        <>
+                            <Button variant="ghost" className="m-1 flex items-center justify-between" onClick={() => setCreatingNewOption(true)}>
+                                <h6 className="text-muted-foreground truncate px-2 text-xs">{__('messages.choose_from_list_or_create_new')}</h6>
+                                <Plus />
+                            </Button>
+                            
+                            <CommandSeparator />
+
+                            <CommandList>
+                                <CommandEmpty>{__('No results found.')}</CommandEmpty>
+                                <CommandGroup>
+                                    {options.map((option) => (
+                                        <CommandItem
+                                            key={option.id}
+                                            value={__(option.name)}
+                                            onSelect={() => {
+                                                onChange(option);
+                                                setOpen(false);
+                                            }}
+                                        >
+                                            <Check className={cn('mr-2 h-4 w-4', selectedOption == option.id ? 'opacity-100' : 'opacity-0')} />
+                                            {__(option.name)}
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            </CommandList>
+                        </>
                     )}
-
-                    <CommandSeparator />
-
-                    <CommandList>
-                        <CommandGroup>
-                            {options.map((option) => (
-                                <CommandItem
-                                    key={option.id}
-                                    value={option.id}
-                                    onSelect={() => {
-                                        onChange(option);
-                                        setOpen(false);
-                                    }}
-                                >
-                                    <Check className={cn('mr-2 h-4 w-4', selectedOption == option.id ? 'opacity-100' : 'opacity-0')} />
-                                    {__(option.name)}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
                 </Command>
             </PopoverContent>
         </Popover>
