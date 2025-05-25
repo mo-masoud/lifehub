@@ -19,11 +19,14 @@ class Transaction extends Model
         'from_type',
         'from_amount',
         'notes',
+        'original_amount',
+        'original_type',
     ];
 
     protected $casts = [
         'amount' => 'float',
         'from_amount' => 'float',
+        'original_amount' => 'float',
     ];
 
     protected $appends = ['date'];
@@ -72,5 +75,64 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    /**
+     * Convert amount to EGP and store both original and converted values
+     */
+    public function convertToEgp(): void
+    {
+        // Only convert if we have a valid currency type that needs conversion
+        if (!in_array($this->type, ['USD', 'GOLD24', 'GOLD21'])) {
+            return;
+        }
+
+        // Load user if not already loaded
+        if (!$this->relationLoaded('user')) {
+            $this->load('user');
+        }
+
+        $user = $this->user;
+        if (!$user) {
+            return;
+        }
+
+        switch ($this->type) {
+            case 'USD':
+                $this->original_amount = $this->amount;
+                $this->original_type = $this->type;
+                $this->amount = $this->amount * $user->getUsdRateFallback();
+                $this->type = 'EGP';
+                break;
+            case 'GOLD24':
+                $this->original_amount = $this->amount;
+                $this->original_type = $this->type;
+                $this->amount = $this->amount * $user->getGold24RateFallback();
+                $this->type = 'EGP';
+                break;
+            case 'GOLD21':
+                $this->original_amount = $this->amount;
+                $this->original_type = $this->type;
+                $this->amount = $this->amount * $user->getGold21RateFallback();
+                $this->type = 'EGP';
+                break;
+        }
+    }
+
+    /**
+     * Boot the model to automatically convert currencies
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($transaction) {
+            $transaction->convertToEgp();
+        });
+
+        static::updating(function ($transaction) {
+            if ($transaction->isDirty(['type', 'amount'])) {
+                $transaction->convertToEgp();
+            }
+        });
     }
 }

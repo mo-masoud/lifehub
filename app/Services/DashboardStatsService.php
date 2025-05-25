@@ -98,27 +98,8 @@ class DashboardStatsService
         $maxAmountEgp = 0;
 
         foreach ($transactions as $transaction) {
-            // Get transaction type (stored directly on transaction)
-            $type = $transaction->type ?? 'EGP';
-
-            // Calculate amount in EGP for comparison
+            // Amount is already converted to EGP in the model, so we can directly compare
             $amountEgp = $transaction->amount;
-
-            switch ($type) {
-                case 'USD':
-                    $amountEgp = $transaction->amount * $usdRate;
-                    break;
-                case 'GOLD24':
-                    $amountEgp = $transaction->amount * $gold24Rate;
-                    break;
-                case 'GOLD21':
-                    $amountEgp = $transaction->amount * $gold21Rate;
-                    break;
-                case 'EGP':
-                default:
-                    // Amount is already in EGP
-                    break;
-            }
 
             // Check if this is the highest transaction in EGP equivalent
             if ($amountEgp > $maxAmountEgp) {
@@ -132,33 +113,13 @@ class DashboardStatsService
         }
 
         // Calculate final amounts for the top transaction
-        $type = $topTransaction->type ?? 'EGP';
-        $amountEgp = $topTransaction->amount;
-        $amountUsd = $topTransaction->amount;
-
-        // Convert based on type for display
-        switch ($type) {
-            case 'USD':
-                $amountEgp = $topTransaction->amount * $usdRate;
-                $amountUsd = $topTransaction->amount; // Already in USD
-                break;
-            case 'GOLD24':
-                $amountEgp = $topTransaction->amount * $gold24Rate;
-                $amountUsd = $amountEgp / $usdRate;
-                break;
-            case 'GOLD21':
-                $amountEgp = $topTransaction->amount * $gold21Rate;
-                $amountUsd = $amountEgp / $usdRate;
-                break;
-            case 'EGP':
-            default:
-                $amountUsd = $topTransaction->amount / $usdRate;
-                // $amountEgp is already correct
-                break;
-        }
+        $originalType = $topTransaction->original_type ?? $topTransaction->type ?? 'EGP';
+        $originalAmount = $topTransaction->original_amount ?? $topTransaction->amount;
+        $amountEgp = $topTransaction->amount; // Amount is already converted to EGP in the model
+        $amountUsd = $amountEgp / $usdRate;
 
         return [
-            'amount' => $topTransaction->amount,
+            'amount' => $originalAmount,
             'amount_egp' => round($amountEgp, 2),
             'amount_usd' => round($amountUsd, 2),
             'date' => $topTransaction->date,
@@ -166,7 +127,7 @@ class DashboardStatsService
             'category_id' => $topTransaction->category?->id,
             'notes' => $topTransaction->notes,
             'period' => $periodName,
-            'type' => $type,
+            'type' => $originalType,
         ];
     }
 
@@ -240,17 +201,7 @@ class DashboardStatsService
      */
     private function getTotalForPeriod(int $userId, $startDate, TransactionDirection $direction): float
     {
-        // Get user and conversion rates
-        $user = Auth::user();
-        if (!$user) {
-            return 0;
-        }
-
-        $usdRate = $user->getUsdRateFallback();
-        $gold24Rate = $user->getGold24RateFallback();
-        $gold21Rate = $user->getGold21RateFallback();
-
-        // Get all transactions for the period
+        // Get all transactions for the period (amounts are already converted to EGP)
         $transactions = Transaction::where('user_id', $userId)
             ->where('direction', $direction->value)
             ->where('created_at', '>=', $startDate)
@@ -259,27 +210,8 @@ class DashboardStatsService
         $totalEgp = 0;
 
         foreach ($transactions as $transaction) {
-            $type = $transaction->type ?? 'EGP';
-
-            // Convert amount to EGP
-            $amountEgp = $transaction->amount;
-            switch ($type) {
-                case 'USD':
-                    $amountEgp = $transaction->amount * $usdRate;
-                    break;
-                case 'GOLD24':
-                    $amountEgp = $transaction->amount * $gold24Rate;
-                    break;
-                case 'GOLD21':
-                    $amountEgp = $transaction->amount * $gold21Rate;
-                    break;
-                case 'EGP':
-                default:
-                    // Amount is already in EGP
-                    break;
-            }
-
-            $totalEgp += $amountEgp;
+            // Amount is already converted to EGP in the model
+            $totalEgp += $transaction->amount;
         }
 
         return round($totalEgp, 2);
@@ -344,7 +276,7 @@ class DashboardStatsService
             return [];
         }
 
-        // Group transactions by category and convert to EGP
+        // Group transactions by category (amounts are already in EGP)
         $categoryTotals = [];
 
         foreach ($transactions as $transaction) {
@@ -353,25 +285,9 @@ class DashboardStatsService
             }
 
             $categoryId = $transaction->category->id;
-            $type = $transaction->type ?? 'EGP';
 
-            // Convert amount to EGP
+            // Amount is already converted to EGP in the model
             $amountEgp = $transaction->amount;
-            switch ($type) {
-                case 'USD':
-                    $amountEgp = $transaction->amount * $usdRate;
-                    break;
-                case 'GOLD24':
-                    $amountEgp = $transaction->amount * $gold24Rate;
-                    break;
-                case 'GOLD21':
-                    $amountEgp = $transaction->amount * $gold21Rate;
-                    break;
-                case 'EGP':
-                default:
-                    // Amount is already in EGP
-                    break;
-            }
 
             // Add to category total
             if (!isset($categoryTotals[$categoryId])) {
