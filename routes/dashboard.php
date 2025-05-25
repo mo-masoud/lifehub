@@ -20,6 +20,7 @@ use App\Http\Controllers\Dashboard\Settings\ProfileController;
 use App\Http\Controllers\Dashboard\Settings\UserSettingController;
 use App\Http\Controllers\Dashboard\SSHController;
 use App\Http\Controllers\Dashboard\Savings\TransactionCategoryController;
+use App\Http\Controllers\Dashboard\SavingsGoalsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -121,5 +122,18 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         Route::resource('savings/transaction-categories', TransactionCategoryController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->names('savings.transaction-categories');
+
+        Route::resource('savings/goals', SavingsGoalsController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('savings.goals');
+
+        Route::post('savings/goals/{savingsGoal}/mark-achieved', [SavingsGoalsController::class, 'markAsAchieved'])
+            ->name('savings.goals.mark-achieved');
+
+        Route::post('savings/goals/{savingsGoal}/dismiss-notification', [SavingsGoalsController::class, 'dismissSuccessNotification'])
+            ->name('savings.goals.dismiss-notification');
+
+        Route::get('api/savings/goals', [SavingsGoalsController::class, 'apiIndex'])
+            ->name('api.savings.goals.index');
     });
 });

@@ -5,15 +5,38 @@ import { TopTransactions as TopTransactionsComponent } from './top-transactions'
 import { TotalExpenses } from './total-expenses';
 import { TotalIncome } from './total-income';
 
+interface SavingsGoal {
+    id: number;
+    title: string;
+    target_amount_usd: number;
+    target_amount_egp: number;
+    current_amount_usd: number;
+    current_amount_egp: number;
+    progress_percentage: number;
+    severity: 'low' | 'medium' | 'high' | 'very-high';
+    target_date: string | null;
+    is_achieved: boolean;
+    is_overdue: boolean;
+    achieved_at: string | null;
+}
+
 interface SavingsStatsProps {
     latestSnapshotTotals: LatestSnapshotTotals | null;
     topTransactions: TopTransactions;
     totalExpenses: TotalByPeriod;
     totalIncome: TotalByPeriod;
     topCategories: TopCategoriesByPeriod;
+    savingsGoals?: SavingsGoal[];
 }
 
-export const SavingsStats = ({ latestSnapshotTotals, topTransactions, totalExpenses, totalIncome, topCategories }: SavingsStatsProps) => {
+export const SavingsStats = ({
+    latestSnapshotTotals,
+    topTransactions,
+    totalExpenses,
+    totalIncome,
+    topCategories,
+    savingsGoals = [],
+}: SavingsStatsProps) => {
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
             {/* Current Savings - First item on all screens */}
@@ -23,6 +46,7 @@ export const SavingsStats = ({ latestSnapshotTotals, topTransactions, totalExpen
                         date={latestSnapshotTotals.date}
                         totalEgp={latestSnapshotTotals.total_egp}
                         totalUsd={latestSnapshotTotals.total_usd}
+                        savingsGoals={savingsGoals}
                     />
                 )}
             </div>

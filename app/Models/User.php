@@ -72,6 +72,11 @@ class User extends Authenticatable
         return $this->hasMany(Snapshot::class);
     }
 
+    public function savingsGoals(): HasMany
+    {
+        return $this->hasMany(SavingsGoal::class);
+    }
+
     /**
      * Get the USD exchange rate for this user.
      *

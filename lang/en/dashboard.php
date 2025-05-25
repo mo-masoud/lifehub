@@ -257,6 +257,7 @@ return [
         'total_year' => 'Total in year',
         'total_month' => 'Total in month',
         'total_week' => 'Total in week',
+        'goals' => 'Goals',
     ],
 
     'auth_layout' => [

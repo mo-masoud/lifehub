@@ -1,4 +1,5 @@
 import { SavingsStats } from '@/components/savings';
+import { SavingsGoalNotifications } from '@/components/savings/savings-goal-notifications';
 import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import { type BreadcrumbItem, type SharedData } from '@/types';
@@ -9,6 +10,23 @@ import { PiggyBank, Settings, Wallet } from 'lucide-react';
 import { PriceRateFallback } from './forms/price-rate-fallback';
 import { InitialSavingsCard } from './initial-savings/initial-savings-card';
 
+interface SavingsGoal {
+    id: number;
+    title: string;
+    target_amount_usd: number;
+    target_amount_egp: number;
+    current_amount_usd: number;
+    current_amount_egp: number;
+    progress_percentage: number;
+    severity: 'low' | 'medium' | 'high' | 'very-high';
+    target_date: string | null;
+    is_achieved: boolean;
+    is_overdue: boolean;
+    achieved_at: string | null;
+    success_notification_dismissed: boolean;
+    success_notification_shown_at: string | null;
+}
+
 interface IndexProps {
     latestSnapshotTotals?: LatestSnapshotTotals | null;
     topTransactions?: TopTransactions;
@@ -16,6 +34,7 @@ interface IndexProps {
     totalIncome?: TotalByPeriod;
     topCategories?: TopCategoriesByPeriod;
     initialSavings?: Balance[];
+    savingsGoals?: SavingsGoal[];
     usdRateFallback?: string;
     gold24RateFallback?: string;
     gold21RateFallback?: string;
@@ -35,6 +54,7 @@ export default function Index({
     totalIncome,
     topCategories,
     initialSavings,
+    savingsGoals = [],
     usdRateFallback,
     gold24RateFallback,
     gold21RateFallback,
@@ -45,6 +65,9 @@ export default function Index({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('general.home')} />
             <div className="space-y-8 p-4 2xl:space-y-6 2xl:px-12">
+                {/* Savings Goals Notifications */}
+                {initial_savings_completed && savingsGoals.length > 0 && <SavingsGoalNotifications goals={savingsGoals} />}
+
                 {/* Savings Module Section */}
                 <div className="space-y-6 2xl:space-y-4">
                     {/* Savings Stats Section */}
@@ -67,6 +90,7 @@ export default function Index({
                                 totalExpenses={totalExpenses!}
                                 totalIncome={totalIncome!}
                                 topCategories={topCategories!}
+                                savingsGoals={savingsGoals}
                             />
                         </div>
                     )}

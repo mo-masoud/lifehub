@@ -206,13 +206,13 @@ export const TopCategoriesExpenses = ({ topCategories }: TopCategoriesExpensesPr
                                     {categories.slice(0, 3).map((category, index) => (
                                         <div key={category.id} className="flex items-center justify-start gap-1">
                                             <div className={`h-2 w-2 rounded-full`} style={{ backgroundColor: getStrokeColor(index) }} />
-                                            <span className="text-xs text-zinc-600 dark:text-zinc-400">{__(category.name)}</span>
+                                            <span className="text-sm text-zinc-600 dark:text-zinc-400">{__(category.name)}</span>
                                         </div>
                                     ))}
                                     {categories.length > 3 && (
                                         <div className="flex items-center justify-start gap-1">
                                             <div className="h-2 w-2 rounded-full" style={{ backgroundColor: getStrokeColor(3) }} />
-                                            <span className="text-xs text-zinc-600 dark:text-zinc-400">{__('stats.other_categories')}</span>
+                                            <span className="text-sm text-zinc-600 dark:text-zinc-400">{__('stats.other_categories')}</span>
                                         </div>
                                     )}
                                 </div>
