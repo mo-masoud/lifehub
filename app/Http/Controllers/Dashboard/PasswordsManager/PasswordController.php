@@ -9,7 +9,7 @@ use App\Models\Password;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class PasswordManagerController extends Controller
+class PasswordController extends Controller
 {
     public function destroy(Request $request, Password $password)
     {

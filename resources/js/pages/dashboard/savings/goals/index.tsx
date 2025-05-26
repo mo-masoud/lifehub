@@ -138,7 +138,7 @@ export default function SavingsGoalsIndex({ goals }: Props) {
                                     <TableCell className="text-start text-sm">{getStatusBadge(goal)}</TableCell>
                                     <ActionCell
                                         updateLabel="Update Goal"
-                                        item={goal}
+                                        item={{ goal }}
                                         FormComponent={SavingsGoalForm}
                                         onDestroy={() => destroy(goal.id.toString())}
                                     />

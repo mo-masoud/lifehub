@@ -14,7 +14,7 @@ import { CreateItem } from '@/components/dashboard/create-item';
 import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
-import { FolderForm } from './foder-form';
+import { FolderForm } from './folder-form';
 
 interface FolderWithCounts extends Folder {
     passwords_count: number;

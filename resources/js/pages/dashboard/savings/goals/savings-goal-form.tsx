@@ -19,13 +19,13 @@ interface SavingsGoal {
 }
 
 interface SavingsGoalFormProps {
-    goal?: { goal: SavingsGoal };
+    goal?: SavingsGoal;
     onSave?: () => void;
 }
 
 const goalSchema = z.object({
     title: z.string().min(1, 'Title is required').max(255, 'Title is too long'),
-    target_amount: z.number().min(0.01, 'Amount must be greater than 0'),
+    target_amount: z.coerce.number().min(0.01, 'Amount must be greater than 0'),
     currency: z.enum(['USD', 'EGP']),
     severity: z.enum(['low', 'medium', 'high', 'very-high']),
     target_date: z.string().optional(),
@@ -34,15 +34,32 @@ const goalSchema = z.object({
 type GoalFormData = z.infer<typeof goalSchema>;
 
 export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
-    const isEditing = !!goal?.goal;
-    const goalData = goal?.goal;
+    const isEditing = !!goal?.id;
+    const goalData = goal;
+
+    // Determine the currency and amount based on existing data
+    const getInitialCurrencyAndAmount = () => {
+        if (!goalData) {
+            return { currency: 'USD' as const, amount: 0 };
+        }
+
+        // If EGP amount exists and USD doesn't, use EGP
+        if (goalData.target_amount_egp > 0 && goalData.target_amount_usd === 0) {
+            return { currency: 'EGP' as const, amount: Number(goalData.target_amount_egp) };
+        }
+
+        // Default to USD
+        return { currency: 'USD' as const, amount: Number(goalData.target_amount_usd) };
+    };
+
+    const { currency: initialCurrency, amount: initialAmount } = getInitialCurrencyAndAmount();
 
     const form = useForm<GoalFormData>({
         resolver: zodResolver(goalSchema),
         defaultValues: {
             title: goalData?.title || '',
-            target_amount: goalData?.target_amount_usd || 0,
-            currency: 'USD',
+            target_amount: initialAmount,
+            currency: initialCurrency,
             severity: goalData?.severity || 'medium',
             target_date: goalData?.target_date || '',
         },
@@ -110,49 +127,52 @@ export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
                     )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="target_amount"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>{__('savings.amount')}</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        step="0.01"
-                                        placeholder="0.00"
-                                        {...field}
-                                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                <FormField
+                    control={form.control}
+                    name="target_amount"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>{__('savings.amount')}</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    value={field.value || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Convert to number, ensuring empty string becomes 0
+                                        const numericValue = value === '' ? 0 : parseFloat(value);
+                                        field.onChange(isNaN(numericValue) ? 0 : numericValue);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-                    <FormField
-                        control={form.control}
-                        name="currency"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Currency</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select currency" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="USD">{__('savings.USD')}</SelectItem>
-                                        <SelectItem value="EGP">{__('savings.EGP')}</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="currency"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Currency</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select currency" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="USD">{__('savings.USD')}</SelectItem>
+                                    <SelectItem value="EGP">{__('savings.EGP')}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
                 <FormField
                     control={form.control}

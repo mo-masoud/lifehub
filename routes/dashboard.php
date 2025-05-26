@@ -9,7 +9,7 @@ use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
 use App\Http\Controllers\Dashboard\HomeController;
-use App\Http\Controllers\Dashboard\PasswordsManager\PasswordManagerController;
+use App\Http\Controllers\Dashboard\PasswordsManager\PasswordController as PasswordManagerController;
 use App\Http\Controllers\Dashboard\Savings\InitialSavingController;
 use App\Http\Controllers\Dashboard\Savings\SnapshotController;
 use App\Http\Controllers\Dashboard\Savings\StorageLocationController;
@@ -140,7 +140,8 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
 
         Route::resource('savings/goals', SavingsGoalsController::class)
             ->only(['index', 'store', 'update', 'destroy'])
-            ->names('savings.goals');
+            ->names('savings.goals')
+            ->parameters(['goals' => 'savingsGoal']);
 
         Route::post('savings/goals/{savingsGoal}/mark-achieved', [SavingsGoalsController::class, 'markAsAchieved'])
             ->name('savings.goals.mark-achieved');

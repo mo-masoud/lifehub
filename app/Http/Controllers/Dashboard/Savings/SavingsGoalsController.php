@@ -78,8 +78,6 @@ class SavingsGoalsController extends Controller
      */
     public function update(Request $request, SavingsGoal $savingsGoal)
     {
-        $this->authorize('update', $savingsGoal);
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0.01',
