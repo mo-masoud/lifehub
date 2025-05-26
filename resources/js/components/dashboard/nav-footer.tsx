@@ -1,6 +1,7 @@
-import { Icon } from '@/components/dashboard/icon';
-import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
+import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
+import { SharedData, type NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { type ComponentPropsWithoutRef } from 'react';
 
 export function NavFooter({
@@ -10,25 +11,47 @@ export function NavFooter({
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
     items: NavItem[];
 }) {
+    const page = usePage<SharedData>();
+
+    const groupedItems = items.reduce(
+        (groups, item) => {
+            const category = item.category || __('general.platform');
+            if (!groups[category]) {
+                groups[category] = [];
+            }
+            groups[category].push(item);
+            return groups;
+        },
+        {} as Record<string, NavItem[]>,
+    );
+
     return (
-        <SidebarGroup {...props} className={`group-data-[collapsible=icon]:p-0 ${className || ''}`}>
-            <SidebarGroupContent>
-                <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton
-                                asChild
-                                className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
-                            >
-                                <a href={item.href} target="_blank" rel="noopener noreferrer">
-                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                    <span>{item.title}</span>
-                                </a>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
-            </SidebarGroupContent>
-        </SidebarGroup>
+        <>
+            {Object.entries(groupedItems).map(([category, items]) => {
+                if (category === __('general.savings') && !page.props.initial_savings_completed) {
+                    return null;
+                }
+                return (
+                    <SidebarGroup key={category} className="px-2 py-0">
+                        <SidebarGroupLabel>{category}</SidebarGroupLabel>
+                        <SidebarMenu>
+                            {items.map((item) => {
+                                const isActive = new URL(item.href).pathname === page.url;
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild isActive={isActive} tooltip={{ children: item.title }}>
+                                            <Link href={item.href} prefetch>
+                                                {item.icon && <item.icon className={cn(!isActive && 'text-primary')} />}
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                );
+                            })}
+                        </SidebarMenu>
+                    </SidebarGroup>
+                );
+            })}
+        </>
     );
 }
