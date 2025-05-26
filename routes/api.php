@@ -13,6 +13,9 @@ Route::as('api.')->group(function () {
 
         // dashboard apis
         Route::as('dashboard.')->prefix('dashboard')->group(function () {
+            Route::apiResource('folders', App\Http\Controllers\API\Dashboard\FolderController::class)
+                ->only(['index', 'store']);
+
             Route::as('savings.')->prefix('savings')->group(function () {
 
                 Route::apiResource('transaction-categories', TransactionCategoryController::class)
@@ -20,7 +23,6 @@ Route::as('api.')->group(function () {
 
                 Route::apiResource('storage-locations', SavingsStorageLocationController::class)
                     ->only(['index', 'store']);
-
             });
         });
     });

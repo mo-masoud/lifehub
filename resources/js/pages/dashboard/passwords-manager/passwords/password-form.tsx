@@ -1,32 +1,65 @@
+import { SelectOrCreate } from '@/components/dashboard/select-or-create';
 import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { __ } from '@/lib/i18n';
 import { generatePassword } from '@/lib/utils';
-import { Password } from '@/types/models';
+import { Folder, Password } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { Dices, Eye, EyeOff } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type PasswordForm = {
     name: string;
     username: string;
-    url?: string;
-    password?: string;
+    url: string;
+    password: string;
+    folder_id: number | null;
 };
 
-export const PasswordForm = ({ password, onSave }: { password?: Password; onSave: (form: PasswordForm) => void }) => {
+export const PasswordForm = ({
+    password,
+    onSave,
+    defaultFolder,
+}: {
+    password?: Password;
+    onSave: (form: PasswordForm) => void;
+    defaultFolder?: Folder;
+}) => {
+    const [folders, setFolders] = useState<Folder[]>([]);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<PasswordForm>>({
+    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<PasswordForm>({
         name: password?.name || '',
         username: password?.username || '',
         url: password?.url || '',
         password: password?.password || '',
+        folder_id: password?.folder_id || defaultFolder?.id || null,
     });
+
+    const fetchFolders = async () => {
+        try {
+            const response = await axios.get(route('api.dashboard.folders.index'));
+            setFolders(response.data);
+        } catch (err) {
+            console.error('Error fetching folders:', err);
+        }
+    };
+
+    const handleCreateFolder = async (name: string) => {
+        const response = await axios.post(route('api.dashboard.folders.store'), {
+            name,
+        });
+        return response.data;
+    };
+
+    useEffect(() => {
+        fetchFolders();
+    }, []);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -120,6 +153,24 @@ export const PasswordForm = ({ password, onSave }: { password?: Password; onSave
                     autoComplete="off"
                 />
                 <InputError className="mt-1 text-xs" message={errors.url} />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="folder" className="truncate">
+                    {__('fields.folder')}
+                </Label>
+                <SelectOrCreate
+                    options={folders}
+                    selectedOption={data.folder_id}
+                    label="name"
+                    placeholder={__('messages.choose_folder')}
+                    onCreate={(folder: Folder) => {
+                        setFolders((prev) => [...prev, folder]);
+                    }}
+                    onChange={(folder: Folder) => setData('folder_id', folder?.id || null)}
+                    create={handleCreateFolder}
+                />
+                <InputError className="mt-1 text-xs" message={errors.folder_id} />
             </div>
 
             <div className="mt-4 flex items-center justify-end gap-4">

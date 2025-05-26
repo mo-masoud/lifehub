@@ -28,6 +28,7 @@ class StoreSSHRequest extends FormRequest
             'ip' => 'required_without:prompt|nullable|string|max:255',
             'prompt' => 'required_without:username,ip|nullable|string|max:255',
             'password' => 'required|string|min:8|max:255',
+            'folder_id' => 'nullable|exists:folders,id',
         ];
     }
 }

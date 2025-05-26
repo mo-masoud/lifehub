@@ -31,6 +31,7 @@ class SSHController extends Controller
         $user = $request->user();
 
         $sshs = SSH::where('user_id', $user->id)
+            ->with('folder')
             ->when(request('keyword'), function ($query) {
                 $query->where(function ($query) {
                     $keyword = request('keyword');

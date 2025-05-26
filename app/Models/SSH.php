@@ -21,6 +21,7 @@ class SSH extends Model
         'ip',
         'last_used_at',
         'password',
+        'folder_id',
     ];
 
     protected $casts = [
@@ -32,6 +33,11 @@ class SSH extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function folder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class);
     }
 
     protected function prompt(): Attribute
@@ -48,8 +54,8 @@ class SSH extends Model
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Crypt::encryptString($value),
-            get: fn ($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value),
+            get: fn($value) => Crypt::decryptString($value),
         );
     }
 }

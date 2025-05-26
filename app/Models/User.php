@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(Password::class);
     }
 
+    public function folders(): HasMany
+    {
+        return $this->hasMany(Folder::class);
+    }
+
     public function settings(): HasMany
     {
         return $this->hasMany(UserSetting::class);

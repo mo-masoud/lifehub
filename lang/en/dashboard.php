@@ -12,6 +12,8 @@ return [
         'search' => 'Search for anything...',
         'ssh_manager' => 'SSHs',
         'savings' => 'Savings',
+        'folders' => 'Folders',
+        'folder' => 'Folder',
     ],
 
     'stats' => [
@@ -49,6 +51,7 @@ return [
     'messages' => [
         'save' => 'Save',
         'saved' => 'Saved',
+        'saving' => 'Saving',
         'warning' => 'Warning',
         'cancel' => 'Cancel',
         'caution_cant_undone' => 'Please proceed with caution, this cannot be undone.',
@@ -56,6 +59,7 @@ return [
         'created_successfully' => 'Created successfully.',
         'something_went_wrong' => 'Something went wrong.',
         'updated_successfully' => 'Updated successfully.',
+        'folder_has_items_cannot_delete' => 'Cannot delete folder that contains passwords or SSH entries. Please move or delete the items first.',
         'or_return' => 'Or, return to',
         'new' => 'New',
         'next' => 'Next',
@@ -66,7 +70,11 @@ return [
         'history' => 'History',
         'showing_pagination' => 'Showing :from to :to of :total results.',
         'filter' => 'Filter',
-        'choose_from_list_or_create_new' => 'Choose from the list or create a new one'
+        'choose_from_list_or_create_new' => 'Choose from the list or create a new one',
+        'choose_folder' => 'Choose folder',
+        'no_folders' => 'No folders',
+        'create_folder' => 'Create folder',
+        'update_folder' => 'Update folder',
     ],
 
     'auth' => [
@@ -145,6 +153,8 @@ return [
         'url' => 'URL',
         'ip' => 'IP/Host',
         'name_placeholder' => 'Name of the item.',
+        'folder' => 'Folder',
+        'folder_placeholder' => 'Choose a folder or create a new one',
     ],
 
     'passwords' => [

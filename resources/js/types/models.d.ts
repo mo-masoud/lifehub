@@ -5,6 +5,8 @@ export interface Password {
     url?: string;
     username: string;
     password: string;
+    folder_id?: number;
+    folder?: Folder;
     created_at: string;
     updated_at: string;
 }
@@ -17,6 +19,18 @@ export interface SSH {
     username: string;
     password: string;
     prompt: string;
+    folder_id?: number;
+    folder?: Folder;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Folder {
+    id: number;
+    user_id: number;
+    name: string;
+    passwords_count?: number;
+    sshs_count?: number;
     created_at: string;
     updated_at: string;
 }

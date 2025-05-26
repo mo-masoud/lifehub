@@ -20,6 +20,7 @@ class Password extends Model
         'url',
         'expiry_at',
         'password',
+        'folder_id',
     ];
 
     protected $casts = [
@@ -32,11 +33,16 @@ class Password extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function folder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class);
+    }
+
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Crypt::encryptString($value),
-            get: fn ($value) => Crypt::decryptString($value),
+            set: fn($value) => Crypt::encryptString($value),
+            get: fn($value) => Crypt::decryptString($value),
         );
     }
 }

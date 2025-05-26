@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { __ } from '@/lib/i18n';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Aperture, Archive, ArrowLeftRight, Key, LayoutGrid, Tag, Target, Terminal } from 'lucide-react';
+import { Aperture, Archive, ArrowLeftRight, FolderOpen, Goal, Key, LayoutGrid, Tag, Terminal } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const navItems: NavItem[] = [
@@ -25,6 +25,17 @@ const navItems: NavItem[] = [
         href: route('dashboard.sshs.index'),
         icon: Terminal,
         category: __('general.password_manager'),
+    },
+    {
+        title: __('general.folders'),
+        href: route('dashboard.folders.index'),
+        icon: FolderOpen,
+    },
+    {
+        title: __('savings.goals'),
+        href: route('dashboard.savings.goals.index'),
+        icon: Goal,
+        category: __('general.savings'),
     },
     {
         title: __('savings.storage_locations'),
@@ -48,12 +59,6 @@ const navItems: NavItem[] = [
         title: __('savings.snapshots'),
         href: route('dashboard.savings.snapshots.index'),
         icon: Aperture,
-        category: __('general.savings'),
-    },
-    {
-        title: __('savings.goals'),
-        href: route('dashboard.savings.goals.index'),
-        icon: Target,
         category: __('general.savings'),
     },
 ];

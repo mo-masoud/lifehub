@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'general' => [
         'application_name' => 'x-dash',
         'dashboard' => 'لوحة التحكم',
@@ -13,6 +12,9 @@ return [
         'search' => 'ابحث عن أي شيء...',
         'ssh_manager' => 'إدارة SSH',
         'savings' => 'المدخرات',
+        'folders' => 'المجلدات',
+        'folder' => 'مجلد',
+        'no_folders' => 'لا توجد مجلدات',
     ],
 
     'stats' => [
@@ -67,8 +69,10 @@ return [
         'created_successfully' => 'تم الإنشاء بنجاح.',
         'something_went_wrong' => 'حدث خطأ ما.',
         'updated_successfully' => 'تم التحديث بنجاح.',
+        'folder_has_items_cannot_delete' => 'لا يمكن حذف مجلد يحتوي على كلمات مرور أو مفاتيح SSH. يرجى نقل أو حذف العناصر أولاً.',
         'filter' => 'تصفية',
         'choose_from_list_or_create_new' => 'اختر من القائمة أو أنشئ جديدًا',
+        'choose_folder' => 'اختر مجلد'
     ],
 
     'auth' => [

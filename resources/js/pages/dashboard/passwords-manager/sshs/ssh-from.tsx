@@ -1,33 +1,58 @@
+import { SelectOrCreate } from '@/components/dashboard/select-or-create';
 import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { __ } from '@/lib/i18n';
-import { SSH } from '@/types/models';
+import { Folder, SSH } from '@/types/models';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 type SShForm = {
     name: string;
-    username?: string;
-    ip?: string;
-    prompt?: string;
-    password?: string;
+    username: string;
+    ip: string;
+    prompt: string;
+    password: string;
+    folder_id: number | null;
 };
 
-export const SSHForm = ({ ssh, onSave }: { ssh?: SSH; onSave: (form: SShForm) => void }) => {
+export const SSHForm = ({ ssh, onSave, defaultFolder }: { ssh?: SSH; onSave: (form: SShForm) => void; defaultFolder?: Folder }) => {
+    const [folders, setFolders] = useState<Folder[]>([]);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<Required<SShForm>>({
+    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<SShForm>({
         name: ssh?.name || '',
         username: ssh?.username || '',
         prompt: ssh?.prompt || '',
         ip: ssh?.ip || '',
         password: ssh?.password || '',
+        folder_id: ssh?.folder_id || defaultFolder?.id || null,
     });
+
+    const fetchFolders = async () => {
+        try {
+            const response = await axios.get(route('api.dashboard.folders.index'));
+            setFolders(response.data);
+        } catch (err) {
+            console.error('Error fetching folders:', err);
+        }
+    };
+
+    const handleCreateFolder = async (name: string) => {
+        const response = await axios.post(route('api.dashboard.folders.store'), {
+            name,
+        });
+        return response.data;
+    };
+
+    useEffect(() => {
+        fetchFolders();
+    }, []);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -127,6 +152,24 @@ export const SSHForm = ({ ssh, onSave }: { ssh?: SSH; onSave: (form: SShForm) =>
                     </Button>
                 </div>
                 <InputError className="mt-1 text-xs" message={errors.password} />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="folder" className="truncate">
+                    {__('fields.folder')}
+                </Label>
+                <SelectOrCreate
+                    options={folders}
+                    selectedOption={data.folder_id}
+                    label="name"
+                    placeholder={__('messages.choose_folder')}
+                    onCreate={(folder: Folder) => {
+                        setFolders((prev) => [...prev, folder]);
+                    }}
+                    onChange={(folder: Folder) => setData('folder_id', folder?.id || null)}
+                    create={handleCreateFolder}
+                />
+                <InputError className="mt-1 text-xs" message={errors.folder_id} />
             </div>
 
             <div className="mt-4 flex items-center justify-end gap-4">

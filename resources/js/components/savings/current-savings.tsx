@@ -3,7 +3,7 @@ import { Progress } from '@/components/ui/progress';
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
 import { router } from '@inertiajs/react';
-import { CalendarDays, HandCoins, RefreshCcw, Target } from 'lucide-react';
+import { CalendarDays, Goal, HandCoins, RefreshCcw, Target } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SavingsGoal {
@@ -137,7 +137,7 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
                             {importantGoal && (
                                 <div className="rounded border border-dashed border-zinc-200 bg-zinc-50/50 p-2 dark:border-zinc-700 dark:bg-zinc-900/50">
                                     <div className="mb-1 flex items-center gap-1">
-                                        <Target className="size-3 text-blue-600 dark:text-blue-400" />
+                                        <Goal className="size-3 text-blue-600 dark:text-blue-400" />
                                         <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{__('Priority Goal')}</span>
                                     </div>
                                     <div className="mb-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">{importantGoal.title}</div>

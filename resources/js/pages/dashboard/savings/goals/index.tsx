@@ -11,7 +11,7 @@ import { formatNumber } from '@/lib/utils';
 import { SavingsGoalForm } from '@/pages/dashboard/savings/goals/savings-goal-form';
 import type { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { Target } from 'lucide-react';
+import { Goal } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SavingsGoal {
@@ -88,7 +88,7 @@ export default function SavingsGoalsIndex({ goals }: Props) {
 
             <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Target className="text-primary size-5" />
+                    <Goal className="text-primary size-5" />
                     <Heading title={__('savings.goals')} />
                 </div>
 

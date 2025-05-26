@@ -28,6 +28,7 @@ class StorePasswordRequest extends FormRequest
             'username' => 'required|string|max:255',
             'url' => 'nullable|url|max:255',
             'password' => 'required|string|min:8|max:255',
+            'folder_id' => 'nullable|exists:folders,id',
         ];
     }
 }

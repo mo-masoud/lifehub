@@ -31,6 +31,7 @@ class PasswordManagerController extends Controller
         $user = $request->user();
 
         $passwords = Password::where('user_id', $user->id)
+            ->with('folder')
             ->when(request('keyword'), function ($query) {
                 $query->where(function ($query) {
                     $keyword = request('keyword');

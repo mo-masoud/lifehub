@@ -10,9 +10,10 @@ interface CreateItemProps {
     label: string;
     FormComponent: FC<any>;
     trigger?: React.ReactNode;
+    formProps?: Record<string, any>;
 }
 
-export const CreateItem = ({ label, FormComponent, trigger }: CreateItemProps) => {
+export const CreateItem = ({ label, FormComponent, trigger, formProps = {} }: CreateItemProps) => {
     const { dir } = usePage<SharedData>().props;
 
     const [show, setShow] = useState(false);
@@ -35,7 +36,7 @@ export const CreateItem = ({ label, FormComponent, trigger }: CreateItemProps) =
                     <SheetDescription className="sr-only"></SheetDescription>
                 </SheetHeader>
 
-                <FormComponent onSave={() => setShow(false)} />
+                <FormComponent onSave={() => setShow(false)} {...formProps} />
             </SheetContent>
         </Sheet>
     );
