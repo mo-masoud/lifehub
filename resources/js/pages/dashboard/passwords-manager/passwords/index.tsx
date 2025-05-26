@@ -21,15 +21,43 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string } }>().props;
+    const { passwords, filters } = usePage<{ passwords: Pagination<Password>; filters: { keyword?: string; folder_id?: string } }>().props;
     const [keyword, setKeyword] = useState<string>(filters.keyword ?? '');
+    const [folderId, setFolderId] = useState<string>(filters.folder_id ?? '');
 
     const search = (e: ChangeEvent<HTMLInputElement>) => {
         setKeyword(e.target.value);
 
         router.get(
             route('dashboard.passwords.index'),
-            { keyword: e.target.value },
+            { keyword: e.target.value, folder_id: folderId },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
+
+    const filterByFolder = (folder_id: string) => {
+        setFolderId(folder_id);
+
+        router.get(
+            route('dashboard.passwords.index'),
+            { keyword, folder_id },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
+
+    const resetFilters = () => {
+        setKeyword('');
+        setFolderId('');
+
+        router.get(
+            route('dashboard.passwords.index'),
+            {},
             {
                 preserveState: true,
                 replace: true,
@@ -54,6 +82,8 @@ export default function Index() {
                     showFolder={true}
                     searchValue={keyword}
                     onSearch={search}
+                    folderFilter={folderId}
+                    onFolderFilter={filterByFolder}
                     showCreateButton={true}
                     searchPlaceholder={__('general.search')}
                 />

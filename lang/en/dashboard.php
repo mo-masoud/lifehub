@@ -73,8 +73,12 @@ return [
         'choose_from_list_or_create_new' => 'Choose from the list or create a new one',
         'choose_folder' => 'Choose folder',
         'no_folders' => 'No folders',
+        'all_folders' => 'All Folders',
+        'no_folder' => 'No Folder',
         'create_folder' => 'Create folder',
         'update_folder' => 'Update folder',
+        'reset' => 'Reset',
+        'apply' => 'Apply',
     ],
 
     'auth' => [

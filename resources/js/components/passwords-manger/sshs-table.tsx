@@ -4,13 +4,15 @@ import { TablePagination } from '@/components/dashboard/table-pagination';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { __ } from '@/lib/i18n';
 import type { Pagination } from '@/types';
 import { Folder, SSH } from '@/types/models';
 import { Link, router } from '@inertiajs/react';
+import axios from 'axios';
 import { Eye, EyeOff, Search } from 'lucide-react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface SSHsTableProps {
@@ -19,6 +21,9 @@ interface SSHsTableProps {
     showFolder?: boolean;
     searchValue?: string;
     onSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
+    folderFilter?: string;
+    onFolderFilter?: (folderId: string) => void;
+    onResetFilters?: () => void;
     showCreateButton?: boolean;
     searchPlaceholder?: string;
     defaultFolder?: Folder;
@@ -30,11 +35,29 @@ export function SSHsTable({
     showFolder = true,
     searchValue = '',
     onSearch,
+    folderFilter = '',
+    onFolderFilter,
     showCreateButton = true,
     searchPlaceholder,
     defaultFolder,
 }: SSHsTableProps) {
     const [showingPasswords, setShowingPasswords] = useState<number[]>([]);
+    const [folders, setFolders] = useState<Folder[]>([]);
+
+    useEffect(() => {
+        const fetchFolders = async () => {
+            try {
+                const response = await axios.get(route('api.dashboard.folders.index'));
+                setFolders(response.data);
+            } catch (err) {
+                console.error('Error fetching folders:', err);
+            }
+        };
+
+        if (onFolderFilter) {
+            fetchFolders();
+        }
+    }, [onFolderFilter]);
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard
@@ -64,30 +87,50 @@ export function SSHsTable({
         });
     };
 
+    const handleFolderFilter = (value: string) => {
+        if (onFolderFilter) {
+            onFolderFilter(value === 'all' ? '' : value);
+        }
+    };
+
     return (
         <div>
-            {(onSearch || showCreateButton) && (
-                <div className="mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        {onSearch && (
-                            <div className="relative">
-                                <Input
-                                    placeholder={searchPlaceholder || `${__('general.search')} ${__('general.ssh_manager')}`}
-                                    className="pl-9"
-                                    value={searchValue}
-                                    onChange={onSearch}
-                                />
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <Search className="size-4" />
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                    {showCreateButton && (
-                        <CreateItem label={__('ssh.create_ssh')} FormComponent={FormComponent} formProps={defaultFolder ? { defaultFolder } : {}} />
+            <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    {onSearch && (
+                        <div className="relative">
+                            <Input
+                                placeholder={searchPlaceholder || `${__('general.search')} ${__('general.ssh_manager')}`}
+                                className="pl-9"
+                                value={searchValue}
+                                onChange={onSearch}
+                            />
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <Search className="size-4" />
+                            </span>
+                        </div>
+                    )}
+                    {onFolderFilter && (
+                        <Select value={folderFilter || 'all'} onValueChange={handleFolderFilter}>
+                            <SelectTrigger className="w-48">
+                                <SelectValue placeholder={__('messages.all_folders')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">{__('messages.all_folders')}</SelectItem>
+                                <SelectItem value="no_folder">{__('messages.no_folder')}</SelectItem>
+                                {folders.map((folder) => (
+                                    <SelectItem key={folder.id} value={folder.id.toString()}>
+                                        {folder.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     )}
                 </div>
-            )}
+                {showCreateButton && (
+                    <CreateItem label={__('ssh.create_ssh')} FormComponent={FormComponent} formProps={defaultFolder ? { defaultFolder } : {}} />
+                )}
+            </div>
 
             <Card className="p-0 pb-2">
                 <Table>

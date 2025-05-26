@@ -41,12 +41,20 @@ class SSHController extends Controller
                         ->orWhere('ip', 'like', "%{$keyword}%");
                 });
             })
+            ->when(request('folder_id'), function ($query) {
+                $folderId = request('folder_id');
+                if ($folderId === 'no_folder') {
+                    $query->whereNull('folder_id');
+                } else {
+                    $query->where('folder_id', $folderId);
+                }
+            })
             ->latest()
             ->paginate();
 
         return inertia('dashboard/passwords-manager/sshs/index', [
             'sshs' => $sshs,
-            'filters' => request()->only(['keyword']),
+            'filters' => request()->only(['keyword', 'folder_id']),
         ]);
     }
     public function store(StoreSSHRequest $request)

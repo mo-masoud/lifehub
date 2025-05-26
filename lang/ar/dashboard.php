@@ -15,6 +15,8 @@ return [
         'folders' => 'المجلدات',
         'folder' => 'مجلد',
         'no_folders' => 'لا توجد مجلدات',
+        'all_folders' => 'جميع المجلدات',
+        'no_folder' => 'بدون مجلد',
     ],
 
     'stats' => [
@@ -72,7 +74,9 @@ return [
         'folder_has_items_cannot_delete' => 'لا يمكن حذف مجلد يحتوي على كلمات مرور أو مفاتيح SSH. يرجى نقل أو حذف العناصر أولاً.',
         'filter' => 'تصفية',
         'choose_from_list_or_create_new' => 'اختر من القائمة أو أنشئ جديدًا',
-        'choose_folder' => 'اختر مجلد'
+        'choose_folder' => 'اختر مجلد',
+        'reset' => 'إعادة تعيين',
+        'apply' => 'تطبيق',
     ],
 
     'auth' => [
