@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\PasswordsManager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\SSHs\StoreSSHRequest;
@@ -43,7 +43,7 @@ class SSHController extends Controller
             ->latest()
             ->paginate();
 
-        return inertia('dashboard/sshs/index', [
+        return inertia('dashboard/passwords-manager/sshs/index', [
             'sshs' => $sshs,
             'filters' => request()->only(['keyword']),
         ]);

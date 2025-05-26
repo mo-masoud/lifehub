@@ -6,7 +6,7 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ExternalLink, Eye, EyeOff, KeyRound, Search } from 'lucide-react';
+import { ExternalLink, Eye, EyeOff, Key, KeyRound, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import { ChangeEvent, useState } from 'react';
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
 import { TablePagination } from '@/components/dashboard/table-pagination';
-import { PasswordForm } from '@/pages/dashboard/passwords/password-form';
+import { PasswordForm } from './password-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -81,7 +81,7 @@ export default function Index() {
             <Head title={__('general.passwords')} />
             <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <KeyRound className="text-primary size-5" />
+                    <Key className="text-primary size-5" />
                     <Heading title={__('general.passwords')} />
                 </div>
 

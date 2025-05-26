@@ -6,15 +6,15 @@ import { __ } from '@/lib/i18n';
 import type { BreadcrumbItem, Pagination } from '@/types';
 import { SSH } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronsLeft, ChevronsRight, Computer, Eye, EyeOff, Search } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, Eye, EyeOff, Search, Terminal } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { SSHForm } from '@/pages/dashboard/sshs/ssh-from';
 import { ChangeEvent, useState } from 'react';
+import { SSHForm } from './ssh-from';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -79,7 +79,7 @@ export default function Index() {
             <Head title={__('general.ssh_manager')} />
             <div className="mt-4 flex items-center justify-between p-4">
                 <div className="flex items-center gap-4">
-                    <Computer className="text-primary size-5" />
+                    <Terminal className="text-primary size-5" />
                     <Heading title={__('general.ssh_manager')} />
                 </div>
 

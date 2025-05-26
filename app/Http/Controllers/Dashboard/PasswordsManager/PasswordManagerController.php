@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\PasswordsManager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Passwords\StorePasswordRequest;
@@ -43,7 +43,7 @@ class PasswordManagerController extends Controller
             ->latest()
             ->paginate();
 
-        return inertia('dashboard/passwords/index', [
+        return inertia('dashboard/passwords-manager/passwords/index', [
             'passwords' => $passwords,
             'filters' => request()->only(['keyword']),
         ]);
