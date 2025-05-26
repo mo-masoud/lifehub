@@ -146,7 +146,9 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
                                         <span className="text-zinc-600 dark:text-zinc-400">
                                             ${formatNumber(Math.floor(importantGoal.current_amount_usd))}
                                         </span>
-                                        <span className="font-medium text-zinc-700 dark:text-zinc-300">{importantGoal.progress_percentage.toFixed(0)}%</span>
+                                        <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                                            {importantGoal.progress_percentage.toFixed(0)}%
+                                        </span>
                                     </div>
                                     {importantGoal.target_date && (
                                         <div className="mt-1 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
