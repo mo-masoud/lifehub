@@ -2,14 +2,23 @@
 
 ### Project Overview
 
-LifeHub is a personal finance and life management application built with Laravel (backend) and React (frontend) using Inertia.js. The application includes features for savings tracking, password and SSH management, transaction recording, and personal financial analytics.
+LifeHub is a comprehensive personal finance and life management application built with Laravel (backend) and React (frontend) using Inertia.js. The application provides a unified dashboard for managing savings tracking, password and SSH management, transaction recording, personal financial analytics, and currency exchange tracking with full bilingual support.
+
+**Key Objectives:**
+
+- Centralized personal finance management
+- Secure password and SSH credential storage
+- Real-time financial analytics and reporting
+- Multi-currency support with exchange rate tracking
+- Snapshot-based financial state management
+- Folder-based organization system
 
 ---
 
 ### Architecture & Stack
 
-- **Backend**: Laravel 12 with PHP 8.2+
-- **Frontend**: React with TypeScript, using Inertia.js for full-stack routing
+- **Backend**: Laravel 11+ with PHP 8.2+
+- **Frontend**: React 18+ with TypeScript, using Inertia.js for full-stack SPA routing
 - **Database**: SQLite (development), supports PostgreSQL/MySQL for production
 - **UI & Design System**: Tailwind CSS with component primitives from **shadcn/ui**
 
@@ -20,26 +29,131 @@ LifeHub is a personal finance and life management application built with Laravel
         npx shadcn@latest add {component-name}
         ```
 
-- **Build Tool**: Vite
-- **Authentication**: Laravel Sanctum
+    - Components are stored in `resources/js/components/ui/`
+    - Custom components extend shadcn/ui with domain-specific logic
+
+- **Build Tool**: Vite with TypeScript support and hot module replacement
+- **Authentication**: Laravel Sanctum with SPA token authentication
+- **State Management**: Inertia.js shared data and useForm hooks
+- **Styling**: Tailwind CSS with custom design tokens and RTL/LTR support
+- **Icons**: Lucide React for consistent iconography
 - **Internationalization**: Laravel localization (Arabic/English) with full RTL/LTR support
+- **Testing**: Pest (backend), React Testing Library (frontend)
+- **Development Tools**: Laravel IDE Helper, ESLint, Prettier, TypeScript
 
 ---
 
 ### Core Features
 
-1. **Savings Management**: Track savings goals, storage locations, initial savings
-2. **Transaction System**: Income, expenses, and transfer tracking
-3. **Password Manager**: Secure password storage with encryption
-4. **SSH Manager**: SSH connection details manager
-5. **Snapshots**: Capture full financial state
-6. **Folders**: Group passwords and SSHs under folders like "personal", "work", etc.
-7. **Multi-language**: Arabic and English support
-8. **Currency Exchange**: Support USD/EGP conversions using exchange rates
+1. **Savings Management**:
+
+    - Track multiple savings goals with target amounts and deadlines
+    - Monitor storage locations (bank accounts, cash, investments)
+    - Initial savings tracking and progress visualization
+    - Currency-specific savings with automatic conversion
+
+2. **Transaction System**:
+
+    - Comprehensive income, expense, and transfer tracking
+    - Categorized transactions with custom categories
+    - Multi-currency transaction support
+    - Batch transaction imports and exports
+    - Transaction analytics and reporting
+
+3. **Password Manager**:
+
+    - Secure password storage with AES-256 encryption
+    - Organized by folders (personal, work, etc.)
+    - Password strength analysis and generation
+    - Secure sharing capabilities
+    - Auto-fill integration ready
+
+4. **SSH Manager**:
+
+    - SSH connection details storage (host, port, username)
+    - Private key and certificate management
+    - Connection testing and validation
+    - Folder-based organization
+    - Quick connection export
+
+5. **Snapshots**:
+
+    - Capture complete financial state at any point in time
+    - Historical financial data comparison
+    - Progress tracking over time
+    - Automated snapshot scheduling
+    - Data integrity verification
+
+6. **Folders System**:
+
+    - Hierarchical organization for passwords and SSH connections
+    - Custom folder creation and management
+    - Permissions and access control
+    - Folder-based search and filtering
+
+7. **Multi-language Support**:
+
+    - Complete Arabic and English localization
+    - RTL/LTR layout switching
+    - Context-aware translations
+    - Cultural formatting (dates, numbers, currency)
+
+8. **Currency Exchange**:
+
+    - Real-time USD/EGP exchange rate tracking
+    - Historical exchange rate data
+    - Multi-currency balance calculations
+    - Exchange rate alerts and notifications
+
+9. **Dashboard Analytics**:
+    - Financial overview widgets
+    - Spending patterns analysis
+    - Income vs. expense visualization
+    - Goal progress tracking
+    - Custom reporting tools
 
 ---
 
-### Naming Conventions
+### Project Structure
+
+```
+lifehub/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── API/Dashboard/          # Dashboard API endpoints
+│   │   │   └── Dashboard/              # Web dashboard controllers
+│   │   ├── Middleware/                 # Custom middleware
+│   │   └── Requests/                   # Form request validation
+│   ├── Models/                         # Eloquent models
+│   ├── Policies/                       # Authorization policies
+│   ├── Providers/                      # Service providers
+│   └── Services/                       # Business logic services
+├── database/
+│   ├── migrations/                     # Database schema
+│   └── seeders/                        # Data seeders
+├── lang/
+│   ├── ar/                            # Arabic translations
+│   └── en/                            # English translations
+├── resources/
+│   ├── js/
+│   │   ├── components/
+│   │   │   ├── ui/                    # shadcn/ui components
+│   │   │   └── shared/                # Shared components
+│   │   ├── layouts/                   # Layout components
+│   │   ├── pages/                     # Inertia.js pages
+│   │   │   └── dashboard/             # Dashboard pages
+│   │   └── types/                     # TypeScript definitions
+│   └── views/                         # Blade templates
+├── routes/
+│   ├── web.php                        # Web routes
+│   ├── dashboard.php                  # Dashboard routes
+│   └── api.php                        # API routes
+└── tests/
+    ├── Feature/                       # Feature tests
+    │   └── APIs/                      # API test suites
+    └── Unit/                          # Unit tests
+```
 
 - **Controllers/Models/Requests/Services**: PascalCase
 - **Database Tables**: snake_case (plural)
