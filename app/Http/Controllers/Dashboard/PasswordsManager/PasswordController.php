@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard\PasswordsManager;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Passwords\StorePasswordRequest;
-use App\Http\Requests\Dashboard\Passwords\UpdatePasswordRequest;
+use App\Http\Requests\Dashboard\Passwords\StoreRequest;
+use App\Http\Requests\Dashboard\Passwords\UpdateRequest;
 use App\Models\Password;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -57,7 +57,7 @@ class PasswordController extends Controller
             'filters' => request()->only(['keyword', 'folder_id']),
         ]);
     }
-    public function store(StorePasswordRequest $request)
+    public function store(StoreRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
@@ -69,7 +69,7 @@ class PasswordController extends Controller
         return redirect()->route('dashboard.passwords.index')->with('success', 'Password created successfully.');
     }
 
-    public function update(UpdatePasswordRequest $request, Password $password)
+    public function update(UpdateRequest $request, Password $password)
     {
         $password->update($request->validated());
 

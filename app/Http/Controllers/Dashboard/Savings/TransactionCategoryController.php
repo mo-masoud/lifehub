@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Savings\StoreTransactionCategoryRequest;
-use App\Http\Requests\Dashboard\Savings\UpdateTransactionCategoryRequest;
+use App\Http\Requests\Dashboard\Savings\TransactionCategories\StoreRequest;
+use App\Http\Requests\Dashboard\Savings\TransactionCategories\UpdateRequest;
 use App\Models\TransactionCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -66,7 +66,7 @@ class TransactionCategoryController extends Controller
         return inertia('dashboard/savings/transaction-categories/index', compact('transactionCategories'));
     }
 
-    public function store(StoreTransactionCategoryRequest $request)
+    public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 
@@ -79,7 +79,7 @@ class TransactionCategoryController extends Controller
         return back()->with('success', 'Transaction category created successfully');
     }
 
-    public function update(UpdateTransactionCategoryRequest $request, TransactionCategory $transactionCategory)
+    public function update(UpdateRequest $request, TransactionCategory $transactionCategory)
     {
         $validated = $request->validated();
 

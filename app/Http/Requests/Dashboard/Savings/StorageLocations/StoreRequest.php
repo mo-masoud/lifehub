@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Dashboard\Savings;
+namespace App\Http\Requests\Dashboard\Savings\StorageLocations;
 
 use App\Models\SavingsStorageLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreStorageLocationRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\StoreFolderRequest;
+use App\Http\Requests\Dashboard\Folders\StoreRequest;
 use App\Models\Folder;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class FolderController extends Controller
         return response()->json($folders);
     }
 
-    public function store(StoreFolderRequest $request)
+    public function store(StoreRequest $request)
     {
         /** @var User $user */
         $user = $request->user();

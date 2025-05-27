@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Savings\StoreSavingsGoalRequest;
-use App\Http\Requests\Dashboard\Savings\UpdateSavingsGoalRequest;
+use App\Http\Requests\Dashboard\Savings\SavingsGoals\StoreRequest;
+use App\Http\Requests\Dashboard\Savings\SavingsGoals\UpdateRequest;
 use App\Models\SavingsGoal;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ class SavingsGoalsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSavingsGoalRequest $request)
+    public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 
@@ -67,7 +67,7 @@ class SavingsGoalsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSavingsGoalRequest $request, SavingsGoal $savingsGoal)
+    public function update(UpdateRequest $request, SavingsGoal $savingsGoal)
     {
         $validated = $request->validated();
 
@@ -127,34 +127,5 @@ class SavingsGoalsController extends Controller
         $savingsGoal->dismissSuccessNotification();
 
         return redirect()->back();
-    }
-
-    /**
-     * Get goals for API (used by dashboard widgets)
-     */
-    public function apiIndex(Request $request)
-    {
-        $user = auth()->user();
-        if (!$user) {
-            abort(401);
-        }
-
-        $query = $user->savingsGoals();
-
-        if ($request->get('important')) {
-            $query->important();
-        }
-
-        if ($request->get('active')) {
-            $query->active();
-        }
-
-        $goals = $query->orderByDesc('severity')
-            ->orderBy('target_date')
-            ->orderByDesc('created_at')
-            ->limit($request->get('limit', 10))
-            ->get();
-
-        return response()->json($goals);
     }
 }

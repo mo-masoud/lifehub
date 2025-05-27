@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Savings\StoreTransactionCategoryRequest;
+use App\Http\Requests\Dashboard\Savings\TransactionCategories\StoreRequest;
 use App\Models\SavingsStorageLocation;
 use App\Models\TransactionCategory;
 use App\Models\User;
@@ -26,7 +26,7 @@ class TransactionCategoryController extends Controller
         return response()->json($locations);
     }
 
-    public function store(StoreTransactionCategoryRequest $request)
+    public function store(StoreRequest $request)
     {
         /** @var User $user */
         $user = $request->user();

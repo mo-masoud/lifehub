@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard\PasswordsManager;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\SSHs\StoreSSHRequest;
-use App\Http\Requests\Dashboard\SSHs\UpdateSSHRequest;
+use App\Http\Requests\Dashboard\SSHs\StoreRequest;
+use App\Http\Requests\Dashboard\SSHs\UpdateRequest;
 use App\Models\SSH;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -57,7 +57,7 @@ class SSHController extends Controller
             'filters' => request()->only(['keyword', 'folder_id']),
         ]);
     }
-    public function store(StoreSSHRequest $request)
+    public function store(StoreRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
@@ -77,7 +77,7 @@ class SSHController extends Controller
         return redirect()->route('dashboard.sshs.index')->with('success', 'SSH created successfully.');
     }
 
-    public function update(UpdateSSHRequest $request, SSH $ssh)
+    public function update(UpdateRequest $request, SSH $ssh)
     {
         $data = $request->validated();
 

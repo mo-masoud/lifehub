@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Requests\Dashboard\Savings;
+namespace App\Http\Requests\Dashboard\Savings\StorageLocations;
 
-use App\Models\TransactionCategory;
+use App\Models\SavingsStorageLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTransactionCategoryRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('transactionCategory'));
+        return $this->user()->can('update', $this->route('storageLocation'));
     }
 
     /**
@@ -23,7 +23,6 @@ class UpdateTransactionCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'direction' => ['required', 'string'],
         ];
     }
 
@@ -33,20 +32,19 @@ class UpdateTransactionCategoryRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            $transactionCategory = $this->route('transactionCategory');
+            $storageLocation = $this->route('storageLocation');
 
-            $query = TransactionCategory::where(function (Builder $query) {
+            $query = SavingsStorageLocation::where(function (Builder $query) {
                 $query->where('user_id', auth()->id())->orWhereNull('user_id');
             })
-                ->whereRaw('LOWER(name) = ?', [strtolower($this->name)])
-                ->where('direction', $this->direction);
+                ->whereRaw('LOWER(name) = ?', [strtolower($this->name)]);
 
-            if ($transactionCategory) {
-                $query->where('id', '!=', $transactionCategory->id);
+            if ($storageLocation) {
+                $query->where('id', '!=', $storageLocation->id);
             }
 
             if ($query->exists()) {
-                $validator->errors()->add('name', 'Transaction category already exists.');
+                $validator->errors()->add('name', 'Storage location already exists.');
             }
         });
     }

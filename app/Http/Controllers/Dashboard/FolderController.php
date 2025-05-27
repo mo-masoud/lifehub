@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\StoreFolderRequest;
-use App\Http\Requests\Dashboard\UpdateFolderRequest;
+use App\Http\Requests\Dashboard\Folders\StoreRequest;
+use App\Http\Requests\Dashboard\Folders\UpdateRequest;
 use App\Models\Folder;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -72,7 +72,7 @@ class FolderController extends Controller
         ]);
     }
 
-    public function store(StoreFolderRequest $request)
+    public function store(StoreRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
@@ -87,7 +87,7 @@ class FolderController extends Controller
         return redirect()->back()->with('success', __('dashboard.messages.updated_successfully'));
     }
 
-    public function update(UpdateFolderRequest $request, Folder $folder)
+    public function update(UpdateRequest $request, Folder $folder)
     {
         $validated = $request->validated();
 

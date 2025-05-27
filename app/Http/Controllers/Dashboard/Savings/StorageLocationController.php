@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Savings\StoreStorageLocationRequest;
-use App\Http\Requests\Dashboard\Savings\UpdateStorageLocationRequest;
+use App\Http\Requests\Dashboard\Savings\StorageLocations\StoreRequest;
+use App\Http\Requests\Dashboard\Savings\StorageLocations\UpdateRequest;
 use App\Models\SavingsStorageLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -56,7 +56,7 @@ class StorageLocationController extends Controller
         return inertia('dashboard/savings/storage-locations/index', compact('storageLocations'));
     }
 
-    public function store(StoreStorageLocationRequest $request)
+    public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 
@@ -68,7 +68,7 @@ class StorageLocationController extends Controller
         return back()->with('success', 'Storage location created successfully');
     }
 
-    public function update(UpdateStorageLocationRequest $request, SavingsStorageLocation $storageLocation)
+    public function update(UpdateRequest $request, SavingsStorageLocation $storageLocation)
     {
         $validated = $request->validated();
 

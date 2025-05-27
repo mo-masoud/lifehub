@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Savings\StoreStorageLocationRequest;
+use App\Http\Requests\Dashboard\Savings\StorageLocations\StoreRequest;
 use App\Models\SavingsStorageLocation;
 use Illuminate\Http\Request;
 
@@ -21,7 +21,7 @@ class SavingsStorageLocationController extends Controller
         return response()->json($locations);
     }
 
-    public function store(StoreStorageLocationRequest $request)
+    public function store(StoreRequest $request)
     {
         $validated = $request->validated();
 

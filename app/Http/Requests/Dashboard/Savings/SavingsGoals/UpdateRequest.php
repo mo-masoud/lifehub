@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Dashboard\Savings;
+namespace App\Http\Requests\Dashboard\Savings\SavingsGoals;
 
-use App\Models\SavingsGoal;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSavingsGoalRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', SavingsGoal::class);
+        return $this->user()->can('update', $this->route('savingsGoal'));
     }
 
     /**
