@@ -66,21 +66,26 @@ LifeHub is a personal finance and life management application built with Laravel
 5. Authorization logic should also be handled inside the `authorize()` method of the FormRequest, not in the controller.
 6. Any model hooks must be placed inside **Observers**.
 7. Prefer Laravel helper functions like `auth()->id()` over facade calls like `Auth::id()`.
-8. Controllers must be grouped by **domain** using folders.
-9. Controllers must never mix JSON API responses with Inertia view returns — separate them into different controllers.
-10. Controllers must not contain any business logic — they should act purely as routing layers that delegate to services or directly to models.
-11. Repository pattern is not used. Instead, Eloquent models should encapsulate all query and data access logic in clearly named methods.
-12. If an API is defined, it must use a **Response class**, unless it's only for dashboard.
-13. API responses must follow a unified structure across the app.
-14. APIs used only in the dashboard must use a `dashboard` prefix and may return data directly without a response class.
-15. Every API must have a corresponding **Feature Test**.
-16. Feature tests for APIs must live under `tests/Feature/APIs`, grouped by domain (e.g., `Dashboard/UsersAPIsTest.php`).
-17. Use **Pest** for all backend testing.
-18. Follow **Laravel Pest Best Practices** (naming, structure, etc.).
-19. Localization strings related to dashboard features should go in `lang/{locale}/dashboard.php`, grouped by domain and in snake_case.
-20. Always **write and run the test before making changes** (TDD is preferred).
-21. Ensure the project has complete **unit tests and E2E tests** for both backend and frontend.
-22. To run backend tests:
+8. Use `$request->user()` if possible instead of calling `auth()->user()` manually.
+
+    - Add a comment above to hint the editor about the type: `/** @var \App\Models\User $user */`
+    - Ensure `use App\Models\User;` is imported at the top.
+
+9. Controllers must be grouped by **domain** using folders.
+10. Controllers must never mix JSON API responses with Inertia view returns — separate them into different controllers.
+11. Controllers must not contain any business logic — they should act purely as routing layers that delegate to services or directly to models.
+12. Repository pattern is not used. Instead, Eloquent models should encapsulate all query and data access logic in clearly named methods.
+13. If an API is defined, it must use a **Response class**, unless it's only for dashboard.
+14. API responses must follow a unified structure across the app.
+15. APIs used only in the dashboard must use a `dashboard` prefix and may return data directly without a response class.
+16. Every API must have a corresponding **Feature Test**.
+17. Feature tests for APIs must live under `tests/Feature/APIs`, grouped by domain (e.g., `Dashboard/UsersAPIsTest.php`).
+18. Use **Pest** for all backend testing.
+19. Follow **Laravel Pest Best Practices** (naming, structure, etc.).
+20. Localization strings related to dashboard features should go in `lang/{locale}/dashboard.php`, grouped by domain and in snake_case.
+21. Always **write and run the test before making changes** (TDD is preferred).
+22. Ensure the project has complete **unit tests and E2E tests** for both backend and frontend.
+23. To run backend tests:
 
     ```bash
     php artisan test
@@ -88,8 +93,8 @@ LifeHub is a personal finance and life management application built with Laravel
     php artisan test --filter=TestOne|TestTwo
     ```
 
-23. `php artisan test --verbose` is deprecated and should not be used.
-24. To run both backend and frontend dev servers at once:
+24. `php artisan test --verbose` is deprecated and should not be used.
+25. To run both backend and frontend dev servers at once:
 
     ```bash
     composer run dev
