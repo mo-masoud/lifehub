@@ -222,7 +222,7 @@ export const colorThemes: ColorTheme[] = [
 export const defaultColorTheme = colorThemes[0];
 
 export function getColorTheme(name: string): ColorTheme | undefined {
-    return colorThemes.find(theme => theme.name === name);
+    return colorThemes.find((theme) => theme.name === name);
 }
 
 export function applyColorTheme(theme: ColorTheme, isDark: boolean = false) {

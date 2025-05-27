@@ -6,12 +6,12 @@ use Database\Factories\ExchangeRateFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Carbon\Carbon;
 
 class ExchangeRate extends Model
 {
     /** @use HasFactory<ExchangeRateFactory> */
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'currency_code',
@@ -73,7 +73,7 @@ class ExchangeRate extends Model
         $frequency = $user->getExchangeRateFrequency();
         $frequencyConfig = config("exchange_rates.fetch_frequencies.{$frequency}");
 
-        if (!$frequencyConfig) {
+        if (! $frequencyConfig) {
             return false;
         }
 

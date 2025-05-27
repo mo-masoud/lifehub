@@ -95,4 +95,4 @@ export const DeleteUser = () => {
             </div>
         </div>
     );
-}
+};

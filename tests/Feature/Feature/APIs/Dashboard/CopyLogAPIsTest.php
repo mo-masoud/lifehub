@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\CopyLog;
 use App\Models\Password;
 use App\Models\SSH;
 use App\Models\User;
@@ -29,7 +28,7 @@ test('authenticated user can log password copy', function () {
                 'copyable_id',
                 'field',
                 'copied_at',
-            ]
+            ],
         ]);
 
     $this->assertDatabaseHas('copy_logs', [

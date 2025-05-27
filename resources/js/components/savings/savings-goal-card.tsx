@@ -27,10 +27,9 @@ interface Props {
     compact?: boolean;
     showActions?: boolean;
     onEdit?: (goal: SavingsGoal) => void;
-    onDelete?: (goal: SavingsGoal) => void;
 }
 
-export const SavingsGoalCard = ({ goal, compact = false, showActions = true, onEdit, onDelete }: Props) => {
+export const SavingsGoalCard = ({ goal, compact = false, showActions = true, onEdit }: Props) => {
     const getSeverityColor = () => {
         switch (goal.severity) {
             case 'low':
@@ -44,13 +43,6 @@ export const SavingsGoalCard = ({ goal, compact = false, showActions = true, onE
             default:
                 return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
         }
-    };
-
-    const getProgressColor = () => {
-        if (goal.is_achieved) return 'bg-green-500';
-        if (goal.is_overdue) return 'bg-red-500';
-        if (goal.progress_percentage >= 80) return 'bg-yellow-500';
-        return 'bg-blue-500';
     };
 
     const handleMarkAsAchieved = () => {

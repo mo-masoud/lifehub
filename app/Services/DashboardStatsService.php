@@ -2,18 +2,15 @@
 
 namespace App\Services;
 
+use App\Enums\TransactionDirection;
 use App\Models\Snapshot;
 use App\Models\Transaction;
-use App\Models\UserSetting;
-use App\Enums\TransactionDirection;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardStatsService
 {
     /**
      * Get the latest snapshot with totals in EGP and USD
-     *
-     * @return array|null
      */
     public function getLatestSnapshotTotals(): ?array
     {
@@ -21,7 +18,7 @@ class DashboardStatsService
             ->latest()
             ->first();
 
-        if (!$latestSnapshot) {
+        if (! $latestSnapshot) {
             return null;
         }
 
@@ -34,8 +31,6 @@ class DashboardStatsService
 
     /**
      * Get the top transaction spent for different time periods
-     *
-     * @return array
      */
     public function getTopTransactionsByPeriod(): array
     {
@@ -65,16 +60,13 @@ class DashboardStatsService
     /**
      * Get the top transaction for a specific time period
      *
-     * @param int $userId
-     * @param \Carbon\Carbon $startDate
-     * @param string $periodName
-     * @return array|null
+     * @param  \Carbon\Carbon  $startDate
      */
     private function getTopTransactionForPeriod(int $userId, $startDate, string $periodName): ?array
     {
         // Get user and conversion rates
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
@@ -108,7 +100,7 @@ class DashboardStatsService
             }
         }
 
-        if (!$topTransaction) {
+        if (! $topTransaction) {
             return null;
         }
 
@@ -133,8 +125,6 @@ class DashboardStatsService
 
     /**
      * Get total expenses (outcomes) for each time period in EGP
-     *
-     * @return array
      */
     public function getTotalExpensesByPeriod(): array
     {
@@ -163,8 +153,6 @@ class DashboardStatsService
 
     /**
      * Get total income for each time period in EGP
-     *
-     * @return array
      */
     public function getTotalIncomeByPeriod(): array
     {
@@ -194,10 +182,7 @@ class DashboardStatsService
     /**
      * Get total amount for a specific time period and direction
      *
-     * @param int $userId
-     * @param \Carbon\Carbon $startDate
-     * @param TransactionDirection $direction
-     * @return float
+     * @param  \Carbon\Carbon  $startDate
      */
     private function getTotalForPeriod(int $userId, $startDate, TransactionDirection $direction): float
     {
@@ -219,8 +204,6 @@ class DashboardStatsService
 
     /**
      * Get top spending categories for different time periods
-     *
-     * @return array
      */
     public function getTopCategoriesByPeriod(): array
     {
@@ -245,15 +228,13 @@ class DashboardStatsService
     /**
      * Get top categories for a specific time period (sorted by total amount)
      *
-     * @param int $userId
-     * @param \Carbon\Carbon|null $startDate
-     * @return array
+     * @param  \Carbon\Carbon|null  $startDate
      */
     private function getTopCategoriesForPeriod(int $userId, $startDate = null): array
     {
         // Get user and conversion rates
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return [];
         }
 
@@ -280,7 +261,7 @@ class DashboardStatsService
         $categoryTotals = [];
 
         foreach ($transactions as $transaction) {
-            if (!$transaction->category) {
+            if (! $transaction->category) {
                 continue;
             }
 
@@ -290,7 +271,7 @@ class DashboardStatsService
             $amountEgp = $transaction->amount;
 
             // Add to category total
-            if (!isset($categoryTotals[$categoryId])) {
+            if (! isset($categoryTotals[$categoryId])) {
                 $categoryTotals[$categoryId] = [
                     'category' => $transaction->category,
                     'total_egp' => 0,

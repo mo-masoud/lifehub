@@ -44,7 +44,7 @@ class CopyLogController extends Controller
 
         return response()->json([
             'message' => __('dashboard.copy_logs.logged_successfully'),
-            'copy_log' => $copyLog
+            'copy_log' => $copyLog,
         ], 201);
     }
 }

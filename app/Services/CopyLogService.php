@@ -15,7 +15,7 @@ class CopyLogService
     public function logCopy(Model $copyable, string $field, int $userId): CopyLog
     {
         // Validate that the model is either Password or SSH
-        if (!($copyable instanceof Password) && !($copyable instanceof SSH)) {
+        if (! ($copyable instanceof Password) && ! ($copyable instanceof SSH)) {
             throw new \InvalidArgumentException('Copyable model must be either Password or SSH');
         }
 
@@ -44,9 +44,9 @@ class CopyLogService
             $validFields = ['password', 'username', 'prompt'];
         }
 
-        if (!in_array($field, $validFields)) {
+        if (! in_array($field, $validFields)) {
             throw new \InvalidArgumentException(
-                "Invalid field '{$field}' for " . get_class($copyable) . ". Valid fields: " . implode(', ', $validFields)
+                "Invalid field '{$field}' for ".get_class($copyable).'. Valid fields: '.implode(', ', $validFields)
             );
         }
     }
@@ -79,7 +79,7 @@ class CopyLogService
      */
     public function getCopyStatistics(string $modelType, int $userId): array
     {
-        if (!in_array($modelType, [Password::class, SSH::class])) {
+        if (! in_array($modelType, [Password::class, SSH::class])) {
             throw new \InvalidArgumentException('Model type must be Password or SSH');
         }
 

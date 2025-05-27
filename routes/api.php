@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\API\Dashboard\Savings\SavingsStorageLocationController;
-use App\Http\Controllers\API\Dashboard\Savings\TransactionCategoryController;
-use App\Http\Controllers\API\Dashboard\Savings\SavingsGoalsController;
 use App\Http\Controllers\API\Dashboard\CopyLogController;
 use App\Http\Controllers\API\Dashboard\PasswordsManager\PasswordHistoryController;
+use App\Http\Controllers\API\Dashboard\Savings\SavingsGoalsController;
+use App\Http\Controllers\API\Dashboard\Savings\SavingsStorageLocationController;
+use App\Http\Controllers\API\Dashboard\Savings\TransactionCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

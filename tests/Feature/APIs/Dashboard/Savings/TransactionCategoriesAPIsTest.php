@@ -28,7 +28,7 @@ describe('TransactionCategory API', function () {
     it('can create a new transaction category', function () {
         $categoryData = [
             'name' => 'Test Category',
-            'direction' => 'in'
+            'direction' => 'in',
         ];
 
         $response = $this->actingAs($this->user)
@@ -37,13 +37,13 @@ describe('TransactionCategory API', function () {
         $response->assertCreated()
             ->assertJsonFragment([
                 'name' => 'Test Category',
-                'direction' => 'in'
+                'direction' => 'in',
             ]);
 
         $this->assertDatabaseHas('transaction_categories', [
             'name' => 'Test Category',
             'direction' => 'in',
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
     });
 
@@ -59,13 +59,13 @@ describe('TransactionCategory API', function () {
         TransactionCategory::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Existing Category',
-            'direction' => 'in'
+            'direction' => 'in',
         ]);
 
         $response = $this->actingAs($this->user)
             ->postJson(route('api.dashboard.savings.transaction-categories.store'), [
                 'name' => 'Existing Category',
-                'direction' => 'in'
+                'direction' => 'in',
             ]);
 
         $response->assertStatus(422)
@@ -79,7 +79,7 @@ describe('TransactionCategory API', function () {
 
         $response = $this->postJson(route('api.dashboard.savings.transaction-categories.store'), [
             'name' => 'Test',
-            'direction' => 'in'
+            'direction' => 'in',
         ]);
         $response->assertUnauthorized();
     });

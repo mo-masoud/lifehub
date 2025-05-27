@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SavingsGoal extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'title',
@@ -44,7 +45,7 @@ class SavingsGoal extends Model
     public function targetAmountEgp(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->target_amount_usd * $this->user->getUsdRate()
+            get: fn () => $this->target_amount_usd * $this->user->getUsdRate()
         );
     }
 
@@ -56,6 +57,7 @@ class SavingsGoal extends Model
         return Attribute::make(
             get: function () {
                 $latestSnapshot = $this->user->snapshots()->latest()->first();
+
                 return $latestSnapshot ? $latestSnapshot->total_usd : 0;
             }
         );
@@ -69,6 +71,7 @@ class SavingsGoal extends Model
         return Attribute::make(
             get: function () {
                 $latestSnapshot = $this->user->snapshots()->latest()->first();
+
                 return $latestSnapshot ? $latestSnapshot->total_egp : 0;
             }
         );
@@ -86,6 +89,7 @@ class SavingsGoal extends Model
                 }
 
                 $progress = ($this->current_amount_usd / $this->target_amount_usd) * 100;
+
                 return min(100, max(0, round($progress, 1)));
             }
         );
@@ -97,7 +101,7 @@ class SavingsGoal extends Model
     public function isOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->target_date && $this->target_date->isPast() && !$this->is_achieved
+            get: fn () => $this->target_date && $this->target_date->isPast() && ! $this->is_achieved
         );
     }
 
@@ -106,7 +110,7 @@ class SavingsGoal extends Model
      */
     public function shouldShowSuccessNotification(): bool
     {
-        if (!$this->is_achieved || $this->success_notification_dismissed) {
+        if (! $this->is_achieved || $this->success_notification_dismissed) {
             return false;
         }
 
@@ -123,7 +127,7 @@ class SavingsGoal extends Model
      */
     public function shouldShowFailureNotification(): bool
     {
-        return $this->is_overdue && !$this->is_achieved;
+        return $this->is_overdue && ! $this->is_achieved;
     }
 
     /**
@@ -153,7 +157,7 @@ class SavingsGoal extends Model
      */
     public function checkAndUpdateAchievement(): void
     {
-        if (!$this->is_achieved && $this->current_amount_usd >= $this->target_amount_usd) {
+        if (! $this->is_achieved && $this->current_amount_usd >= $this->target_amount_usd) {
             $this->markAsAchieved();
         }
     }
@@ -214,6 +218,7 @@ class SavingsGoal extends Model
     public static function convertEgpToUsd(float $egpAmount, User $user): float
     {
         $usdRate = $user->getUsdRate();
+
         return $egpAmount / $usdRate;
     }
 }

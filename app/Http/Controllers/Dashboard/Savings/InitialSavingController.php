@@ -50,7 +50,7 @@ class InitialSavingController extends Controller
         $user = $request->user();
 
         UserSetting::markInitialSavingsCompleted($user);
-        new CreateSnapshotService()->handle($user);
+        (new CreateSnapshotService)->handle($user);
 
         return back()->with('success', 'Initial saving marked as completed successfully.');
     }

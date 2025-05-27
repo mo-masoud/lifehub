@@ -24,7 +24,7 @@ describe('Folders API', function () {
 
     it('can create a new folder', function () {
         $folderData = [
-            'name' => 'Test Folder'
+            'name' => 'Test Folder',
         ];
 
         $response = $this->actingAs($this->user)
@@ -32,12 +32,12 @@ describe('Folders API', function () {
 
         $response->assertOk()
             ->assertJsonFragment([
-                'name' => 'Test Folder'
+                'name' => 'Test Folder',
             ]);
 
         $this->assertDatabaseHas('folders', [
             'name' => 'Test Folder',
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
     });
 
@@ -52,12 +52,12 @@ describe('Folders API', function () {
     it('prevents creating duplicate folder names for same user', function () {
         Folder::factory()->create([
             'user_id' => $this->user->id,
-            'name' => 'Existing Folder'
+            'name' => 'Existing Folder',
         ]);
 
         $response = $this->actingAs($this->user)
             ->postJson(route('api.dashboard.folders.store'), [
-                'name' => 'Existing Folder'
+                'name' => 'Existing Folder',
             ]);
 
         $response->assertUnprocessable()
@@ -68,12 +68,12 @@ describe('Folders API', function () {
         $otherUser = User::factory()->create();
         Folder::factory()->create([
             'user_id' => $otherUser->id,
-            'name' => 'Shared Name'
+            'name' => 'Shared Name',
         ]);
 
         $response = $this->actingAs($this->user)
             ->postJson(route('api.dashboard.folders.store'), [
-                'name' => 'Shared Name'
+                'name' => 'Shared Name',
             ]);
 
         $response->assertOk();
@@ -84,7 +84,7 @@ describe('Folders API', function () {
         $response->assertUnauthorized();
 
         $response = $this->postJson(route('api.dashboard.folders.store'), [
-            'name' => 'Test'
+            'name' => 'Test',
         ]);
         $response->assertUnauthorized();
     });

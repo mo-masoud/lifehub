@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\TransactionCategories\StoreRequest;
-use App\Models\SavingsStorageLocation;
 use App\Models\TransactionCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;

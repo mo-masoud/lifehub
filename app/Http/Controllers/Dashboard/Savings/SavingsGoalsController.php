@@ -7,20 +7,20 @@ use App\Http\Requests\Dashboard\Savings\SavingsGoals\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\SavingsGoals\UpdateRequest;
 use App\Models\SavingsGoal;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SavingsGoalsController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             abort(401);
         }
 

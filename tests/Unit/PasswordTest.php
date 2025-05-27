@@ -9,7 +9,7 @@ test('password encryption and decryption', function () {
     $plainPassword = 'securePassword123';
 
     // Create a Password instance
-    $password = new Password();
+    $password = new Password;
     $password->password = $plainPassword;
 
     // Assert the password is encrypted in the database

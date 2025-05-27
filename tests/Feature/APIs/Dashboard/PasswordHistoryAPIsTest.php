@@ -3,7 +3,6 @@
 use App\Models\Password;
 use App\Models\PasswordHistory;
 use App\Models\User;
-use Illuminate\Support\Facades\Crypt;
 
 describe('Password History APIs', function () {
     beforeEach(function () {
@@ -16,20 +15,20 @@ describe('Password History APIs', function () {
         $password = Password::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Password',
-            'password' => 'current_password'
+            'password' => 'current_password',
         ]);
 
         // Create some password history entries
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'old_password_1',
-            'changed_at' => now()->subDays(2)
+            'changed_at' => now()->subDays(2),
         ]);
 
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'old_password_2',
-            'changed_at' => now()->subDays(1)
+            'changed_at' => now()->subDays(1),
         ]);
 
         $response = $this->getJson("/api/dashboard/passwords/{$password->id}/history");
@@ -40,11 +39,11 @@ describe('Password History APIs', function () {
                     '*' => [
                         'id',
                         'old_password',
-                        'changed_at'
-                    ]
+                        'changed_at',
+                    ],
                 ],
                 'message',
-                'password_name'
+                'password_name',
             ]);
 
         expect($response->json('data'))->toHaveCount(2);
@@ -60,13 +59,13 @@ describe('Password History APIs', function () {
 
         $password = Password::factory()->create([
             'user_id' => $otherUser->id,
-            'name' => 'Other User Password'
+            'name' => 'Other User Password',
         ]);
 
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'secret_password',
-            'changed_at' => now()
+            'changed_at' => now(),
         ]);
 
         $response = $this->getJson("/api/dashboard/passwords/{$password->id}/history");
@@ -77,7 +76,7 @@ describe('Password History APIs', function () {
     it('returns empty array when password has no history', function () {
         $password = Password::factory()->create([
             'user_id' => $this->user->id,
-            'name' => 'New Password'
+            'name' => 'New Password',
         ]);
 
         $response = $this->getJson("/api/dashboard/passwords/{$password->id}/history");
@@ -95,7 +94,7 @@ describe('Password History APIs', function () {
     it('automatically tracks password changes', function () {
         $password = Password::factory()->create([
             'user_id' => $this->user->id,
-            'password' => 'original_password'
+            'password' => 'original_password',
         ]);
 
         expect($password->passwordHistories)->toHaveCount(0);
@@ -114,26 +113,26 @@ describe('Password History APIs', function () {
     it('tracks multiple password changes and orders them properly', function () {
         $password = Password::factory()->create([
             'user_id' => $this->user->id,
-            'password' => 'password_v1'
+            'password' => 'password_v1',
         ]);
 
         // Manually create password history entries with specific timestamps
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'password_v1',
-            'changed_at' => now()->subMinutes(3)
+            'changed_at' => now()->subMinutes(3),
         ]);
 
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'password_v2',
-            'changed_at' => now()->subMinutes(2)
+            'changed_at' => now()->subMinutes(2),
         ]);
 
         PasswordHistory::create([
             'password_id' => $password->id,
             'old_password' => 'password_v3',
-            'changed_at' => now()->subMinutes(1)
+            'changed_at' => now()->subMinutes(1),
         ]);
 
         $password->refresh();
@@ -158,14 +157,14 @@ describe('Password History APIs', function () {
     it('does not create history when other fields are updated', function () {
         $password = Password::factory()->create([
             'user_id' => $this->user->id,
-            'password' => 'unchanged_password'
+            'password' => 'unchanged_password',
         ]);
 
         // Update other fields
         $password->update([
             'name' => 'Updated Name',
             'username' => 'updated_username',
-            'url' => 'https://updated-url.com'
+            'url' => 'https://updated-url.com',
         ]);
 
         $password->refresh();

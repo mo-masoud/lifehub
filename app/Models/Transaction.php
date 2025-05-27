@@ -41,7 +41,7 @@ class Transaction extends Model
             get: function () {
                 $createdAt = Carbon::parse($this->created_at);
 
-                $monthName = __('shared.' . $createdAt->format('F'));
+                $monthName = __('shared.'.$createdAt->format('F'));
 
                 $day = $createdAt->day;
                 $year = $createdAt->year;
@@ -92,7 +92,7 @@ class Transaction extends Model
      */
     public function processTransfer(): void
     {
-        if (!$this->isTransfer()) {
+        if (! $this->isTransfer()) {
             return;
         }
 
@@ -108,17 +108,17 @@ class Transaction extends Model
     public function convertToEgp(): void
     {
         // Only convert if we have a valid currency type that needs conversion
-        if (!in_array($this->type, ['USD', 'GOLD24', 'GOLD21'])) {
+        if (! in_array($this->type, ['USD', 'GOLD24', 'GOLD21'])) {
             return;
         }
 
         // Load user if not already loaded
-        if (!$this->relationLoaded('user')) {
+        if (! $this->relationLoaded('user')) {
             $this->load('user');
         }
 
         $user = $this->user;
-        if (!$user) {
+        if (! $user) {
             return;
         }
 

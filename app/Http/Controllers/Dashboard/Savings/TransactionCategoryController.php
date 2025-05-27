@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\TransactionCategories\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\TransactionCategories\UpdateRequest;
 use App\Models\TransactionCategory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TransactionCategoryController extends Controller

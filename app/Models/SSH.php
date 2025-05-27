@@ -66,13 +66,13 @@ class SSH extends Model
             ->select('sshs.*')
             ->selectRaw('MAX(copy_logs.copied_at) as latest_copy_at')
             ->groupBy('sshs.id')
-            ->orderByRaw('latest_copy_at IS NULL, latest_copy_at ' . $direction);
+            ->orderByRaw('latest_copy_at IS NULL, latest_copy_at '.$direction);
     }
 
     protected function prompt(): Attribute
     {
         return Attribute::make(
-            get: static fn($value, $attributes) => sprintf(
+            get: static fn ($value, $attributes) => sprintf(
                 'ssh %s@%s',
                 $attributes['username'],
                 $attributes['ip']
@@ -83,8 +83,8 @@ class SSH extends Model
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => Crypt::encryptString($value),
-            get: fn($value) => Crypt::decryptString($value),
+            set: fn ($value) => Crypt::encryptString($value),
+            get: fn ($value) => Crypt::decryptString($value),
         );
     }
 }

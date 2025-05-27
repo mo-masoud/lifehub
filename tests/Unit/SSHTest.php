@@ -11,7 +11,7 @@ test('ssh password encryption and decryption', function () {
     $plainPassword = 'sshPassword456';
 
     // Create an SSH instance
-    $ssh = new SSH();
+    $ssh = new SSH;
     $ssh->password = $plainPassword;
 
     // Assert the password is encrypted in the database

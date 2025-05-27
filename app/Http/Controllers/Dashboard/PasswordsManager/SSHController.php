@@ -25,6 +25,7 @@ class SSHController extends Controller
 
         return redirect()->route('dashboard.sshs.index')->with('success', 'SSH deleted successfully.');
     }
+
     public function index(Request $request)
     {
         /** @var User $user */
@@ -57,6 +58,7 @@ class SSHController extends Controller
             'filters' => request()->only(['keyword', 'folder_id']),
         ]);
     }
+
     public function store(StoreRequest $request)
     {
         /** @var User $user */
@@ -81,7 +83,7 @@ class SSHController extends Controller
     {
         $data = $request->validated();
 
-        if (isset($data['prompt']) && !isset($data['username'], $data['ip'])) {
+        if (isset($data['prompt']) && ! isset($data['username'], $data['ip'])) {
             $prompt = str_replace('ssh ', '', $data['prompt']);
             $prompt = explode('@', $prompt);
             $data['username'] = $prompt[0];

@@ -36,15 +36,15 @@ class TransactionController extends Controller
 
         $transactions = Transaction::with('storageLocation', 'category')
             ->where('user_id', Auth::id())
-            ->when($filters['direction'], fn($q) => $q->where('direction', $filters['direction']))
-            ->when($filters['type'], fn($q) => $q->where('type', $filters['type']))
-            ->when($filters['fromType'], fn($q) => $q->where('from_type', $filters['fromType']))
-            ->when($filters['storage'], fn($q) => $q->where('storage_location_id', $filters['storage']))
-            ->when($filters['minAmount'], fn($q) => $q->where('amount', '>=', $filters['minAmount']))
-            ->when($filters['maxAmount'], fn($q) => $q->where('amount', '<=', $filters['maxAmount']))
-            ->when($filters['minDate'], fn($q) => $q->whereDate('created_at', '>=', Carbon::parse($filters['minDate'])))
-            ->when($filters['maxDate'], fn($q) => $q->whereDate('created_at', '<=', Carbon::parse($filters['maxDate'])))
-            ->when($filters['category'], fn($q) => $q->where('transaction_category_id', $filters['category']))
+            ->when($filters['direction'], fn ($q) => $q->where('direction', $filters['direction']))
+            ->when($filters['type'], fn ($q) => $q->where('type', $filters['type']))
+            ->when($filters['fromType'], fn ($q) => $q->where('from_type', $filters['fromType']))
+            ->when($filters['storage'], fn ($q) => $q->where('storage_location_id', $filters['storage']))
+            ->when($filters['minAmount'], fn ($q) => $q->where('amount', '>=', $filters['minAmount']))
+            ->when($filters['maxAmount'], fn ($q) => $q->where('amount', '<=', $filters['maxAmount']))
+            ->when($filters['minDate'], fn ($q) => $q->whereDate('created_at', '>=', Carbon::parse($filters['minDate'])))
+            ->when($filters['maxDate'], fn ($q) => $q->whereDate('created_at', '<=', Carbon::parse($filters['maxDate'])))
+            ->when($filters['category'], fn ($q) => $q->where('transaction_category_id', $filters['category']))
             ->latest()
             ->paginate();
 
@@ -64,7 +64,7 @@ class TransactionController extends Controller
             $transferCategory = \App\Models\TransactionCategory::firstOrCreate([
                 'user_id' => Auth::id(),
                 'name' => 'Transfer',
-                'direction' => 'transfer'
+                'direction' => 'transfer',
             ]);
             $data['transaction_category_id'] = $transferCategory->id;
         } else {
@@ -89,7 +89,7 @@ class TransactionController extends Controller
             $transferCategory = \App\Models\TransactionCategory::firstOrCreate([
                 'user_id' => Auth::id(),
                 'name' => 'Transfer',
-                'direction' => 'transfer'
+                'direction' => 'transfer',
             ]);
             $data['transaction_category_id'] = $transferCategory->id;
         } else {

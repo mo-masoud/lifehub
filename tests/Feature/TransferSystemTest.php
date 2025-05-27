@@ -15,8 +15,11 @@ class TransferSystemTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected SavingsStorageLocation $sourceLocation;
+
     protected SavingsStorageLocation $destinationLocation;
+
     protected TransactionCategory $category;
 
     protected function setUp(): void
@@ -32,18 +35,18 @@ class TransferSystemTest extends TestCase
 
         $this->sourceLocation = SavingsStorageLocation::create([
             'user_id' => $this->user->id,
-            'name' => 'Source Wallet'
+            'name' => 'Source Wallet',
         ]);
 
         $this->destinationLocation = SavingsStorageLocation::create([
             'user_id' => $this->user->id,
-            'name' => 'Destination Wallet'
+            'name' => 'Destination Wallet',
         ]);
 
         $this->category = TransactionCategory::create([
             'user_id' => $this->user->id,
             'name' => 'Test Category',
-            'direction' => 'transfer'
+            'direction' => 'transfer',
         ]);
     }
 

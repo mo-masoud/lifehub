@@ -26,11 +26,11 @@ describe('SavingsGoals API', function () {
         // Create important and non-important goals
         SavingsGoal::factory()->create([
             'user_id' => $this->user->id,
-            'severity' => 'high'
+            'severity' => 'high',
         ]);
         SavingsGoal::factory()->create([
             'user_id' => $this->user->id,
-            'severity' => 'low'
+            'severity' => 'low',
         ]);
 
         $response = $this->actingAs($this->user)
@@ -45,12 +45,12 @@ describe('SavingsGoals API', function () {
         SavingsGoal::factory()->create([
             'user_id' => $this->user->id,
             'is_achieved' => true,
-            'achieved_at' => now()
+            'achieved_at' => now(),
         ]);
         SavingsGoal::factory()->create([
             'user_id' => $this->user->id,
             'is_achieved' => false,
-            'achieved_at' => null
+            'achieved_at' => null,
         ]);
 
         $response = $this->actingAs($this->user)

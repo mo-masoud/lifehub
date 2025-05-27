@@ -28,7 +28,7 @@ class UserSetting extends Model
     /**
      * Checks if the user has completed their initial savings setup.
      *
-     * @param User $user The user to check.
+     * @param  User  $user  The user to check.
      * @return bool True if the user has completed initial savings, false otherwise.
      */
     public static function hasCompletedInitialSavings(?User $user): bool
@@ -39,7 +39,7 @@ class UserSetting extends Model
     /**
      * Marks the user's initial savings as completed.
      *
-     * @param User $user The user to update.
+     * @param  User  $user  The user to update.
      */
     public static function markInitialSavingsCompleted(User $user): void
     {

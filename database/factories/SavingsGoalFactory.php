@@ -48,7 +48,7 @@ class SavingsGoalFactory extends Factory
      */
     public function achieved(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_achieved' => true,
             'achieved_at' => now(),
             'success_notification_shown_at' => now(),
@@ -60,7 +60,7 @@ class SavingsGoalFactory extends Factory
      */
     public function overdue(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'target_date' => $this->faker->dateTimeBetween('-1 year', '-1 day')->format('Y-m-d'),
             'is_achieved' => false,
             'achieved_at' => null,
@@ -72,7 +72,7 @@ class SavingsGoalFactory extends Factory
      */
     public function lowPriority(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'severity' => 'low',
         ]);
     }
@@ -82,7 +82,7 @@ class SavingsGoalFactory extends Factory
      */
     public function highPriority(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'severity' => 'very-high',
         ]);
     }
@@ -92,7 +92,7 @@ class SavingsGoalFactory extends Factory
      */
     public function inProgress(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'target_date' => $this->faker->dateTimeBetween('+1 month', '+1 year')->format('Y-m-d'),
             'is_achieved' => false,
             'achieved_at' => null,

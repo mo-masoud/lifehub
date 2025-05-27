@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function inertia;
 use function view;
 
@@ -22,7 +23,7 @@ class HandleLocale
 
         $locale = $request->cookie('locale', $default);
 
-        if (!array_key_exists($locale, $available)) {
+        if (! array_key_exists($locale, $available)) {
             $locale = $default;
         }
 

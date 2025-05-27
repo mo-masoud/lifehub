@@ -99,7 +99,7 @@ return [
         'verify_email_description' => 'Please verify your email address by clicking on the link we just emailed to you.',
         'verify_email_verification' => 'Email verification',
         'verification_link_sent' => 'A new verification link has been sent to your email address',
-        'resend_verify_email' => 'Resend verification email'
+        'resend_verify_email' => 'Resend verification email',
     ],
 
     'settings' => [
@@ -145,7 +145,7 @@ return [
         'delete_account_confirmation_text' => 'Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password
                             to confirm you would like to permanently delete your account.',
         'email_unverified' => 'Your email address is unverified.',
-        'resend_verification_link' => 'Click here to resend the verification email.'
+        'resend_verification_link' => 'Click here to resend the verification email.',
     ],
 
     'fields' => [
@@ -172,7 +172,7 @@ return [
         'username_placeholder' => 'Username/email for the password.',
         'password_placeholder' => 'Password for the password.',
         'url_placeholder' => 'URL for the password.',
-        'no_passwords_founds' => 'Their are no passwords founds.'
+        'no_passwords_founds' => 'Their are no passwords founds.',
     ],
 
     'password_history' => [

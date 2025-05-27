@@ -51,20 +51,6 @@ export default function Index() {
         );
     };
 
-    const resetFilters = () => {
-        setKeyword('');
-        setFolderId('');
-
-        router.get(
-            route('dashboard.sshs.index'),
-            {},
-            {
-                preserveState: true,
-                replace: true,
-            },
-        );
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={__('general.ssh_manager')} />

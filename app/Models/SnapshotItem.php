@@ -12,7 +12,7 @@ class SnapshotItem extends Model
         'type',
         'storage_location_id',
         'amount',
-        'rate'
+        'rate',
     ];
 
     public function snapshot(): BelongsTo

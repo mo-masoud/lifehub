@@ -18,8 +18,9 @@ class CreateSnapshotService
     /**
      * Handles the creation of a snapshot for the given user.
      *
-     * @param User $user The user for whom the snapshot is being created.
+     * @param  User  $user  The user for whom the snapshot is being created.
      * @return Snapshot The created snapshot.
+     *
      * @throws Throwable If an error occurs during the snapshot creation process.
      */
     public function handle(User $user): Snapshot
@@ -62,7 +63,7 @@ class CreateSnapshotService
     /**
      * Creates a snapshot for the user with the given rates.
      *
-     * @param array $rates The rates to include in the snapshot.
+     * @param  array  $rates  The rates to include in the snapshot.
      * @return Snapshot The created snapshot.
      */
     protected function createSnapshot(array $rates): Snapshot
@@ -78,9 +79,9 @@ class CreateSnapshotService
     /**
      * Creates snapshot items for the given snapshot and balances.
      *
-     * @param Snapshot $snapshot The snapshot for which items are being created.
-     * @param array $balances The balances to include in the snapshot items.
-     * @param array $rates The rates to use for the snapshot items.
+     * @param  Snapshot  $snapshot  The snapshot for which items are being created.
+     * @param  array  $balances  The balances to include in the snapshot items.
+     * @param  array  $rates  The rates to use for the snapshot items.
      */
     protected function createSnapshotItems(Snapshot $snapshot, array $balances, array $rates): void
     {
@@ -109,7 +110,7 @@ class CreateSnapshotService
 
         if ($lastSnapshot) {
             foreach ($lastSnapshot->items as $item) {
-                $key = $item->type . '-' . $item->storage_location_id;
+                $key = $item->type.'-'.$item->storage_location_id;
                 $final[$key] = [
                     'type' => $item->type,
                     'storage_location_id' => $item->storage_location_id,
@@ -118,7 +119,7 @@ class CreateSnapshotService
             }
         } else {
             foreach ($this->user->initialSavings as $saving) {
-                $key = $saving->type->value . '-' . $saving->storage_location_id;
+                $key = $saving->type->value.'-'.$saving->storage_location_id;
                 $final[$key] = [
                     'type' => $saving->type->value,
                     'storage_location_id' => $saving->storage_location_id,
@@ -131,14 +132,14 @@ class CreateSnapshotService
             $this->applyTransactionToBalance($final, $tx);
         }
 
-        return array_values(array_filter($final, fn($item) => $item['amount'] != 0));
+        return array_values(array_filter($final, fn ($item) => $item['amount'] != 0));
     }
 
     /**
      * Applies a transaction to the user's balances.
      *
-     * @param array &$final The array of balances to update.
-     * @param mixed $tx The transaction to apply.
+     * @param  array  &$final  The array of balances to update.
+     * @param  mixed  $tx  The transaction to apply.
      */
     protected function applyTransactionToBalance(array &$final, $tx): void
     {
@@ -157,15 +158,15 @@ class CreateSnapshotService
     /**
      * Adjusts a specific balance by the given amount.
      *
-     * @param array &$final The array of balances to update.
-     * @param string $type The type of the balance (e.g., USD, GOLD24).
-     * @param int $storageLocationId The ID of the storage location.
-     * @param float $amount The amount to adjust the balance by.
+     * @param  array  &$final  The array of balances to update.
+     * @param  string  $type  The type of the balance (e.g., USD, GOLD24).
+     * @param  int  $storageLocationId  The ID of the storage location.
+     * @param  float  $amount  The amount to adjust the balance by.
      */
     protected function adjustBalance(array &$final, string $type, int $storageLocationId, float $amount): void
     {
-        $key = $type . '-' . $storageLocationId;
-        if (!isset($final[$key])) {
+        $key = $type.'-'.$storageLocationId;
+        if (! isset($final[$key])) {
             $final[$key] = [
                 'type' => $type,
                 'storage_location_id' => $storageLocationId,

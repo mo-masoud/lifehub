@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:passwords,name,' . $this->route('password')->id,
+            'name' => 'required|string|max:255|unique:passwords,name,'.$this->route('password')->id,
             'username' => 'required|string|max:255',
             'url' => 'nullable|url|max:255',
             'password' => 'required|string|min:8|max:255',

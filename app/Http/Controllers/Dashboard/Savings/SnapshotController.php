@@ -42,6 +42,7 @@ class SnapshotController extends Controller
 
         try {
             $service->handle($user);
+
             return back()->with('success', 'Snapshot created successfully');
         } catch (Throwable $th) {
             return back()->withErrors(__('dashboard.messages.something_went_wrong'));

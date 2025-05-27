@@ -16,11 +16,6 @@ import { Input } from '@/components/ui/input';
 import { ChangeEvent, useState } from 'react';
 import { FolderForm } from './folder-form';
 
-interface FolderWithCounts extends Folder {
-    passwords_count: number;
-    sshs_count: number;
-}
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: __('general.dashboard'),

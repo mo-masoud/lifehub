@@ -37,7 +37,7 @@ test('fails with invalid user id', function () {
 test('updates exchange rates for users without current rates', function () {
     // Mock HTTP response for exchange rate service
     Http::fake([
-        '*' => Http::response(['rates' => ['EGP' => 50.0]], 200)
+        '*' => Http::response(['rates' => ['EGP' => 50.0]], 200),
     ]);
 
     $this->artisan('exchange-rates:fetch', ['--user-id' => $this->user1->id])
@@ -97,7 +97,7 @@ test('displays proper summary with mixed results', function () {
 
     // Mock HTTP response for the user without current rate
     Http::fake([
-        '*' => Http::response(['rates' => ['EGP' => 50.0]], 200)
+        '*' => Http::response(['rates' => ['EGP' => 50.0]], 200),
     ]);
 
     $this->artisan('exchange-rates:fetch')

@@ -30,11 +30,11 @@ class StoreRequest extends FormRequest
             'type' => [
                 'required',
                 'string',
-                'in:' . implode(',', SavingType::values()),
+                'in:'.implode(',', SavingType::values()),
                 Rule::unique('initial_savings')->where(function ($query) {
                     return $query->where('storage_location_id', request('storage_location_id'))
                         ->where('user_id', auth()->id());
-                })
+                }),
             ],
             'amount' => 'required|numeric|min:0',
             'storage_location_id' => 'required|numeric|exists:savings_storage_locations,id',

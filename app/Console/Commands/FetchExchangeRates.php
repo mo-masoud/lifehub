@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Models\ExchangeRate;
+use App\Models\User;
 use App\Services\ExchangeRateService;
 use Illuminate\Console\Command;
 
@@ -34,6 +34,7 @@ class FetchExchangeRates extends Command
             $users = User::where('id', $userId)->get();
             if ($users->isEmpty()) {
                 $this->error("User with ID {$userId} not found.");
+
                 return 1;
             }
         } else {
@@ -44,7 +45,7 @@ class FetchExchangeRates extends Command
         $updated = 0;
         $skipped = 0;
 
-        $this->info("Checking exchange rates for " . $users->count() . " user(s)...");
+        $this->info('Checking exchange rates for '.$users->count().' user(s)...');
 
         foreach ($users as $user) {
             $this->line("Processing user: {$user->name} (ID: {$user->id})");
@@ -56,13 +57,13 @@ class FetchExchangeRates extends Command
                 ->first();
 
             // Check if rate needs updating
-            if (!$currentRate || $currentRate->needsRefresh($user)) {
+            if (! $currentRate || $currentRate->needsRefresh($user)) {
                 try {
                     $newRate = $exchangeRateService->getUsdRate($user);
                     $this->info("  ✅ Updated USD rate: {$newRate} EGP");
                     $updated++;
                 } catch (\Exception $e) {
-                    $this->error("  ❌ Failed to update rate: " . $e->getMessage());
+                    $this->error('  ❌ Failed to update rate: '.$e->getMessage());
                 }
             } else {
                 $frequency = $user->getExchangeRateFrequency();

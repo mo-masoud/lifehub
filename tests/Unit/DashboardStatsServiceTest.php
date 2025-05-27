@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use App\Models\User;
+use App\Enums\SavingType;
+use App\Enums\TransactionDirection;
+use App\Models\SavingsStorageLocation;
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
-use App\Models\SavingsStorageLocation;
+use App\Models\User;
 use App\Models\UserSetting;
 use App\Services\DashboardStatsService;
-use App\Enums\TransactionDirection;
-use App\Enums\SavingType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
@@ -19,15 +19,18 @@ class DashboardStatsServiceTest extends TestCase
     use RefreshDatabase;
 
     private DashboardStatsService $service;
+
     private User $user;
+
     private SavingsStorageLocation $storageLocation;
+
     private TransactionCategory $category;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->service = new DashboardStatsService();
+        $this->service = new DashboardStatsService;
 
         // Create test user
         $this->user = User::factory()->create();
@@ -41,13 +44,13 @@ class DashboardStatsServiceTest extends TestCase
         // Create test storage location and category
         $this->storageLocation = SavingsStorageLocation::create([
             'user_id' => $this->user->id,
-            'name' => 'Test Wallet'
+            'name' => 'Test Wallet',
         ]);
 
         $this->category = TransactionCategory::create([
             'user_id' => $this->user->id,
             'name' => 'Test Category',
-            'direction' => 'out'
+            'direction' => 'out',
         ]);
     }
 

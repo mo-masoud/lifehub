@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ExchangeRate>
@@ -28,7 +27,7 @@ class ExchangeRateFactory extends Factory
             'is_active' => true,
             'api_response' => [
                 'base' => 'USD',
-                'rates' => ['EGP' => $this->faker->randomFloat(2, 30, 60)]
+                'rates' => ['EGP' => $this->faker->randomFloat(2, 30, 60)],
             ],
         ];
     }

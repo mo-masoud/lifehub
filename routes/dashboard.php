@@ -11,20 +11,19 @@ use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
 use App\Http\Controllers\Dashboard\FolderController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\PasswordsManager\PasswordController as PasswordManagerController;
+use App\Http\Controllers\Dashboard\PasswordsManager\SSHController;
 use App\Http\Controllers\Dashboard\Savings\InitialSavingController;
+use App\Http\Controllers\Dashboard\Savings\SavingsGoalsController;
 use App\Http\Controllers\Dashboard\Savings\SnapshotController;
 use App\Http\Controllers\Dashboard\Savings\StorageLocationController;
+use App\Http\Controllers\Dashboard\Savings\TransactionCategoryController;
 use App\Http\Controllers\Dashboard\Savings\TransactionController;
 use App\Http\Controllers\Dashboard\Settings\AppearanceController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
 use App\Http\Controllers\Dashboard\Settings\UserSettingController;
-use App\Http\Controllers\Dashboard\PasswordsManager\SSHController;
-use App\Http\Controllers\Dashboard\Savings\TransactionCategoryController;
-use App\Http\Controllers\Dashboard\Savings\SavingsGoalsController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::prefix('dashboard')->as('dashboard.')->group(function () {
 

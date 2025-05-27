@@ -31,14 +31,16 @@ class CreateSuperAdmin extends Command
         $password = $this->secret('What is the password of the super admin?');
 
         // Validate the email format
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->error('Invalid email format.');
+
             return 1;
         }
 
         // Check if the email already exists
         if (User::where('email', $email)->exists()) {
             $this->error('Email already exists.');
+
             return 1;
         }
 

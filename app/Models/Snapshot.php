@@ -46,7 +46,7 @@ class Snapshot extends Model
     public function totalUsd(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->items->sum(function ($item) {
+            get: fn () => $this->items->sum(function ($item) {
                 return ($item->amount * $item->rate) / $this->usd_rate;
             })
         );

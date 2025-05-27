@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
         $folder = $this->route('folder');
 
         return [
-            'name' => 'required|string|max:255|unique:folders,name,' . $folder->id . ',id,user_id,' . $this->user()->id,
+            'name' => 'required|string|max:255|unique:folders,name,'.$folder->id.',id,user_id,'.$this->user()->id,
         ];
     }
 }

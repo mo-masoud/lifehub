@@ -32,7 +32,7 @@ class TransactionCategoryFactory extends Factory
      */
     public function income(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'direction' => 'in',
         ]);
     }
@@ -42,7 +42,7 @@ class TransactionCategoryFactory extends Factory
      */
     public function expense(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'direction' => 'out',
         ]);
     }

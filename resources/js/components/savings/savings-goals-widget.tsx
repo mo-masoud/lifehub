@@ -27,7 +27,7 @@ interface Props {
     totalEgp: number;
 }
 
-export const SavingsGoalsWidget = ({ goals, totalUsd, totalEgp }: Props) => {
+export const SavingsGoalsWidget = ({ goals, totalUsd }: Props) => {
     const importantGoals = goals
         .filter(
             (goal) =>

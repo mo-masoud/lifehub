@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Savings\StorageLocations\StoreRequest;
 use App\Http\Requests\Dashboard\Savings\StorageLocations\UpdateRequest;
 use App\Models\SavingsStorageLocation;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 
 class StorageLocationController extends Controller
 {

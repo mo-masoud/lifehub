@@ -25,7 +25,7 @@ describe('SavingsStorageLocation API', function () {
 
     it('can create a new storage location', function () {
         $locationData = [
-            'name' => 'Test Location'
+            'name' => 'Test Location',
         ];
 
         $response = $this->actingAs($this->user)
@@ -33,12 +33,12 @@ describe('SavingsStorageLocation API', function () {
 
         $response->assertCreated()
             ->assertJsonFragment([
-                'name' => 'Test Location'
+                'name' => 'Test Location',
             ]);
 
         $this->assertDatabaseHas('savings_storage_locations', [
             'name' => 'Test Location',
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ]);
     });
 
@@ -53,12 +53,12 @@ describe('SavingsStorageLocation API', function () {
     it('prevents creating duplicate locations', function () {
         SavingsStorageLocation::factory()->create([
             'user_id' => $this->user->id,
-            'name' => 'Existing Location'
+            'name' => 'Existing Location',
         ]);
 
         $response = $this->actingAs($this->user)
             ->postJson(route('api.dashboard.savings.storage-locations.store'), [
-                'name' => 'Existing Location'
+                'name' => 'Existing Location',
             ]);
 
         $response->assertStatus(422)
@@ -71,7 +71,7 @@ describe('SavingsStorageLocation API', function () {
         $response->assertUnauthorized();
 
         $response = $this->postJson(route('api.dashboard.savings.storage-locations.store'), [
-            'name' => 'Test'
+            'name' => 'Test',
         ]);
         $response->assertUnauthorized();
     });

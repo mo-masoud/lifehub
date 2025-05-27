@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -85,19 +84,16 @@ class User extends Authenticatable
 
     /**
      * Get the USD exchange rate for this user.
-     *
-     * @return float
      */
     public function getUsdRate(): float
     {
         $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+
         return $exchangeRateService->getUsdRate($this);
     }
 
     /**
      * Get the USD exchange rate fallback for this user.
-     *
-     * @return float
      */
     public function getUsdRateFallback(): float
     {
@@ -106,8 +102,6 @@ class User extends Authenticatable
 
     /**
      * Get the Gold 24k rate fallback for this user.
-     *
-     * @return float
      */
     public function getGold24Rate(): float
     {
@@ -116,8 +110,6 @@ class User extends Authenticatable
 
     /**
      * Get the Gold 21k rate fallback for this user.
-     *
-     * @return float
      */
     public function getGold21Rate(): float
     {
@@ -126,8 +118,6 @@ class User extends Authenticatable
 
     /**
      * Get the user's exchange rate fetch frequency setting
-     *
-     * @return string
      */
     public function getExchangeRateFrequency(): string
     {
@@ -136,16 +126,13 @@ class User extends Authenticatable
 
     /**
      * Set the user's exchange rate fetch frequency
-     *
-     * @param string $frequency
-     * @return void
      */
     public function setExchangeRateFrequency(string $frequency): void
     {
         $validFrequencies = array_keys(config('exchange_rates.fetch_frequencies', []));
 
-        if (!in_array($frequency, $validFrequencies)) {
-            throw new \InvalidArgumentException("Invalid frequency. Must be one of: " . implode(', ', $validFrequencies));
+        if (! in_array($frequency, $validFrequencies)) {
+            throw new \InvalidArgumentException('Invalid frequency. Must be one of: '.implode(', ', $validFrequencies));
         }
 
         UserSetting::set($this, 'exchange_rate_frequency', $frequency);
@@ -165,6 +152,7 @@ class User extends Authenticatable
     public function refreshExchangeRate(): array
     {
         $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+
         return $exchangeRateService->manualRefresh($this);
     }
 
@@ -174,6 +162,7 @@ class User extends Authenticatable
     public function getRemainingManualCalls(): int
     {
         $exchangeRateService = app(\App\Services\ExchangeRateService::class);
+
         return $exchangeRateService->getRemainingManualCalls($this);
     }
 

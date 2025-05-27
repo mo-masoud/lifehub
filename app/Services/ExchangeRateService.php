@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UserSetting;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class ExchangeRateService
 {
@@ -22,7 +21,7 @@ class ExchangeRateService
         }
 
         // Try to get cached rate first
-        if (!$forceRefresh) {
+        if (! $forceRefresh) {
             $cachedRate = ExchangeRate::getActiveRate($user, 'USD');
             if ($cachedRate) {
                 $exchangeRate = ExchangeRate::where('user_id', $user->id)
@@ -30,14 +29,14 @@ class ExchangeRateService
                     ->where('is_active', true)
                     ->first();
 
-                if ($exchangeRate && !$exchangeRate->needsRefresh($user)) {
+                if ($exchangeRate && ! $exchangeRate->needsRefresh($user)) {
                     return $cachedRate;
                 }
             }
         }
 
         // Check if user can make manual API calls
-        if ($forceRefresh && !$this->canMakeManualCall($user)) {
+        if ($forceRefresh && ! $this->canMakeManualCall($user)) {
             // Return cached rate or fallback
             return ExchangeRate::getActiveRate($user, 'USD')
                 ?? $this->getFallbackRate($user, 'usd_rate_fallback', 50);
@@ -56,16 +55,18 @@ class ExchangeRateService
             $apiUrl = config('exchange_rates.api_url');
             $response = Http::timeout(10)->get($apiUrl);
 
-            if (!$response->successful()) {
-                Log::warning("Exchange rate API failed for user {$user->id}: " . $response->status());
+            if (! $response->successful()) {
+                Log::warning("Exchange rate API failed for user {$user->id}: ".$response->status());
+
                 return $this->getFallbackRate($user, 'usd_rate_fallback', 50);
             }
 
             $data = $response->json();
             $rate = $data['rates']['EGP'] ?? null;
 
-            if (!$rate) {
+            if (! $rate) {
                 Log::warning("No EGP rate found in API response for user {$user->id}");
+
                 return $this->getFallbackRate($user, 'usd_rate_fallback', 50);
             }
 
@@ -93,7 +94,8 @@ class ExchangeRateService
 
             return (float) $rate;
         } catch (\Exception $e) {
-            Log::error("Failed to fetch exchange rate for user {$user->id}: " . $e->getMessage());
+            Log::error("Failed to fetch exchange rate for user {$user->id}: ".$e->getMessage());
+
             return $this->getFallbackRate($user, 'usd_rate_fallback', 50);
         }
     }
@@ -135,7 +137,7 @@ class ExchangeRateService
 
         // Store fallback rate in cache if no active rate exists
         $existingRate = ExchangeRate::getActiveRate($user, 'USD');
-        if (!$existingRate) {
+        if (! $existingRate) {
             ExchangeRate::createActive([
                 'user_id' => $user->id,
                 'currency_code' => 'USD',
@@ -169,7 +171,7 @@ class ExchangeRateService
      */
     public function manualRefresh(User $user): array
     {
-        if (!$this->canMakeManualCall($user)) {
+        if (! $this->canMakeManualCall($user)) {
             return [
                 'success' => false,
                 'message' => 'Daily manual API call limit reached',

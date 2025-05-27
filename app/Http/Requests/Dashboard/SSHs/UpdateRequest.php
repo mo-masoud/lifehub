@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:sshs,name,' . $this->route('ssh')->id,
+            'name' => 'required|string|max:255|unique:sshs,name,'.$this->route('ssh')->id,
             'username' => 'required_without:prompt|nullable|string|max:255',
             'ip' => 'required_without:prompt|nullable|string|max:255',
             'prompt' => 'required_without:username,ip|nullable|string|max:255',

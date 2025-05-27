@@ -28,11 +28,11 @@ class UpdateRequest extends FormRequest
             'type' => [
                 'required',
                 'string',
-                'in:' . implode(',', SavingType::values()),
+                'in:'.implode(',', SavingType::values()),
                 Rule::unique('initial_savings')->where(function ($query) {
                     return $query->where('storage_location_id', request('storage_location_id'))
                         ->where('user_id', auth()->id());
-                })->ignore($this->route('initialSaving')->id)
+                })->ignore($this->route('initialSaving')->id),
             ],
 
             'amount' => 'required|numeric|min:0',

@@ -8,7 +8,7 @@ import { Password } from '@/types/models';
 import { usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { Clock, Eye, EyeOff, History } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface PasswordHistoryItem {
@@ -36,7 +36,7 @@ export function PasswordHistory({ password }: PasswordHistoryProps) {
     const [error, setError] = useState<string | null>(null);
     const [visiblePasswords, setVisiblePasswords] = useState<Set<number>>(new Set());
 
-    const fetchHistory = async () => {
+    const fetchHistory = useCallback(async () => {
         setLoading(true);
         setError(null);
 
@@ -50,13 +50,13 @@ export function PasswordHistory({ password }: PasswordHistoryProps) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [password.id]);
 
     useEffect(() => {
         if (isOpen && history.length === 0) {
             fetchHistory();
         }
-    }, [isOpen]);
+    }, [isOpen, fetchHistory, history.length]);
 
     const togglePasswordVisibility = (historyId: number) => {
         const newVisible = new Set(visiblePasswords);

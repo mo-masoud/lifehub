@@ -13,7 +13,7 @@ class SavingsGoalsController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             abort(401);
         }
 

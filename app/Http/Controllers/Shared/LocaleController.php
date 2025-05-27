@@ -13,13 +13,15 @@ class LocaleController extends Controller
 
         if (empty($locale)) {
             $errors = validator()->make(['locale' => $locale], ['locale' => 'required'])->errors();
+
             return redirect()->back()->withErrors($errors);
         }
 
         $available = config('x-dash.available_languages');
 
-        if (!array_key_exists($locale, $available)) {
+        if (! array_key_exists($locale, $available)) {
             $errors = validator()->make(['locale' => $locale], ['locale' => 'in:'.implode(',', $available)])->errors();
+
             return redirect()->back()->withErrors($errors);
         }
 

@@ -74,7 +74,7 @@ export function SSHsTable({
         );
     };
 
-    const copyIpToClipboard = (text: string, sshId: number) => {
+    const copyIpToClipboard = (text: string) => {
         // IP is not a tracked field in backend, so use basic copy without logging
         navigator.clipboard
             .writeText(text)
@@ -180,7 +180,7 @@ export function SSHsTable({
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyIpToClipboard(ssh.ip, ssh.id)}>
+                                    <span className="cursor-pointer" onClick={() => copyIpToClipboard(ssh.ip)}>
                                         {ssh.ip}
                                     </span>
                                 </TableCell>

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserSetting;
 use App\Models\User;
+use App\Models\UserSetting;
 use App\Services\DashboardStatsService;
 use Illuminate\Http\Request;
 

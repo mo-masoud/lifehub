@@ -27,7 +27,7 @@ export const copyToClipboardWithLogging = async (
     copyable_id: number,
     field: string,
     onSuccess?: () => void,
-    onError?: (error: any) => void
+    onError?: (error: any) => void,
 ): Promise<void> => {
     try {
         // Copy to clipboard first
@@ -37,7 +37,7 @@ export const copyToClipboardWithLogging = async (
         logCopy({
             copyable_type,
             copyable_id,
-            field
+            field,
         });
 
         // Call success callback

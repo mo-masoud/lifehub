@@ -8,7 +8,7 @@ interface ColorThemePickerProps {
 }
 
 export const ColorThemePicker = ({ className }: ColorThemePickerProps) => {
-    const { colorTheme, updateColorTheme, appearance } = useAppearance();
+    const { colorTheme, updateColorTheme } = useAppearance();
 
     return (
         <div className={cn('space-y-3', className)}>

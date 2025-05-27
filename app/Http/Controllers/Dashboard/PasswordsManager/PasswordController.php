@@ -25,6 +25,7 @@ class PasswordController extends Controller
 
         return redirect()->route('dashboard.passwords.index')->with('success', 'Password deleted successfully.');
     }
+
     public function index(Request $request)
     {
         /** @var User $user */
@@ -57,6 +58,7 @@ class PasswordController extends Controller
             'filters' => request()->only(['keyword', 'folder_id']),
         ]);
     }
+
     public function store(StoreRequest $request)
     {
         /** @var User $user */

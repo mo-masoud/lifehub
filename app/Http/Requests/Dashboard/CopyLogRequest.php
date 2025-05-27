@@ -33,11 +33,11 @@ class CopyLogRequest extends FormRequest
                     default => []
                 };
 
-                if (!in_array($value, $validFields)) {
+                if (! in_array($value, $validFields)) {
                     $fail(__('dashboard.copy_logs.invalid_field_for_type', [
                         'field' => $value,
                         'type' => $copyableType,
-                        'valid_fields' => implode(', ', $validFields)
+                        'valid_fields' => implode(', ', $validFields),
                     ]));
                 }
             }],
