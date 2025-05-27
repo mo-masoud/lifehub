@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\StoreFolderRequest;
+use App\Http\Requests\Dashboard\UpdateFolderRequest;
 use App\Models\Folder;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -70,14 +72,12 @@ class FolderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreFolderRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:folders,name,NULL,id,user_id,' . $user->id,
-        ]);
+        $validated = $request->validated();
 
         $folder = Folder::create([
             'user_id' => $user->id,
@@ -87,18 +87,9 @@ class FolderController extends Controller
         return redirect()->back()->with('success', __('dashboard.messages.updated_successfully'));
     }
 
-    public function update(Request $request, Folder $folder)
+    public function update(UpdateFolderRequest $request, Folder $folder)
     {
-        /** @var User $user */
-        $user = $request->user();
-
-        if ($folder->user_id !== $user->id) {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:folders,name,' . $folder->id . ',id,user_id,' . $user->id,
-        ]);
+        $validated = $request->validated();
 
         $folder->update($validated);
 

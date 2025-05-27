@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Dashboard\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Settings\DeleteProfileRequest;
 use App\Http\Requests\Dashboard\Settings\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,16 +17,14 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(DeleteProfileRequest $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
+        $validated = $request->validated();
 
         /** @var User $user */
         $user = $request->user();
 
-        Auth::logout();
+        auth()->logout();
 
         $user->delete();
 

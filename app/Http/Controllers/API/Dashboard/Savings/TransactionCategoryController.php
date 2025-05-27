@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Savings\StoreTransactionCategoryRequest;
 use App\Models\SavingsStorageLocation;
 use App\Models\TransactionCategory;
 use App\Models\User;
@@ -25,31 +26,29 @@ class TransactionCategoryController extends Controller
         return response()->json($locations);
     }
 
-    public function store(Request $request)
+    public function store(StoreTransactionCategoryRequest $request)
     {
         /** @var User $user */
         $user = $request->user();
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'direction' => ['required', 'string', 'in:in,out'],
-        ]);
+        $validated = $request->validated();
 
-        $existing = SavingsStorageLocation::where(function (Builder $query) use ($user) {
+        $existing = TransactionCategory::where(function (Builder $query) use ($user) {
             $query->where('user_id', $user->id)->orWhereNull('user_id');
-        })->where('name', $request->name)
+        })->where('name', $validated['name'])
+            ->where('direction', $validated['direction'])
             ->first();
 
         if ($existing) {
             return response()->json(['message' => 'Category already exists.'], 409);
         }
 
-        $location = TransactionCategory::create([
+        $category = TransactionCategory::create([
             'user_id' => $user->id,
-            'name' => $request->name,
-            'direction' => $request->direction,
+            'name' => $validated['name'],
+            'direction' => $validated['direction'],
         ]);
 
-        return response()->json($location, 201);
+        return response()->json($category, 201);
     }
 }

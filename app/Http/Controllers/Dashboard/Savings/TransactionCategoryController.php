@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Savings\StoreTransactionCategoryRequest;
+use App\Http\Requests\Dashboard\Savings\UpdateTransactionCategoryRequest;
 use App\Models\TransactionCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TransactionCategoryController extends Controller
 {
@@ -25,7 +26,7 @@ class TransactionCategoryController extends Controller
     {
         $transactionCategories = TransactionCategory::with('transactions')
             ->whereNull('user_id')
-            ->orWhere('user_id', Auth::id())
+            ->orWhere('user_id', auth()->id())
             ->get();
 
         foreach ($transactionCategories as $category) {
@@ -65,50 +66,26 @@ class TransactionCategoryController extends Controller
         return inertia('dashboard/savings/transaction-categories/index', compact('transactionCategories'));
     }
 
-    private function validateAndCheckExisting(Request $request, ?TransactionCategory $transactionCategory = null): void
+    public function store(StoreTransactionCategoryRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'direction' => ['required', 'string'],
-        ]);
-
-        $query = TransactionCategory::where(function (Builder $query) {
-            $query->where('user_id', Auth::id())->orWhereNull('user_id');
-        })
-            ->whereRaw('LOWER(name) = ?', [strtolower($request->name)])
-            ->where('direction', $request->direction);
-
-        if ($transactionCategory) {
-            $query->where('id', '!=', $transactionCategory->id);
-        }
-
-        if ($query->exists()) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'name' => 'Transaction category already exists.',
-            ]);
-        }
-    }
-
-    public function store(Request $request)
-    {
-        $this->validateAndCheckExisting($request);
+        $validated = $request->validated();
 
         TransactionCategory::create([
-            'user_id' => Auth::id(),
-            'name' => $request->name,
-            'direction' => $request->direction,
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'direction' => $validated['direction'],
         ]);
 
         return back()->with('success', 'Transaction category created successfully');
     }
 
-    public function update(Request $request, TransactionCategory $transactionCategory)
+    public function update(UpdateTransactionCategoryRequest $request, TransactionCategory $transactionCategory)
     {
-        $this->validateAndCheckExisting($request, $transactionCategory);
+        $validated = $request->validated();
 
         $transactionCategory->update([
-            'name' => $request->name,
-            'direction' => $request->direction,
+            'name' => $validated['name'],
+            'direction' => $validated['direction'],
         ]);
 
         return back()->with('success', 'Transaction category updated successfully');

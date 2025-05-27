@@ -12,7 +12,6 @@ class TransactionCategoriesSeeder extends Seeder
      */
     public function run(): void
     {
-
         TransactionCategory::insert([
             ['name' => 'grocery', 'user_id' => null, 'direction' => 'out',],
             ['name' => 'restaurant', 'user_id' => null, 'direction' => 'out',],

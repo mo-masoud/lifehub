@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Dashboard\Savings\SavingsStorageLocationController;
 use App\Http\Controllers\API\Dashboard\Savings\TransactionCategoryController;
+use App\Http\Controllers\Dashboard\Savings\SavingsGoalsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,8 @@ Route::as('api.')->group(function () {
                 ->only(['index', 'store']);
 
             Route::as('savings.')->prefix('savings')->group(function () {
+                Route::get('goals', [SavingsGoalsController::class, 'apiIndex'])
+                    ->name('goals.index');
 
                 Route::apiResource('transaction-categories', TransactionCategoryController::class)
                     ->only(['index', 'store']);

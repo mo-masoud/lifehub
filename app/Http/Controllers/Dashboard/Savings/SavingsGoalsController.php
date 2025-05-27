@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Savings\StoreSavingsGoalRequest;
+use App\Http\Requests\Dashboard\Savings\UpdateSavingsGoalRequest;
 use App\Models\SavingsGoal;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,8 +19,7 @@ class SavingsGoalsController extends Controller
      */
     public function index(): Response
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = auth()->user();
         if (!$user) {
             abort(401);
         }
@@ -38,23 +38,14 @@ class SavingsGoalsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreSavingsGoalRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'target_amount' => 'required|numeric|min:0.01',
-            'currency' => 'required|in:USD,EGP',
-            'severity' => 'required|in:low,medium,high,very-high',
-            'target_date' => 'nullable|date|after_or_equal:today',
-        ]);
+        $validated = $request->validated();
 
         // Convert to USD if needed
         $targetAmountUsd = $validated['target_amount'];
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        if (!$user) {
-            abort(401);
-        }
+
+        $user = $request->user();
 
         if ($validated['currency'] === 'EGP') {
             $targetAmountUsd = SavingsGoal::convertEgpToUsd($validated['target_amount'], $user);
@@ -76,23 +67,14 @@ class SavingsGoalsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SavingsGoal $savingsGoal)
+    public function update(UpdateSavingsGoalRequest $request, SavingsGoal $savingsGoal)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'target_amount' => 'required|numeric|min:0.01',
-            'currency' => 'required|in:USD,EGP',
-            'severity' => 'required|in:low,medium,high,very-high',
-            'target_date' => 'nullable|date|after_or_equal:today',
-        ]);
+        $validated = $request->validated();
 
         // Convert to USD if needed
         $targetAmountUsd = $validated['target_amount'];
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        if (!$user) {
-            abort(401);
-        }
+
+        $user = $request->user();
 
         if ($validated['currency'] === 'EGP') {
             $targetAmountUsd = SavingsGoal::convertEgpToUsd($validated['target_amount'], $user);
@@ -152,8 +134,7 @@ class SavingsGoalsController extends Controller
      */
     public function apiIndex(Request $request)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = auth()->user();
         if (!$user) {
             abort(401);
         }

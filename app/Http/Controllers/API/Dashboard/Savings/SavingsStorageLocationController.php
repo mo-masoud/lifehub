@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Savings\StoreStorageLocationRequest;
 use App\Models\SavingsStorageLocation;
 use Illuminate\Http\Request;
 
@@ -20,14 +21,12 @@ class SavingsStorageLocationController extends Controller
         return response()->json($locations);
     }
 
-    public function store(Request $request)
+    public function store(StoreStorageLocationRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ]);
+        $validated = $request->validated();
 
         $existing = SavingsStorageLocation::where('user_id', $request->user()->id)
-            ->where('name', $request->name)
+            ->where('name', $validated['name'])
             ->first();
 
         if ($existing) {
@@ -36,7 +35,7 @@ class SavingsStorageLocationController extends Controller
 
         $location = SavingsStorageLocation::create([
             'user_id' => $request->user()->id,
-            'name' => $request->name,
+            'name' => $validated['name'],
         ]);
 
         return response()->json($location, 201);

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Savings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\Savings\StoreStorageLocationRequest;
+use App\Http\Requests\Dashboard\Savings\UpdateStorageLocationRequest;
 use App\Models\SavingsStorageLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class StorageLocationController extends Controller
 {
@@ -24,7 +25,7 @@ class StorageLocationController extends Controller
     public function index()
     {
         $storageLocations = SavingsStorageLocation::whereNull('user_id')
-            ->orWhere('user_id', Auth::id())
+            ->orWhere('user_id', auth()->id())
             ->latest()
             ->paginate();
 
@@ -55,46 +56,24 @@ class StorageLocationController extends Controller
         return inertia('dashboard/savings/storage-locations/index', compact('storageLocations'));
     }
 
-    private function validateAndCheckExisting(Request $request, ?SavingsStorageLocation $storageLocation = null): void
+    public function store(StoreStorageLocationRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ]);
-
-        $query = SavingsStorageLocation::where(function (Builder $query) {
-            $query->where('user_id', Auth::id())->orWhereNull('user_id');
-        })
-            ->whereRaw('LOWER(name) = ?', [strtolower($request->name)]);
-
-        if ($storageLocation) {
-            $query->where('id', '!=', $storageLocation->id);
-        }
-
-        if ($query->exists()) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'name' => 'Storage location already exists.',
-            ]);
-        }
-    }
-
-    public function store(Request $request)
-    {
-        $this->validateAndCheckExisting($request);
+        $validated = $request->validated();
 
         SavingsStorageLocation::create([
-            'user_id' => Auth::id(),
-            'name' => $request->name,
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
         ]);
 
         return back()->with('success', 'Storage location created successfully');
     }
 
-    public function update(Request $request, SavingsStorageLocation $storageLocation)
+    public function update(UpdateStorageLocationRequest $request, SavingsStorageLocation $storageLocation)
     {
-        $this->validateAndCheckExisting($request, $storageLocation);
+        $validated = $request->validated();
 
         $storageLocation->update([
-            'name' => $request->name,
+            'name' => $validated['name'],
         ]);
 
         return back()->with('success', 'Storage location updated successfully');

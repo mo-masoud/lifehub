@@ -138,8 +138,5 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
 
         Route::post('savings/goals/{savingsGoal}/dismiss-notification', [SavingsGoalsController::class, 'dismissSuccessNotification'])
             ->name('savings.goals.dismiss-notification');
-
-        Route::get('api/savings/goals', [SavingsGoalsController::class, 'apiIndex'])
-            ->name('api.savings.goals.index');
     });
 });

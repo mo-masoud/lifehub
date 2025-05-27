@@ -67,10 +67,6 @@ LifeHub is a personal finance and life management application built with Laravel
 6. Any model hooks must be placed inside **Observers**.
 7. Prefer Laravel helper functions like `auth()->id()` over facade calls like `Auth::id()`.
 8. Use `$request->user()` if possible instead of calling `auth()->user()` manually.
-
-    - Add a comment above to hint the editor about the type: `/** @var \App\Models\User $user */`
-    - Ensure `use App\Models\User;` is imported at the top.
-
 9. Controllers must be grouped by **domain** using folders.
 10. Controllers must never mix JSON API responses with Inertia view returns — separate them into different controllers.
 11. Controllers must not contain any business logic — they should act purely as routing layers that delegate to services or directly to models.
