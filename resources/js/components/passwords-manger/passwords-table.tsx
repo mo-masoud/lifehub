@@ -1,6 +1,7 @@
 import { ActionCell } from '@/components/dashboard/action-cell';
 import { CreateItem } from '@/components/dashboard/create-item';
 import { TablePagination } from '@/components/dashboard/table-pagination';
+import { PasswordHistory } from '@/components/passwords-manger/password-history';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -197,13 +198,17 @@ export function PasswordsTable({
                                         )}
                                     </TableCell>
                                 )}
-                                <ActionCell
-                                    updateLabel={__('passwords.update_password')}
-                                    item={{ password }}
-                                    FormComponent={FormComponent}
-                                    onDestroy={destroy}
-                                    type="sheet"
-                                />
+                                <TableCell className="flex items-center justify-end text-sm">
+                                    <PasswordHistory password={password} />
+                                    <ActionCell
+                                        updateLabel={__('passwords.update_password')}
+                                        item={{ password }}
+                                        FormComponent={FormComponent}
+                                        onDestroy={destroy}
+                                        type="sheet"
+                                        asChild={true}
+                                    />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

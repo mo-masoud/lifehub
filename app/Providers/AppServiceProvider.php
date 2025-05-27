@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Password;
 use App\Models\SSH;
+use App\Observers\PasswordObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,5 +28,8 @@ class AppServiceProvider extends ServiceProvider
             'password' => Password::class,
             'ssh' => SSH::class,
         ]);
+
+        // Register observers
+        Password::observe(PasswordObserver::class);
     }
 }

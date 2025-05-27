@@ -4,6 +4,7 @@ use App\Http\Controllers\API\Dashboard\Savings\SavingsStorageLocationController;
 use App\Http\Controllers\API\Dashboard\Savings\TransactionCategoryController;
 use App\Http\Controllers\API\Dashboard\Savings\SavingsGoalsController;
 use App\Http\Controllers\API\Dashboard\CopyLogController;
+use App\Http\Controllers\API\Dashboard\PasswordsManager\PasswordHistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::as('api.')->group(function () {
 
             Route::apiResource('copy-logs', CopyLogController::class)
                 ->only(['store']);
+
+            Route::get('passwords/{password}/history', [PasswordHistoryController::class, 'index'])
+                ->name('passwords.history.index');
 
             Route::as('savings.')->prefix('savings')->group(function () {
                 Route::get('goals', [SavingsGoalsController::class, 'index'])

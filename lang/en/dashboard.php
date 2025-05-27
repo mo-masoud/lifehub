@@ -67,6 +67,7 @@ return [
         'delete' => 'Delete',
         'delete_confirmation' => 'Are you sure you want to delete this?',
         'update' => 'Update',
+        'retry' => 'Retry',
         'history' => 'History',
         'showing_pagination' => 'Showing :from to :to of :total results.',
         'filter' => 'Filter',
@@ -169,6 +170,18 @@ return [
         'password_placeholder' => 'Password for the password.',
         'url_placeholder' => 'URL for the password.',
         'no_passwords_founds' => 'Their are no passwords founds.'
+    ],
+
+    'password_history' => [
+        'title' => 'Password History',
+        'description' => 'View previous passwords for',
+        'no_history' => 'No password history found',
+        'previous_password' => 'Previous Password',
+        'changed_at' => 'Changed On',
+        'current_password' => 'Current Password',
+        'retrieved_successfully' => 'Password history retrieved successfully',
+        'view_history' => 'View Password History',
+        'fetch_failed' => 'Failed to fetch password history',
     ],
 
     'ssh' => [

@@ -2,11 +2,23 @@
 
 return [
     'general' => [
-        'application_name' => 'x-dash',
-        'dashboard' => 'لوحة التحكم',
+        'application_name' => 'x-dash'        'delete' => 'حذف',
+        'delete_confirmation' => 'هل أنت متأكد من أنك تريد حذف هذا؟',
+        'update' => 'تحديث',
+        'retry' => 'إعادة المحاولة',
+        'history' => 'التاريخ',      'dashboard' => 'لوحة التحكم',
         'platform' => 'المنصة',
-        'home' => 'الرئيسية',
-        'settings' => 'الإعدادات',
+        'home' => 'ال    'password_history' => [
+        'title' => 'تاريخ كلمات المرور',
+        'description' => 'عرض كلمات المرور السابقة لـ',
+        'no_history' => 'لم يتم العثور على تاريخ كلمات مرور',
+        'previous_password' => 'كلمة المرور السابقة',
+        'changed_at' => 'تم التغيير في',
+        'current_password' => 'كلمة المرور الحالية',
+        'retrieved_successfully' => 'تم استرداد تاريخ كلمات المرور بنجاح',
+        'view_history' => 'عرض تاريخ كلمة المرور',
+        'fetch_failed' => 'فشل في جلب تاريخ كلمات المرور',
+    ],       'settings' => 'الإعدادات',
         'password_manager' => 'إدارة كلمات المرور',
         'passwords' => 'كلمات المرور',
         'search' => 'ابحث عن أي شيء...',
@@ -162,6 +174,17 @@ return [
         'url_placeholder' => 'رابط كلمة المرور.',
         'password_placeholder' => 'كلمة مرور جديدة.',
         'no_passwords_founds' => 'لا توجد كلمات مرور.',
+    ],
+
+    'password_history' => [
+        'title' => 'تاريخ كلمات المرور',
+        'description' => 'عرض كلمات المرور السابقة لـ',
+        'no_history' => 'لا يوجد تاريخ لكلمات المرور',
+        'previous_password' => 'كلمة المرور السابقة',
+        'changed_at' => 'تم التغيير في',
+        'current_password' => 'كلمة المرور الحالية',
+        'retrieved_successfully' => 'تم استرجاع تاريخ كلمات المرور بنجاح',
+        'view_history' => 'عرض تاريخ كلمات المرور',
     ],
 
     'words' => [
