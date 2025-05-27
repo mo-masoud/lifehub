@@ -55,17 +55,18 @@ class SSH extends Model
     }
 
     /**
-     * Scope to order by copy count
+     * Scope to order by latest copy activity
      */
-    public function scopeOrderByCopyCount($query, string $direction = 'desc')
+    public function scopeOrderByLatestCopy($query, string $direction = 'desc')
     {
         return $query->leftJoin('copy_logs', function ($join) {
             $join->on('sshs.id', '=', 'copy_logs.copyable_id')
-                ->where('copy_logs.copyable_type', '=', static::class);
+                ->where('copy_logs.copyable_type', '=', 'ssh');
         })
-            ->selectRaw('sshs.*, COUNT(copy_logs.id) as copy_count')
+            ->select('sshs.*')
+            ->selectRaw('MAX(copy_logs.copied_at) as latest_copy_at')
             ->groupBy('sshs.id')
-            ->orderBy('copy_count', $direction);
+            ->orderByRaw('latest_copy_at IS NULL, latest_copy_at ' . $direction);
     }
 
     protected function prompt(): Attribute

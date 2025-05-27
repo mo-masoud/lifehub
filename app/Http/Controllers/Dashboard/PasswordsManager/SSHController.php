@@ -30,26 +30,26 @@ class SSHController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $sshs = SSH::where('user_id', $user->id)
+        $sshs = SSH::where('sshs.user_id', $user->id)
             ->with('folder')
             ->when(request('keyword'), function ($query) {
                 $query->where(function ($query) {
                     $keyword = request('keyword');
 
-                    $query->where('name', 'like', "%{$keyword}%")
-                        ->orWhere('username', 'like', "%{$keyword}%")
-                        ->orWhere('ip', 'like', "%{$keyword}%");
+                    $query->where('sshs.name', 'like', "%{$keyword}%")
+                        ->orWhere('sshs.username', 'like', "%{$keyword}%")
+                        ->orWhere('sshs.ip', 'like', "%{$keyword}%");
                 });
             })
             ->when(request('folder_id'), function ($query) {
                 $folderId = request('folder_id');
                 if ($folderId === 'no_folder') {
-                    $query->whereNull('folder_id');
+                    $query->whereNull('sshs.folder_id');
                 } else {
-                    $query->where('folder_id', $folderId);
+                    $query->where('sshs.folder_id', $folderId);
                 }
             })
-            ->latest()
+            ->orderByLatestCopy()
             ->paginate();
 
         return inertia('dashboard/passwords-manager/sshs/index', [

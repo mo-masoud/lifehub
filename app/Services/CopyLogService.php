@@ -24,7 +24,7 @@ class CopyLogService
 
         return CopyLog::create([
             'user_id' => $userId,
-            'copyable_type' => get_class($copyable),
+            'copyable_type' => $copyable->getMorphClass(),
             'copyable_id' => $copyable->id,
             'field' => $field,
             'copied_at' => now(),
@@ -56,7 +56,7 @@ class CopyLogService
      */
     public function getCopyCount(Model $copyable, ?string $field = null): int
     {
-        $query = CopyLog::where('copyable_type', get_class($copyable))
+        $query = CopyLog::where('copyable_type', $copyable->getMorphClass())
             ->where('copyable_id', $copyable->id);
 
         if ($field) {

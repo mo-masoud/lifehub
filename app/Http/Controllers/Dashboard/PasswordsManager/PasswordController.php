@@ -30,26 +30,26 @@ class PasswordController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $passwords = Password::where('user_id', $user->id)
+        $passwords = Password::where('passwords.user_id', $user->id)
             ->with('folder')
             ->when(request('keyword'), function ($query) {
                 $query->where(function ($query) {
                     $keyword = request('keyword');
 
-                    $query->where('name', 'like', "%{$keyword}%")
-                        ->orWhere('username', 'like', "%{$keyword}%")
-                        ->orWhere('url', 'like', "%{$keyword}%");
+                    $query->where('passwords.name', 'like', "%{$keyword}%")
+                        ->orWhere('passwords.username', 'like', "%{$keyword}%")
+                        ->orWhere('passwords.url', 'like', "%{$keyword}%");
                 });
             })
             ->when(request('folder_id'), function ($query) {
                 $folderId = request('folder_id');
                 if ($folderId === 'no_folder') {
-                    $query->whereNull('folder_id');
+                    $query->whereNull('passwords.folder_id');
                 } else {
-                    $query->where('folder_id', $folderId);
+                    $query->where('passwords.folder_id', $folderId);
                 }
             })
-            ->latest()
+            ->orderByLatestCopy()
             ->paginate();
 
         return inertia('dashboard/passwords-manager/passwords/index', [

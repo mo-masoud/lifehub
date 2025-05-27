@@ -34,7 +34,7 @@ test('authenticated user can log password copy', function () {
 
     $this->assertDatabaseHas('copy_logs', [
         'user_id' => $this->user->id,
-        'copyable_type' => Password::class,
+        'copyable_type' => 'password',
         'copyable_id' => $password->id,
         'field' => 'password',
     ]);
@@ -54,7 +54,7 @@ test('authenticated user can log SSH copy', function () {
 
     $this->assertDatabaseHas('copy_logs', [
         'user_id' => $this->user->id,
-        'copyable_type' => SSH::class,
+        'copyable_type' => 'ssh',
         'copyable_id' => $ssh->id,
         'field' => 'prompt',
     ]);

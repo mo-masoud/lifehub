@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Configure morph map for CopyLog polymorphic relationships
-        Relation::enforceMorphMap([
+        Relation::morphMap([
             'password' => Password::class,
             'ssh' => SSH::class,
         ]);
