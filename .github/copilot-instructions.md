@@ -68,7 +68,7 @@ LifeHub is a personal finance and life management application built with Laravel
 7. Prefer Laravel helper functions like `auth()->id()` over facade calls like `Auth::id()`.
 8. Use `$request->user()` if possible instead of calling `auth()->user()` manually.
 9. Controllers must be grouped by **domain** using folders.
-10. Controllers must never mix JSON API responses with Inertia view returns — separate them into different controllers.
+10. If your controller handles both web and API logic, separate it into two dedicated controllers — one for Inertia views, and one for JSON API responses.
 11. Controllers must not contain any business logic — they should act purely as routing layers that delegate to services or directly to models.
 12. Repository pattern is not used. Instead, Eloquent models should encapsulate all query and data access logic in clearly named methods.
 13. If an API is defined, it must use a **Response class**, unless it's only for dashboard.
@@ -83,7 +83,10 @@ LifeHub is a personal finance and life management application built with Laravel
 22. Ensure the project has complete **unit tests and E2E tests** for both backend and frontend.
 23. Do not translate CLI or shell commands. Always keep them in English.
 24. When adding translation strings, always provide both English and Arabic versions.
-25. To run backend tests:
+25. Place all request classes, response classes, and services within the domain folder they belong to.
+26. If multiple requests belong to the same controller, group them inside a dedicated subfolder within that controller’s domain folder.
+27. If an API is dashboard-only, make sure it lives under `app/Http/Controllers/API/Dashboard/YourDomain`.
+28. To run backend tests:
 
     ```bash
     php artisan test
@@ -91,8 +94,8 @@ LifeHub is a personal finance and life management application built with Laravel
     php artisan test --filter=TestOne|TestTwo
     ```
 
-26. `php artisan test --verbose` is deprecated and should not be used.
-27. To run both backend and frontend dev servers at once:
+29. `php artisan test --verbose` is deprecated and should not be used.
+30. To run both backend and frontend dev servers at once:
 
     ```bash
     composer run dev
