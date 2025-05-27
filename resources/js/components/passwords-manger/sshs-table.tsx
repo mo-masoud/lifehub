@@ -9,6 +9,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { __ } from '@/lib/i18n';
 import type { Pagination } from '@/types';
 import { Folder, SSH } from '@/types/models';
+import { copyToClipboardWithLogging } from '@/utils/copy-log';
 import { Link, router } from '@inertiajs/react';
 import axios from 'axios';
 import { Eye, EyeOff, Search } from 'lucide-react';
@@ -59,7 +60,22 @@ export function SSHsTable({
         }
     }, [onFolderFilter]);
 
-    const copyToClipboard = (text: string) => {
+    const copyToClipboard = (text: string, sshId: number, field: 'username' | 'password' | 'prompt') => {
+        copyToClipboardWithLogging(
+            text,
+            'ssh',
+            sshId,
+            field,
+            () => toast.success('Copied to clipboard'),
+            (err) => {
+                console.error('Could not copy text: ', err);
+                toast.error('Failed to copy to clipboard');
+            },
+        );
+    };
+
+    const copyIpToClipboard = (text: string, sshId: number) => {
+        // IP is not a tracked field in backend, so use basic copy without logging
         navigator.clipboard
             .writeText(text)
             .then(() => {
@@ -67,6 +83,7 @@ export function SSHsTable({
             })
             .catch((err) => {
                 console.error('Could not copy text: ', err);
+                toast.error('Failed to copy to clipboard');
             });
     };
 
@@ -158,22 +175,25 @@ export function SSHsTable({
                             <TableRow key={ssh.id}>
                                 <TableCell className="text-start text-sm">{ssh.name}</TableCell>
                                 <TableCell className="text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.username)}>
+                                    <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.username, ssh.id, 'username')}>
                                         {ssh.username}
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.ip)}>
+                                    <span className="cursor-pointer" onClick={() => copyIpToClipboard(ssh.ip, ssh.id)}>
                                         {ssh.ip}
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.prompt)}>
+                                    <span className="cursor-pointer" onClick={() => copyToClipboard(ssh.prompt, ssh.id, 'prompt')}>
                                         {ssh.prompt}
                                     </span>
                                 </TableCell>
                                 <TableCell className="w-40 text-start text-sm">
-                                    <span className="cursor-pointer ltr:mr-2 rtl:ml-2" onClick={() => copyToClipboard(ssh.password)}>
+                                    <span
+                                        className="cursor-pointer ltr:mr-2 rtl:ml-2"
+                                        onClick={() => copyToClipboard(ssh.password, ssh.id, 'password')}
+                                    >
                                         {showingPasswords.includes(ssh.id) ? ssh.password : '**************'}
                                     </span>
                                     <Button size="icon" variant="ghost" onClick={() => toggleShowPassword(ssh.id)}>

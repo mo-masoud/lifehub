@@ -296,4 +296,15 @@ return [
     'home maintenance' => 'صيانة المنزل',
     'vacation' => 'إجازة',
     'salary' => 'راتب',
+
+    'copy_logs' => [
+        'logged_successfully' => 'تم تسجيل عملية النسخ بنجاح',
+        'copyable_type_required' => 'نوع العنصر القابل للنسخ مطلوب',
+        'copyable_type_invalid' => 'نوع العنصر القابل للنسخ يجب أن يكون كلمة مرور أو SSH',
+        'copyable_id_required' => 'معرف العنصر القابل للنسخ مطلوب',
+        'copyable_id_integer' => 'معرف العنصر القابل للنسخ يجب أن يكون رقماً صحيحاً',
+        'copyable_id_min' => 'معرف العنصر القابل للنسخ يجب أن يكون 1 على الأقل',
+        'field_required' => 'اسم الحقل مطلوب',
+        'invalid_field_for_type' => 'حقل غير صالح :field لـ :type. الحقول الصالحة هي: :valid_fields',
+    ],
 ];

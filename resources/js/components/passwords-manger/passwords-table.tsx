@@ -9,6 +9,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { __ } from '@/lib/i18n';
 import type { Pagination } from '@/types';
 import { Folder, Password } from '@/types/models';
+import { copyToClipboardWithLogging } from '@/utils/copy-log';
 import { Link, router } from '@inertiajs/react';
 import axios from 'axios';
 import { ExternalLink, Eye, EyeOff, Search } from 'lucide-react';
@@ -59,15 +60,18 @@ export function PasswordsTable({
         }
     }, [onFolderFilter]);
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard
-            .writeText(text)
-            .then(() => {
-                toast.success('Copied to clipboard');
-            })
-            .catch((err) => {
+    const copyToClipboard = (text: string, passwordId: number, field: 'username' | 'password') => {
+        copyToClipboardWithLogging(
+            text,
+            'password',
+            passwordId,
+            field,
+            () => toast.success('Copied to clipboard'),
+            (err) => {
                 console.error('Could not copy text: ', err);
-            });
+                toast.error('Failed to copy to clipboard');
+            },
+        );
     };
 
     const toggleShowPassword = (id: number) => {
@@ -157,12 +161,12 @@ export function PasswordsTable({
                             <TableRow key={password.id}>
                                 <TableCell className="text-start text-sm">{password.name}</TableCell>
                                 <TableCell className="text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyToClipboard(password.username)}>
+                                    <span className="cursor-pointer" onClick={() => copyToClipboard(password.username, password.id, 'username')}>
                                         {password.username}
                                     </span>
                                 </TableCell>
                                 <TableCell className="flex w-40 items-center gap-2 text-start text-sm">
-                                    <span className="cursor-pointer" onClick={() => copyToClipboard(password.password)}>
+                                    <span className="cursor-pointer" onClick={() => copyToClipboard(password.password, password.id, 'password')}>
                                         {showingPasswords.includes(password.id) ? password.password : '**************'}
                                     </span>
                                     <Button size="icon" variant="ghost" onClick={() => toggleShowPassword(password.id)}>
