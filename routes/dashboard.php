@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\Savings\InitialSavingController;
 use App\Http\Controllers\Dashboard\Savings\SnapshotController;
 use App\Http\Controllers\Dashboard\Savings\StorageLocationController;
 use App\Http\Controllers\Dashboard\Savings\TransactionController;
+use App\Http\Controllers\Dashboard\Settings\AppearanceController;
 use App\Http\Controllers\Dashboard\Settings\LocaleController;
 use App\Http\Controllers\Dashboard\Settings\PasswordController;
 use App\Http\Controllers\Dashboard\Settings\ProfileController;
@@ -85,9 +86,7 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
         Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
         Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
-        Route::get('settings/appearance', static function () {
-            return Inertia::render('dashboard/settings/appearance');
-        })->name('appearance');
+        Route::get('settings/appearance', [AppearanceController::class, 'show'])->name('appearance');
 
         Route::get('settings/locale', LocaleController::class)->name('settings.locale');
 
