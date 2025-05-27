@@ -24,7 +24,7 @@ class CreateSuperAdmin extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(): int
     {
         $name = $this->ask('What is the name of the super admin?');
         $email = $this->ask('What is the email of the super admin?');
@@ -33,13 +33,13 @@ class CreateSuperAdmin extends Command
         // Validate the email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->error('Invalid email format.');
-            return;
+            return 1;
         }
 
         // Check if the email already exists
         if (User::where('email', $email)->exists()) {
             $this->error('Email already exists.');
-            return;
+            return 1;
         }
 
         User::create([
@@ -50,5 +50,7 @@ class CreateSuperAdmin extends Command
         ]);
 
         $this->info('Super admin created successfully.');
+
+        return 0;
     }
 }
