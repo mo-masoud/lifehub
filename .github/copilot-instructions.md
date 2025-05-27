@@ -85,7 +85,9 @@ LifeHub is a personal finance and life management application built with Laravel
 20. Localization strings related to dashboard features should go in `lang/{locale}/dashboard.php`, grouped by domain and in snake_case.
 21. Always **write and run the test before making changes** (TDD is preferred).
 22. Ensure the project has complete **unit tests and E2E tests** for both backend and frontend.
-23. To run backend tests:
+23. Do not translate CLI or shell commands. Always keep them in English.
+24. When adding translation strings, always provide both English and Arabic versions.
+25. To run backend tests:
 
     ```bash
     php artisan test
@@ -93,8 +95,8 @@ LifeHub is a personal finance and life management application built with Laravel
     php artisan test --filter=TestOne|TestTwo
     ```
 
-24. `php artisan test --verbose` is deprecated and should not be used.
-25. To run both backend and frontend dev servers at once:
+26. `php artisan test --verbose` is deprecated and should not be used.
+27. To run both backend and frontend dev servers at once:
 
     ```bash
     composer run dev
@@ -121,6 +123,8 @@ LifeHub is a personal finance and life management application built with Laravel
 - Group all dashboard-related strings in `dashboard.php`.
 - Use domain-based keys (e.g., `transactions.income_added`) in `snake_case`.
 - Handle directionality with proper Tailwind RTL classes.
+- Do not translate command line instructions.
+- Always add both English and Arabic versions of every key.
 
 ---
 
