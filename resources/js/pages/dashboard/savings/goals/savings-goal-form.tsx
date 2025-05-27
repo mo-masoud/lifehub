@@ -212,9 +212,11 @@ export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
                     )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? 'Saving...' : isEditing ? __('messages.update') : __('messages.save')}
-                </Button>
+                <div className="flex items-center justify-end">
+                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                        {form.formState.isSubmitting ? 'Saving...' : isEditing ? __('messages.update') : __('messages.save')}
+                    </Button>
+                </div>
             </form>
         </Form>
     );

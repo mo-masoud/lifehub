@@ -1,61 +1,67 @@
+import { InputError } from '@/components/forms/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Folder } from '@/types/models';
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
+import { Transition } from '@headlessui/react';
+import { useForm } from '@inertiajs/react';
 import { toast } from 'sonner';
 
-export const FolderForm = ({ folder, onSave }: { folder?: Folder; onSave?: () => void }) => {
-    const [name, setName] = useState(folder?.name || '');
-    const [processing, setProcessing] = useState(false);
+type FolderForm = {
+    name: string;
+};
 
-    const handleSubmit = (e: React.FormEvent) => {
+export const FolderForm = ({ folder, onSave }: { folder?: Folder; onSave: (form: FolderForm) => void }) => {
+    const { data, setData, post, patch, errors, processing, recentlySuccessful } = useForm<FolderForm>({
+        name: folder?.name || '',
+    });
+
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        setProcessing(true);
 
-        const routeName = folder ? 'dashboard.folders.update' : 'dashboard.folders.store';
-        const routeParams = folder ? [folder.id] : [];
+        const method = folder ? patch : post;
+        const url = folder ? route('dashboard.folders.update', folder.id) : route('dashboard.folders.store');
+        const message = folder ? __('messages.updated_successfully') : __('messages.created_successfully');
 
-        router.post(
-            route(routeName, ...routeParams),
-            {
-                name,
-                _method: folder ? 'PUT' : 'POST',
+        method(url, {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                toast.success(message);
+                onSave(data);
             },
-            {
-                onSuccess: () => {
-                    toast.success(folder ? __('messages.updated_successfully') : __('messages.created_successfully'));
-                },
-                onError: () => {
-                    toast.error(__('messages.something_went_wrong'));
-                },
-                onFinish: () => {
-                    setProcessing(false);
-                    onSave?.();
-                },
-            },
-        );
+        });
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 p-4">
-            <div>
-                <label htmlFor="name" className="block text-sm font-medium">
+        <form onSubmit={submit} className="space-y-4">
+            <div className="grid gap-2">
+                <Label htmlFor="name" className="truncate">
                     {__('fields.name')}
-                </label>
+                </Label>
                 <Input
                     id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
+                    value={data.name}
+                    onChange={(e) => setData('name', e.target.value)}
+                    className="mt-1 block w-full placeholder:text-xs"
                     placeholder={__('fields.name_placeholder')}
+                    autoComplete="off"
                 />
+
+                <InputError className="mt-1 text-xs" message={errors.name} />
             </div>
             <div className="flex justify-end space-x-2">
-                <Button type="submit" disabled={processing}>
-                    {processing ? __('messages.saving') : __('messages.save')}
-                </Button>
+                <Button disabled={processing}>{__('messages.save')}</Button>
+
+                <Transition
+                    show={recentlySuccessful}
+                    enter="transition ease-in-out"
+                    enterFrom="opacity-0"
+                    leave="transition ease-in-out"
+                    leaveTo="opacity-0"
+                >
+                    <p className="text-sm text-neutral-600">{__('messages.saved')}</p>
+                </Transition>
             </div>
         </form>
     );

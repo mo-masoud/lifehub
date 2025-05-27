@@ -10,6 +10,7 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { TableCell } from '@/components/ui/table';
 import { __ } from '@/lib/i18n';
@@ -26,6 +27,7 @@ interface Props {
     item: any;
     onDestroy?: (id: string) => void;
     asChild?: boolean;
+    type?: 'modal' | 'sheet';
 }
 export const ActionCell = ({
     canEdit = true,
@@ -35,6 +37,7 @@ export const ActionCell = ({
     item,
     onDestroy,
     asChild,
+    type = 'modal',
 }: Props) => {
     const { dir } = usePage<SharedData>().props;
 
@@ -45,25 +48,49 @@ export const ActionCell = ({
     const nested = Object.values(item)[0];
     const record: Record<string, any> = nested ? { ...nested } : {};
 
-    return (
-        <Container className="flex items-center justify-end text-sm">
-            {canEdit && FormComponent && (
-                <Sheet open={show} onOpenChange={setShow}>
-                    <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={() => setShow(true)}>
-                            <FilePenLine className="size-4 text-green-500" />
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
-                        <SheetHeader>
-                            <SheetTitle>{updateLabel}</SheetTitle>
-                            <SheetDescription className="sr-only"></SheetDescription>
-                        </SheetHeader>
+    const editTrigger = (
+        <Button variant="ghost" size="icon" onClick={() => setShow(true)}>
+            <FilePenLine className="size-4 text-green-500" />
+        </Button>
+    );
+
+    const renderEditForm = () => {
+        if (!FormComponent) return null;
+
+        if (type === 'modal') {
+            return (
+                <Dialog open={show} onOpenChange={setShow}>
+                    <DialogTrigger asChild>{editTrigger}</DialogTrigger>
+                    <DialogContent className="max-w-2xl" onOpenAutoFocus={(e) => e.preventDefault()}>
+                        <DialogHeader>
+                            <DialogTitle>{updateLabel}</DialogTitle>
+                            <DialogDescription className="sr-only"></DialogDescription>
+                        </DialogHeader>
 
                         <FormComponent {...item} onSave={() => setShow(false)} />
-                    </SheetContent>
-                </Sheet>
-            )}
+                    </DialogContent>
+                </Dialog>
+            );
+        }
+
+        return (
+            <Sheet open={show} onOpenChange={setShow}>
+                <SheetTrigger asChild>{editTrigger}</SheetTrigger>
+                <SheetContent className="min-w-[600px]" onOpenAutoFocus={(e) => e.preventDefault()} side={dir === 'rtl' ? 'left' : 'right'}>
+                    <SheetHeader>
+                        <SheetTitle>{updateLabel}</SheetTitle>
+                        <SheetDescription className="sr-only"></SheetDescription>
+                    </SheetHeader>
+
+                    <FormComponent {...item} onSave={() => setShow(false)} />
+                </SheetContent>
+            </Sheet>
+        );
+    };
+
+    return (
+        <Container className="flex items-center justify-end text-sm">
+            {canEdit && FormComponent && renderEditForm()}
             {canDelete && onDestroy && (
                 <AlertDialog>
                     <AlertDialogTrigger asChild>

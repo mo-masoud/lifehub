@@ -36,7 +36,7 @@ export const StorageLocationForm = ({ storage, onSave }: { storage?: StorageLoca
     };
 
     return (
-        <form onSubmit={submit} className="space-y-4 p-4">
+        <form onSubmit={submit} className="space-y-4">
             <div className="grid gap-2">
                 <Label htmlFor="storage" className="truncate">
                     {__('savings.storage')} <span className="mx-1 text-lg text-red-500">*</span>

@@ -50,7 +50,7 @@ export default function Index() {
                     <Heading title={__('savings.transactions')} />
                 </div>
 
-                <CreateItem label={__('savings.create_transaction')} FormComponent={TransactionForm} />
+                <CreateItem label={__('savings.create_transaction')} FormComponent={TransactionForm} type="sheet" />
             </div>
 
             <div className="mt-4 mb-2 flex items-center justify-end px-4">
@@ -99,6 +99,7 @@ export default function Index() {
                                     </TableCell>
                                     <TableCell className="max-w-xs truncate text-start text-xs">{transaction.notes || 'N/A'}</TableCell>
                                     <ActionCell
+                                        type="sheet"
                                         updateLabel={__('savings.update_transaction')}
                                         item={{ transaction }}
                                         FormComponent={TransactionForm}

@@ -128,7 +128,12 @@ export function SSHsTable({
                     )}
                 </div>
                 {showCreateButton && (
-                    <CreateItem label={__('ssh.create_ssh')} FormComponent={FormComponent} formProps={defaultFolder ? { defaultFolder } : {}} />
+                    <CreateItem
+                        label={__('ssh.create_ssh')}
+                        FormComponent={FormComponent}
+                        formProps={defaultFolder ? { defaultFolder } : {}}
+                        type="sheet"
+                    />
                 )}
             </div>
 
@@ -190,7 +195,13 @@ export function SSHsTable({
                                         )}
                                     </TableCell>
                                 )}
-                                <ActionCell updateLabel={__('savings.update_ssh')} item={{ ssh }} FormComponent={FormComponent} onDestroy={destroy} />
+                                <ActionCell
+                                    updateLabel={__('ssh.update_ssh')}
+                                    item={{ ssh }}
+                                    FormComponent={FormComponent}
+                                    onDestroy={destroy}
+                                    type="sheet"
+                                />
                             </TableRow>
                         ))}
                     </TableBody>

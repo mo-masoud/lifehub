@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\Auth\NewPasswordController;
 use App\Http\Controllers\Dashboard\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Dashboard\Auth\RegisteredUserController;
 use App\Http\Controllers\Dashboard\Auth\VerifyEmailController;
+use App\Http\Controllers\Dashboard\FolderController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\PasswordsManager\PasswordController as PasswordManagerController;
 use App\Http\Controllers\Dashboard\Savings\InitialSavingController;
@@ -99,20 +100,9 @@ Route::prefix('dashboard')->as('dashboard.')->group(function () {
             ->only(['index', 'store', 'destroy', 'update'])
             ->parameters(['sshs' => 'ssh']);
 
-        Route::get('folders', [App\Http\Controllers\Dashboard\FolderController::class, 'index'])
-            ->name('folders.index');
-
-        Route::post('folders', [App\Http\Controllers\Dashboard\FolderController::class, 'store'])
-            ->name('folders.store');
-
-        Route::get('folders/{folder}', [App\Http\Controllers\Dashboard\FolderController::class, 'show'])
-            ->name('folders.show');
-
-        Route::put('folders/{folder}', [App\Http\Controllers\Dashboard\FolderController::class, 'update'])
-            ->name('folders.update');
-
-        Route::delete('folders/{folder}', [App\Http\Controllers\Dashboard\FolderController::class, 'destroy'])
-            ->name('folders.destroy');
+        Route::resource('folders', FolderController::class)
+            ->except(['edit', 'create'])
+            ->names('folders');
 
         Route::resource('savings/initial', InitialSavingController::class)
             ->only(['store', 'destroy', 'update'])

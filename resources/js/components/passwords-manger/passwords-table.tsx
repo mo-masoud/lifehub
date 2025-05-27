@@ -132,6 +132,7 @@ export function PasswordsTable({
                         label={__('passwords.create_password')}
                         FormComponent={FormComponent}
                         formProps={defaultFolder ? { defaultFolder } : {}}
+                        type="sheet"
                     />
                 )}
             </div>
@@ -193,10 +194,11 @@ export function PasswordsTable({
                                     </TableCell>
                                 )}
                                 <ActionCell
-                                    updateLabel={__('savings.update_password')}
+                                    updateLabel={__('passwords.update_password')}
                                     item={{ password }}
                                     FormComponent={FormComponent}
                                     onDestroy={destroy}
+                                    type="sheet"
                                 />
                             </TableRow>
                         ))}

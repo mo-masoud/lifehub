@@ -48,7 +48,7 @@ export const TransactionCategoryForm = ({
     };
 
     return (
-        <form onSubmit={submit} className="space-y-4 p-4">
+        <form onSubmit={submit} className="space-y-4">
             <div className="grid gap-2">
                 <Label htmlFor="name" className="truncate">
                     {__('fields.name')} <span className="mx-1 text-lg text-red-500">*</span>
