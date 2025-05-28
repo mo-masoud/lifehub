@@ -31,8 +31,6 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
         );
     };
 
-    console.log({ savingsGoals });
-
     // Get the most important goal (highest priority + near deadline)
     const importantGoal = savingsGoals
         .filter((goal) => !goal.is_achieved)
