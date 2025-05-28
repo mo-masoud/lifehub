@@ -2,30 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
+import { SavingsGoal } from '@/types/models';
 import { router } from '@inertiajs/react';
 import { CalendarDays, Goal, HandCoins, RefreshCcw, Target } from 'lucide-react';
 import { toast } from 'sonner';
-
-interface SavingsGoal {
-    id: number;
-    title: string;
-    target_amount_usd: string;
-    target_amount_egp: number;
-    current_amount_usd: number;
-    current_amount_egp: number;
-    effective_target_amount_usd: number;
-    effective_target_amount_egp: number;
-    safety_margin_percentage: number;
-    safety_margin_amount_usd: number;
-    safety_margin_amount_egp: number;
-    progress_percentage: number;
-    effective_progress_percentage: number;
-    severity: 'low' | 'medium' | 'high' | 'very-high';
-    target_date: string | null;
-    is_achieved: boolean;
-    is_overdue: boolean;
-    achieved_at: string | null;
-}
 
 interface CurrentSavingsProps {
     date: string;
@@ -78,7 +58,7 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
             return 0;
         })[0];
 
-    const totalTargetUsd = savingsGoals.reduce((sum, goal) => sum + parseFloat(goal.target_amount_usd), 0);
+    const totalTargetUsd = savingsGoals.reduce((sum, goal) => sum + goal.target_amount_usd, 0);
 
     const overallProgress = totalTargetUsd > 0 ? Math.min(100, (totalUsd / totalTargetUsd) * 100) : 0;
 

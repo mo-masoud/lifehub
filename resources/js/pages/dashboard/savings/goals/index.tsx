@@ -10,30 +10,10 @@ import { __ } from '@/lib/i18n';
 import { formatNumber } from '@/lib/utils';
 import { SavingsGoalForm } from '@/pages/dashboard/savings/goals/savings-goal-form';
 import type { BreadcrumbItem } from '@/types';
+import { SavingsGoal } from '@/types/models';
 import { Head, router } from '@inertiajs/react';
 import { Goal } from 'lucide-react';
 import { toast } from 'sonner';
-
-interface SavingsGoal {
-    id: number;
-    title: string;
-    target_amount_usd: number;
-    target_amount_egp: number;
-    current_amount_usd: number;
-    current_amount_egp: number;
-    effective_target_amount_usd: number;
-    effective_target_amount_egp: number;
-    safety_margin_percentage: number;
-    safety_margin_amount_usd: number;
-    safety_margin_amount_egp: number;
-    progress_percentage: number;
-    effective_progress_percentage: number;
-    severity: 'low' | 'medium' | 'high' | 'very-high';
-    target_date: string | null;
-    is_achieved: boolean;
-    is_overdue: boolean;
-    achieved_at: string | null;
-}
 
 interface Props {
     goals: SavingsGoal[];

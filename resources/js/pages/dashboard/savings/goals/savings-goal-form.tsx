@@ -3,23 +3,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { __ } from '@/lib/i18n';
+import { SavingsGoal } from '@/types/models';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
-interface SavingsGoal {
-    id: number;
-    title: string;
-    target_amount_usd: number;
-    target_amount_egp: number;
-    effective_target_amount_usd: number;
-    effective_target_amount_egp: number;
-    safety_margin_percentage?: number;
-    severity: 'low' | 'medium' | 'high' | 'very-high';
-    target_date: string | null;
-}
 
 interface SavingsGoalFormProps {
     goal?: SavingsGoal;

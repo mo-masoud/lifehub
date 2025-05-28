@@ -4,34 +4,11 @@ import AppLayout from '@/layouts/dashboard/app-layout';
 import { __ } from '@/lib/i18n';
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { type LatestSnapshotTotals, type TopCategoriesByPeriod, type TopTransactions, type TotalByPeriod } from '@/types/dashboard';
-import { Balance } from '@/types/models';
+import { Balance, SavingsGoal } from '@/types/models';
 import { Head, usePage } from '@inertiajs/react';
 import { PiggyBank, Settings, Wallet } from 'lucide-react';
 import { PriceRateFallback } from './forms/price-rate-fallback';
 import { InitialSavingsCard } from './initial-savings/initial-savings-card';
-
-interface SavingsGoal {
-    id: number;
-    title: string;
-    target_amount_usd: string;
-    target_amount_egp: number;
-    current_amount_usd: number;
-    current_amount_egp: number;
-    effective_target_amount_usd: number;
-    effective_target_amount_egp: number;
-    safety_margin_percentage: number;
-    safety_margin_amount_usd: number;
-    safety_margin_amount_egp: number;
-    progress_percentage: number;
-    effective_progress_percentage: number;
-    severity: 'low' | 'medium' | 'high' | 'very-high';
-    target_date: string | null;
-    is_achieved: boolean;
-    is_overdue: boolean;
-    achieved_at: string | null;
-    success_notification_dismissed: boolean;
-    success_notification_shown_at: string | null;
-}
 
 interface IndexProps {
     latestSnapshotTotals?: LatestSnapshotTotals | null;
