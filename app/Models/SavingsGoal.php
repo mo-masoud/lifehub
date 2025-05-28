@@ -15,6 +15,7 @@ class SavingsGoal extends Model
         'user_id',
         'title',
         'target_amount_usd',
+        'safety_margin_percentage',
         'severity',
         'target_date',
         'is_achieved',
@@ -25,6 +26,7 @@ class SavingsGoal extends Model
 
     protected $casts = [
         'target_amount_usd' => 'decimal:2',
+        'safety_margin_percentage' => 'decimal:2',
         'target_date' => 'date',
         'is_achieved' => 'boolean',
         'achieved_at' => 'datetime',
@@ -32,7 +34,18 @@ class SavingsGoal extends Model
         'success_notification_shown_at' => 'datetime',
     ];
 
-    protected $appends = ['target_amount_egp', 'current_amount_usd', 'current_amount_egp', 'progress_percentage', 'is_overdue'];
+    protected $appends = [
+        'target_amount_egp',
+        'current_amount_usd',
+        'current_amount_egp',
+        'progress_percentage',
+        'effective_target_amount_usd',
+        'effective_target_amount_egp',
+        'safety_margin_amount_usd',
+        'safety_margin_amount_egp',
+        'effective_progress_percentage',
+        'is_overdue'
+    ];
 
     public function user(): BelongsTo
     {
@@ -45,7 +58,7 @@ class SavingsGoal extends Model
     public function targetAmountEgp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->target_amount_usd * $this->user->getUsdRate()
+            get: fn() => $this->target_amount_usd * $this->user->getUsdRate()
         );
     }
 
@@ -96,12 +109,30 @@ class SavingsGoal extends Model
     }
 
     /**
+     * Get progress percentage against effective target (including safety margin) (0-100)
+     */
+    public function effectiveProgressPercentage(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->effective_target_amount_usd <= 0) {
+                    return 0;
+                }
+
+                $progress = ($this->current_amount_usd / $this->effective_target_amount_usd) * 100;
+
+                return min(100, max(0, round($progress, 1)));
+            }
+        );
+    }
+
+    /**
      * Check if goal is overdue
      */
     public function isOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->target_date && $this->target_date->isPast() && ! $this->is_achieved
+            get: fn() => $this->target_date && $this->target_date->isPast() && ! $this->is_achieved
         );
     }
 
@@ -157,7 +188,7 @@ class SavingsGoal extends Model
      */
     public function checkAndUpdateAchievement(): void
     {
-        if (! $this->is_achieved && $this->current_amount_usd >= $this->target_amount_usd) {
+        if (! $this->is_achieved && $this->current_amount_usd >= $this->effective_target_amount_usd) {
             $this->markAsAchieved();
         }
     }
@@ -220,5 +251,48 @@ class SavingsGoal extends Model
         $usdRate = $user->getUsdRate();
 
         return $egpAmount / $usdRate;
+    }
+
+    /**
+     * Get effective target amount in USD (including safety margin)
+     */
+    public function effectiveTargetAmountUsd(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $safetyMarginAmount = $this->target_amount_usd * ($this->safety_margin_percentage / 100);
+                return $this->target_amount_usd + $safetyMarginAmount;
+            }
+        );
+    }
+
+    /**
+     * Get effective target amount in EGP (including safety margin)
+     */
+    public function effectiveTargetAmountEgp(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->effective_target_amount_usd * $this->user->getUsdRate()
+        );
+    }
+
+    /**
+     * Get safety margin amount in USD
+     */
+    public function safetyMarginAmountUsd(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->target_amount_usd * ($this->safety_margin_percentage / 100)
+        );
+    }
+
+    /**
+     * Get safety margin amount in EGP
+     */
+    public function safetyMarginAmountEgp(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->safety_margin_amount_usd * $this->user->getUsdRate()
+        );
     }
 }

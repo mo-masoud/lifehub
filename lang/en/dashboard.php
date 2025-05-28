@@ -288,6 +288,15 @@ return [
         'total_month' => 'Total in month',
         'total_week' => 'Total in week',
         'goals' => 'Goals',
+        'safety_margin_percentage' => 'Safety Margin (%)',
+        'safety_margin_percentage_placeholder' => 'Enter safety margin percentage (0-100%)',
+        'safety_margin_amount' => 'Safety Margin Amount',
+        'effective_target' => 'Effective Target',
+        'target_amount' => 'Target Amount',
+        'progress_to_target' => 'Progress to Target',
+        'progress_to_effective_target' => 'Progress to Effective Target',
+        'includes_safety_margin' => 'Includes {:percentage}% safety margin',
+        'safety_margin_info' => 'The safety margin adds an additional buffer to your goal target',
     ],
 
     'auth_layout' => [

@@ -54,8 +54,9 @@ class SavingsGoalsController extends Controller
         $goal = $user->savingsGoals()->create([
             'title' => $validated['title'],
             'target_amount_usd' => $targetAmountUsd,
+            'safety_margin_percentage' => $validated['safety_margin_percentage'] ?? 0,
             'severity' => $validated['severity'],
-            'target_date' => $validated['target_date'],
+            'target_date' => $validated['target_date'] ?? null,
         ]);
 
         // Check if already achieved
@@ -83,8 +84,9 @@ class SavingsGoalsController extends Controller
         $savingsGoal->update([
             'title' => $validated['title'],
             'target_amount_usd' => $targetAmountUsd,
+            'safety_margin_percentage' => $validated['safety_margin_percentage'] ?? 0,
             'severity' => $validated['severity'],
-            'target_date' => $validated['target_date'],
+            'target_date' => $validated['target_date'] ?? null,
         ]);
 
         // Check if newly achieved after update

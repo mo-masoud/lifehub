@@ -171,3 +171,152 @@ test('manual achievement marking works correctly', function () {
         ->and($goal->fresh()->achieved_at)->not->toBeNull()
         ->and($goal->fresh()->success_notification_shown_at)->not->toBeNull();
 });
+
+test('achievement logic respects safety margin', function () {
+    // Create a storage location for testing
+    $storageLocation = \App\Models\SavingsStorageLocation::factory()->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    // Create a goal with 10% safety margin
+    $goal = SavingsGoal::factory()->create([
+        'user_id' => $this->user->id,
+        'target_amount_usd' => 1000,
+        'safety_margin_percentage' => 10, // 10% safety margin = $100
+        'is_achieved' => false,
+        'achieved_at' => null,
+    ]);
+
+    // Create a snapshot with savings equal to base target (but not effective target)
+    $snapshot = new \App\Models\Snapshot([
+        'user_id' => $this->user->id,
+        'usd_rate' => 50.0,
+        'gold24_price' => 3000,
+        'gold21_price' => 2625,
+    ]);
+    $snapshot->save();
+
+    // Create snapshot item with $1000 USD (base target, but not enough for safety margin)
+    $snapshotItem = new \App\Models\SnapshotItem([
+        'snapshot_id' => $snapshot->id,
+        'type' => \App\Enums\SavingType::EGP->value,
+        'storage_location_id' => $storageLocation->id,
+        'amount' => 50000, // EGP amount
+        'rate' => 1.0,
+    ]);
+    $snapshotItem->save();
+
+    // Verify effective target is correct
+    expect($goal->effective_target_amount_usd)->toBe(1100.0);
+
+    // At base target ($1000), goal should NOT be achieved
+    expect((float) $goal->current_amount_usd)->toBe(1000.0);
+    $goal->checkAndUpdateAchievement();
+    expect($goal->fresh()->is_achieved)->toBeFalse();
+
+    // Add more savings to reach effective target ($1100)
+    $snapshotItem->update(['amount' => 55000]); // $1100 USD
+    $snapshot->refresh();
+    $goal->refresh();
+
+    // Now goal should be achieved
+    expect((float) $goal->current_amount_usd)->toBe(1100.0);
+    $goal->checkAndUpdateAchievement();
+    expect($goal->fresh()->is_achieved)->toBeTrue();
+});
+
+test('achievement logic works without safety margin', function () {
+    // Create a storage location for testing
+    $storageLocation = \App\Models\SavingsStorageLocation::factory()->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    // Create a goal with no safety margin
+    $goal = SavingsGoal::factory()->create([
+        'user_id' => $this->user->id,
+        'target_amount_usd' => 1000,
+        'safety_margin_percentage' => 0, // No safety margin
+        'is_achieved' => false,
+        'achieved_at' => null,
+    ]);
+
+    // Create a snapshot with savings equal to target
+    $snapshot = new \App\Models\Snapshot([
+        'user_id' => $this->user->id,
+        'usd_rate' => 50.0,
+        'gold24_price' => 3000,
+        'gold21_price' => 2625,
+    ]);
+    $snapshot->save();
+
+    // Create snapshot item with exactly $1000 USD
+    $snapshotItem = new \App\Models\SnapshotItem([
+        'snapshot_id' => $snapshot->id,
+        'type' => \App\Enums\SavingType::EGP->value,
+        'storage_location_id' => $storageLocation->id,
+        'amount' => 50000, // EGP amount = $1000 USD
+        'rate' => 1.0,
+    ]);
+    $snapshotItem->save();
+
+    // Verify effective target equals base target
+    expect($goal->effective_target_amount_usd)->toBe(1000.0);
+
+    // At base target, goal should be achieved
+    expect((float) $goal->current_amount_usd)->toBe(1000.0);
+    $goal->checkAndUpdateAchievement();
+    expect($goal->fresh()->is_achieved)->toBeTrue();
+});
+
+test('achievement logic handles high safety margins correctly', function () {
+    // Create a storage location for testing
+    $storageLocation = \App\Models\SavingsStorageLocation::factory()->create([
+        'user_id' => $this->user->id,
+    ]);
+
+    // Create a goal with 25% safety margin
+    $goal = SavingsGoal::factory()->create([
+        'user_id' => $this->user->id,
+        'target_amount_usd' => 2000,
+        'safety_margin_percentage' => 25, // 25% safety margin = $500
+        'is_achieved' => false,
+        'achieved_at' => null,
+    ]);
+
+    // Create snapshot
+    $snapshot = new \App\Models\Snapshot([
+        'user_id' => $this->user->id,
+        'usd_rate' => 50.0,
+        'gold24_price' => 3000,
+        'gold21_price' => 2625,
+    ]);
+    $snapshot->save();
+
+    // Create snapshot item with $2400 USD (just below effective target of $2500)
+    $snapshotItem = new \App\Models\SnapshotItem([
+        'snapshot_id' => $snapshot->id,
+        'type' => \App\Enums\SavingType::EGP->value,
+        'storage_location_id' => $storageLocation->id,
+        'amount' => 120000, // EGP amount = $2400 USD
+        'rate' => 1.0,
+    ]);
+    $snapshotItem->save();
+
+    // Verify calculations
+    expect($goal->effective_target_amount_usd)->toBe(2500.0);
+    expect((float) $goal->current_amount_usd)->toBe(2400.0);
+
+    // Should not be achieved yet
+    $goal->checkAndUpdateAchievement();
+    expect($goal->fresh()->is_achieved)->toBeFalse();
+
+    // Add enough to reach effective target
+    $snapshotItem->update(['amount' => 125000]); // $2500 USD
+    $snapshot->refresh();
+    $goal->refresh();
+
+    // Now should be achieved
+    expect((float) $goal->current_amount_usd)->toBe(2500.0);
+    $goal->checkAndUpdateAchievement();
+    expect($goal->fresh()->is_achieved)->toBeTrue();
+});

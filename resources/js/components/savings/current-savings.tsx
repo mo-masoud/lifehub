@@ -9,11 +9,17 @@ import { toast } from 'sonner';
 interface SavingsGoal {
     id: number;
     title: string;
-    target_amount_usd: number;
+    target_amount_usd: string;
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
+    effective_progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
     is_achieved: boolean;
@@ -45,6 +51,8 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
         );
     };
 
+    console.log({ savingsGoals });
+
     // Get the most important goal (highest priority + near deadline)
     const importantGoal = savingsGoals
         .filter((goal) => !goal.is_achieved)
@@ -70,7 +78,8 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
             return 0;
         })[0];
 
-    const totalTargetUsd = savingsGoals.reduce((sum, goal) => sum + goal.target_amount_usd, 0);
+    const totalTargetUsd = savingsGoals.reduce((sum, goal) => sum + parseFloat(goal.target_amount_usd), 0);
+
     const overallProgress = totalTargetUsd > 0 ? Math.min(100, (totalUsd / totalTargetUsd) * 100) : 0;
 
     return (
@@ -134,7 +143,7 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
                             )}
 
                             {/* Most Important Goal */}
-                            {importantGoal && (
+                            {importantGoal ? (
                                 <div className="rounded border border-dashed border-zinc-200 bg-zinc-50/50 p-2 dark:border-zinc-700 dark:bg-zinc-900/50">
                                     <div className="mb-1 flex items-center gap-1">
                                         <Goal className="size-3 text-blue-600 dark:text-blue-400" />
@@ -158,6 +167,11 @@ export const CurrentSavings = ({ date, totalEgp, totalUsd, savingsGoals = [] }: 
                                             </span>
                                         </div>
                                     )}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-center">
+                                    <Target className="mb-1 size-6 text-zinc-400" />
+                                    <span className="text-xs text-zinc-500 dark:text-zinc-400">{__('No goals set')}</span>
                                 </div>
                             )}
                         </>

@@ -9,10 +9,15 @@ import { toast } from 'sonner';
 interface SavingsGoal {
     id: number;
     title: string;
-    target_amount_usd: number;
+    target_amount_usd: string;
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
@@ -82,7 +87,7 @@ export const SavingsGoalNotifications = ({ goals }: Props) => {
                         <div className="flex-1">
                             <div className="font-medium text-green-800 dark:text-green-300">🎉 {__('Congratulations! Goal Achieved')}</div>
                             <div className="mt-1 text-sm text-green-700 dark:text-green-400">
-                                <strong>"{goal.title}"</strong> - ${formatNumber(goal.target_amount_usd)}
+                                <strong>"{goal.title}"</strong> - ${formatNumber(parseFloat(goal.target_amount_usd))}
                                 {goal.achieved_at && (
                                     <span className="ml-1">
                                         ({__('achieved on')} {new Date(goal.achieved_at).toLocaleDateString()})
@@ -128,9 +133,11 @@ export const SavingsGoalNotifications = ({ goals }: Props) => {
                                 )}
                             </div>
                             <div className="mt-1 text-xs text-red-600 dark:text-red-500">
-                                ${formatNumber(goal.current_amount_usd)} / ${formatNumber(goal.target_amount_usd)}
+                                ${formatNumber(goal.current_amount_usd)} / ${formatNumber(parseFloat(goal.target_amount_usd))}
                                 <span className="ml-1">
-                                    ({__('$:amount remaining', { amount: formatNumber(goal.target_amount_usd - goal.current_amount_usd) })})
+                                    (
+                                    {__('$:amount remaining', { amount: formatNumber(parseFloat(goal.target_amount_usd) - goal.current_amount_usd) })}
+                                    )
                                 </span>
                             </div>
                         </div>

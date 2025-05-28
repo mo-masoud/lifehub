@@ -21,7 +21,13 @@ interface SavingsGoal {
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
+    effective_progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
     is_achieved: boolean;
@@ -117,8 +123,15 @@ export default function SavingsGoalsIndex({ goals }: Props) {
                                 <TableRow key={goal.id}>
                                     <TableCell className="text-start text-sm font-medium">{goal.title}</TableCell>
                                     <TableCell className="text-start text-sm">
-                                        ${formatNumber(goal.target_amount_usd)}
-                                        <span className="text-muted-foreground block text-xs">{formatNumber(goal.target_amount_egp)} EGP</span>
+                                        <div>
+                                            ${formatNumber(goal.target_amount_usd)}
+                                            <span className="text-muted-foreground block text-xs">{formatNumber(goal.target_amount_egp)} EGP</span>
+                                            {goal.safety_margin_percentage > 0 && (
+                                                <span className="block text-xs text-purple-600 dark:text-purple-400">
+                                                    Effective: ${formatNumber(goal.effective_target_amount_usd)}
+                                                </span>
+                                            )}
+                                        </div>
                                     </TableCell>
                                     <TableCell className="text-start text-sm">
                                         <div className="space-y-1">
@@ -127,6 +140,16 @@ export default function SavingsGoalsIndex({ goals }: Props) {
                                                 <span>{Math.round(goal.progress_percentage)}%</span>
                                             </div>
                                             <Progress value={goal.progress_percentage} className="h-2" />
+
+                                            {goal.safety_margin_percentage > 0 && (
+                                                <>
+                                                    <div className="flex justify-between text-xs text-purple-600 dark:text-purple-400">
+                                                        <span>w/ {goal.safety_margin_percentage}% margin</span>
+                                                        <span>{Math.round(goal.effective_progress_percentage)}%</span>
+                                                    </div>
+                                                    <Progress value={goal.effective_progress_percentage} className="h-1.5 opacity-60" />
+                                                </>
+                                            )}
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-start text-sm">

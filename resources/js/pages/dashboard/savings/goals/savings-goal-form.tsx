@@ -14,6 +14,9 @@ interface SavingsGoal {
     title: string;
     target_amount_usd: number;
     target_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage?: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
 }
@@ -27,6 +30,7 @@ const goalSchema = z.object({
     title: z.string().min(1, 'Title is required').max(255, 'Title is too long'),
     target_amount: z.coerce.number().min(0.01, 'Amount must be greater than 0'),
     currency: z.enum(['USD', 'EGP']),
+    safety_margin_percentage: z.coerce.number().min(0, 'Safety margin must be 0 or greater').max(100, 'Safety margin cannot exceed 100%').optional(),
     severity: z.enum(['low', 'medium', 'high', 'very-high']),
     target_date: z.string().optional(),
 });
@@ -60,6 +64,7 @@ export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
             title: goalData?.title || '',
             target_amount: initialAmount,
             currency: initialCurrency,
+            safety_margin_percentage: goalData?.safety_margin_percentage || 0,
             severity: goalData?.severity || 'medium',
             target_date: goalData?.target_date || '',
         },
@@ -70,6 +75,7 @@ export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
             title: data.title,
             target_amount: data.target_amount,
             currency: data.currency,
+            safety_margin_percentage: data.safety_margin_percentage || 0,
             severity: data.severity,
             target_date: data.target_date || null,
         };
@@ -208,6 +214,33 @@ export function SavingsGoalForm({ goal, onSave }: SavingsGoalFormProps) {
                                 <Input type="date" {...field} />
                             </FormControl>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="safety_margin_percentage"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Safety Margin (%)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    max="100"
+                                    placeholder="0"
+                                    value={field.value || ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const numericValue = value === '' ? 0 : parseFloat(value);
+                                        field.onChange(isNaN(numericValue) ? 0 : numericValue);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                            <p className="text-muted-foreground text-xs">Add a safety buffer above your target amount (0-100%)</p>
                         </FormItem>
                     )}
                 />

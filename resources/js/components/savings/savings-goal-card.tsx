@@ -14,7 +14,13 @@ interface SavingsGoal {
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
+    effective_progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
     is_achieved: boolean;
@@ -153,11 +159,22 @@ export const SavingsGoalCard = ({ goal, compact = false, showActions = true, onE
             {/* Progress */}
             <div className="mb-4 space-y-3">
                 <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{__('Progress')}</span>
+                    <span className="text-sm font-medium">{__('Progress to Target')}</span>
                     <span className="text-sm font-bold">{goal.progress_percentage}%</span>
                 </div>
 
                 <Progress value={goal.progress_percentage} className="h-3" />
+
+                {goal.safety_margin_percentage > 0 && (
+                    <>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">{__('Progress to Effective Target')}</span>
+                            <span className="text-sm font-bold text-purple-600 dark:text-purple-400">{goal.effective_progress_percentage}%</span>
+                        </div>
+
+                        <Progress value={goal.effective_progress_percentage} className="h-2" />
+                    </>
+                )}
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -175,6 +192,19 @@ export const SavingsGoalCard = ({ goal, compact = false, showActions = true, onE
                             <span className="text-muted-foreground ml-1 text-xs">({formatNumber(goal.target_amount_egp)} £)</span>
                         </div>
                     </div>
+
+                    {goal.safety_margin_percentage > 0 && (
+                        <div>
+                            <div className="text-muted-foreground">{__('Effective Target (with safety margin)')}</div>
+                            <div className="font-semibold">
+                                <span className="text-purple-600 dark:text-purple-400">{formatNumber(goal.effective_target_amount_usd)} $</span>
+                                <span className="text-muted-foreground ml-1 text-xs">({formatNumber(goal.effective_target_amount_egp)} £)</span>
+                            </div>
+                            <div className="text-muted-foreground mt-1 text-xs">
+                                +{goal.safety_margin_percentage}% safety margin ({formatNumber(goal.safety_margin_amount_usd)} $)
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

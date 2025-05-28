@@ -13,11 +13,17 @@ import { InitialSavingsCard } from './initial-savings/initial-savings-card';
 interface SavingsGoal {
     id: number;
     title: string;
-    target_amount_usd: number;
+    target_amount_usd: string;
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
+    effective_progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
     is_achieved: boolean;

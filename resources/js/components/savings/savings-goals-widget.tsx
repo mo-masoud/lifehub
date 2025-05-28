@@ -13,7 +13,13 @@ interface SavingsGoal {
     target_amount_egp: number;
     current_amount_usd: number;
     current_amount_egp: number;
+    effective_target_amount_usd: number;
+    effective_target_amount_egp: number;
+    safety_margin_percentage: number;
+    safety_margin_amount_usd: number;
+    safety_margin_amount_egp: number;
     progress_percentage: number;
+    effective_progress_percentage: number;
     severity: 'low' | 'medium' | 'high' | 'very-high';
     target_date: string | null;
     is_achieved: boolean;
@@ -135,15 +141,30 @@ export const SavingsGoalsWidget = ({ goals, totalUsd }: Props) => {
                                 <Badge className={`ml-2 text-xs ${getSeverityColor(goal.severity)}`}>{__(goal.severity)}</Badge>
                             </div>
 
-                            <div className="mb-2">
+                            <div className="mb-2 space-y-1">
                                 <Progress value={goal.progress_percentage} className="h-1.5" />
+
+                                {goal.safety_margin_percentage > 0 && (
+                                    <Progress value={goal.effective_progress_percentage} className="h-1 opacity-60" />
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-between text-xs">
-                                <span className="text-gray-600 dark:text-gray-400">
-                                    ${formatNumber(goal.current_amount_usd)} / ${formatNumber(goal.target_amount_usd)}
-                                </span>
-                                <span className="font-medium">{goal.progress_percentage.toFixed(1)}%</span>
+                            <div className="space-y-1 text-xs">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-gray-600 dark:text-gray-400">
+                                        ${formatNumber(goal.current_amount_usd)} / ${formatNumber(goal.target_amount_usd)}
+                                    </span>
+                                    <span className="font-medium">{goal.progress_percentage.toFixed(1)}%</span>
+                                </div>
+
+                                {goal.safety_margin_percentage > 0 && (
+                                    <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-400">
+                                        <span className="text-xs">
+                                            w/ {goal.safety_margin_percentage}% margin: ${formatNumber(goal.effective_target_amount_usd)}
+                                        </span>
+                                        <span className="font-medium">{goal.effective_progress_percentage?.toFixed(1)}%</span>
+                                    </div>
+                                )}
                             </div>
 
                             {goal.target_date && (

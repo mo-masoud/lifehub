@@ -75,4 +75,45 @@ describe('SavingsGoals API', function () {
 
         $response->assertUnauthorized();
     });
+
+    // Form validation tests for safety margin
+    it('accepts valid safety margin percentage in form', function () {
+        $response = $this->actingAs($this->user)
+            ->postJson(route('dashboard.savings.goals.store'), [
+                'title' => 'Test Goal',
+                'target_amount' => 1000,
+                'currency' => 'USD',
+                'safety_margin_percentage' => 15,
+                'severity' => 'medium',
+            ]);
+
+        $response->assertRedirect()
+            ->assertSessionHasNoErrors();
+    });
+
+    it('rejects negative safety margin percentage', function () {
+        $response = $this->actingAs($this->user)
+            ->postJson(route('dashboard.savings.goals.store'), [
+                'title' => 'Test Goal',
+                'target_amount' => 1000,
+                'currency' => 'USD',
+                'safety_margin_percentage' => -5,
+                'severity' => 'medium',
+            ]);
+
+        $response->assertJsonValidationErrors(['safety_margin_percentage']);
+    });
+
+    it('rejects safety margin percentage over 100', function () {
+        $response = $this->actingAs($this->user)
+            ->postJson(route('dashboard.savings.goals.store'), [
+                'title' => 'Test Goal',
+                'target_amount' => 1000,
+                'currency' => 'USD',
+                'safety_margin_percentage' => 150,
+                'severity' => 'medium',
+            ]);
+
+        $response->assertJsonValidationErrors(['safety_margin_percentage']);
+    });
 });

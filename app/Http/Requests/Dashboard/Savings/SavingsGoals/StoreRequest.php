@@ -24,6 +24,7 @@ class StoreRequest extends FormRequest
             'title' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0.01',
             'currency' => 'required|in:USD,EGP',
+            'safety_margin_percentage' => 'nullable|numeric|min:0|max:100',
             'severity' => 'required|in:low,medium,high,very-high',
             'target_date' => 'nullable|date|after_or_equal:today',
         ];
