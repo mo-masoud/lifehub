@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Snapshot extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'user_id',
         'usd_rate',
@@ -46,7 +48,7 @@ class Snapshot extends Model
     public function totalUsd(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->items->sum(function ($item) {
+            get: fn() => $this->items->sum(function ($item) {
                 return ($item->amount * $item->rate) / $this->usd_rate;
             })
         );

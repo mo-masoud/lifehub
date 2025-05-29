@@ -33,11 +33,6 @@ class HomeController extends Controller
             // User has completed initial savings, show regular stats
             $savingsGoals = $user->savingsGoals()->get();
 
-            // Check and update achievement status for all goals
-            foreach ($savingsGoals as $goal) {
-                $goal->checkAndUpdateAchievement();
-            }
-
             $data = array_merge($data, [
                 'latestSnapshotTotals' => $this->dashboardStatsService->getLatestSnapshotTotals(),
                 'topTransactions' => $this->dashboardStatsService->getTopTransactionsByPeriod(),

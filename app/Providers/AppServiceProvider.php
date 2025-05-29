@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Password;
+use App\Models\Snapshot;
 use App\Models\SSH;
 use App\Observers\PasswordObserver;
+use App\Observers\SnapshotObserver;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
 
         // Register observers
         Password::observe(PasswordObserver::class);
+        Snapshot::observe(SnapshotObserver::class);
     }
 }
