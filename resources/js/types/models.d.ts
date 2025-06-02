@@ -22,4 +22,7 @@ export interface Password extends BaseModel {
     last_used_at?: Date;
     expires_at?: Date;
     cli?: string;
+    is_expired?: boolean;
+    is_expired_soon?: boolean;
+    folder?: Folder;
 }

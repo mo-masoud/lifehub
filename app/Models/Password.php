@@ -28,6 +28,8 @@ class Password extends Model
 
     protected $appends = [
         'cli',
+        'is_expired',
+        'is_expired_soon',
     ];
 
     protected $casts = [
@@ -53,6 +55,20 @@ class Password extends Model
     {
         return Attribute::make(
             get: fn() => $this->type === PasswordTypes::SSH ? 'ssh ' . $this->username . '@' . $this->url : null,
+        );
+    }
+
+    public function isExpired(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->expires_at && $this->expires_at < now(),
+        );
+    }
+
+    public function isExpiredSoon(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->expires_at && $this->expires_at <= now()->addDays(15),
         );
     }
 
