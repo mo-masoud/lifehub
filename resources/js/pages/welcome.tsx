@@ -19,8 +19,8 @@ export default function Welcome() {
                     </Link>
 
                     <div className="flex items-center gap-2">
-                        <GradientButton variant="outline" className="w-24">
-                            Sign in
+                        <GradientButton variant="outline" className="w-24" asChild>
+                            <Link href={route('login')}>Sign in</Link>
                         </GradientButton>
                         <GradientButton className="w-28">
                             <Sparkles />

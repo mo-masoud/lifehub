@@ -162,6 +162,10 @@
         @apply bg-gradient-to-br from-violet-100 via-white to-cyan-100 dark:from-violet-950 dark:via-gray-900 dark:to-cyan-950;
     }
 
+    .bg-gradient-deep {
+        @apply bg-gradient-to-br from-violet-600 via-white to-cyan-600 dark:from-violet-950 dark:via-gray-900 dark:to-cyan-950;
+    }
+
     .text-gradient {
         @apply bg-gradient-to-r from-violet-600 to-cyan-600 bg-clip-text text-transparent;
     }
