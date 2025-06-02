@@ -14,7 +14,7 @@ export const NotificationsNav = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
-                    <span className="bg-destructive absolute top-0 right-0 inline-flex size-4 items-center justify-center rounded-full p-1 text-xs font-semibold text-white">
+                    <span className="absolute top-0 right-0 inline-flex size-4 items-center justify-center rounded-full bg-red-500 p-1 text-[11px] font-semibold text-white">
                         3
                     </span>
                     <Bell className="animate-wiggle" />
