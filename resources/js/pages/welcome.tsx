@@ -22,9 +22,11 @@ export default function Welcome() {
                         <GradientButton variant="outline" className="w-24" asChild>
                             <Link href={route('login')}>Sign in</Link>
                         </GradientButton>
-                        <GradientButton className="w-28">
-                            <Sparkles />
-                            <span>Sign up</span>
+                        <GradientButton className="w-28" asChild>
+                            <Link href={route('register')}>
+                                <Sparkles />
+                                <span>Sign up</span>
+                            </Link>
                         </GradientButton>
                     </div>
                 </header>
@@ -41,9 +43,11 @@ export default function Welcome() {
                         </p>
 
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <GradientButton className="group">
-                                Get Early Access
-                                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                            <GradientButton className="group" asChild>
+                                <Link href={route('register')}>
+                                    <span>Get Early Access</span>
+                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                                </Link>
                             </GradientButton>
 
                             <GradientButton variant="outline" size="lg">

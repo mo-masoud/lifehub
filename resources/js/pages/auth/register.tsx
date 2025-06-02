@@ -1,10 +1,9 @@
-import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { LoaderCircle, Sparkles } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
+import { GradientButton } from '@/components/ui/grediant-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -101,17 +100,22 @@ export default function Register() {
                         <InputError message={errors.password_confirmation} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    <GradientButton type="submit" className="group mt-4 w-full" tabIndex={5} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
-                    </Button>
+                        <Sparkles className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                    </GradientButton>
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                <div className="flex flex-col items-center gap-2">
+                    <div className="flex w-full items-center gap-4">
+                        <hr className="border-muted-foreground/20 flex-1" />
+                        <p className="text-muted-foreground text-center text-sm">Already have an account?</p>
+                        <hr className="border-muted-foreground/20 flex-1" />
+                    </div>
+                    <Link href={route('login')} className="text-gradient font-semibold transition-transform duration-200 hover:scale-105">
                         Log in
-                    </TextLink>
+                    </Link>
                 </div>
             </form>
         </AuthLayout>

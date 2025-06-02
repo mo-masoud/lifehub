@@ -1,10 +1,10 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, Mail } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
+import { GradientButton } from '@/components/ui/grediant-button';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function VerifyEmail({ status }: { status?: string }) {
@@ -27,12 +27,17 @@ export default function VerifyEmail({ status }: { status?: string }) {
             )}
 
             <form onSubmit={submit} className="space-y-6 text-center">
-                <Button disabled={processing} variant="secondary">
+                <GradientButton type="submit" disabled={processing} className="group w-full">
                     {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                     Resend verification email
-                </Button>
+                    <Mail className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                </GradientButton>
 
-                <TextLink href={route('logout')} method="post" className="mx-auto block text-sm">
+                <TextLink
+                    href={route('logout')}
+                    method="post"
+                    className="text-gradient mx-auto block text-sm font-semibold transition-transform duration-200 hover:scale-105"
+                >
                     Log out
                 </TextLink>
             </form>

@@ -61,7 +61,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <div className="flex items-center">
                             <Label htmlFor="password">Password</Label>
                             {canResetPassword && (
-                                <TextLink href={route('password.request')} className="text-gradient ml-auto text-sm underline" tabIndex={5}>
+                                <TextLink href={route('password.request')} className="text-gradient ml-auto text-sm" tabIndex={5}>
                                     Forgot password?
                                 </TextLink>
                             )}
@@ -97,9 +97,13 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </GradientButton>
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{' '}
-                    <Link href={route('register')} tabIndex={5} className="text-gradient font-semibold">
+                <div className="flex flex-col items-center gap-2">
+                    <div className="flex w-full items-center gap-4">
+                        <hr className="border-muted-foreground/20 flex-1" />
+                        <p className="text-muted-foreground text-center text-sm">New to LifeHub?</p>
+                        <hr className="border-muted-foreground/20 flex-1" />
+                    </div>
+                    <Link href={route('register')} className="text-gradient font-semibold transition-transform duration-200 hover:scale-105">
                         Sign up
                     </Link>
                 </div>
