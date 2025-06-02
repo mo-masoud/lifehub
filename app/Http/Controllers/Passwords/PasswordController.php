@@ -22,7 +22,8 @@ class PasswordController extends Controller
                 $query->where(function ($q) use ($request) {
                     $q->where('name', 'like', '%' . $request->search . '%')
                         ->orWhere('username', 'like', '%' . $request->search . '%')
-                        ->orWhere('url', 'like', '%' . $request->search . '%');
+                        ->orWhere('url', 'like', '%' . $request->search . '%')
+                        ->orWhere('notes', 'like', '%' . $request->search . '%');
                 });
             })
             ->when($request->filled('expired'), function ($query) {
