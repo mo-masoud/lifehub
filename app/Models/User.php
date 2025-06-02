@@ -45,4 +45,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the folders for the user.
+     */
+    public function folders()
+    {
+        return $this->hasMany(Folder::class);
+    }
+
+    /**
+     * Get the passwords for the user.
+     */
+    public function passwords()
+    {
+        return $this->hasMany(Password::class);
+    }
 }
