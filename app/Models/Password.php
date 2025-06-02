@@ -52,7 +52,7 @@ class Password extends Model
     public function cli(): Attribute
     {
         return Attribute::make(
-            get: fn() => 'ssh ' . $this->username . '@' . $this->url,
+            get: fn() => $this->type === PasswordTypes::SSH ? 'ssh ' . $this->username . '@' . $this->url : null,
         );
     }
 
