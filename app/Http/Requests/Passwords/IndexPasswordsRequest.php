@@ -25,7 +25,7 @@ class IndexPasswordsRequest extends FormRequest
     {
         return [
             'folder_id' => ['nullable', 'integer', 'exists:folders,id'],
-            'sort' => ['nullable', 'string', 'in:name,last_used_at,copied,folder_id,expires_at'],
+            'sort' => ['nullable', 'string', 'in:name,username,last_used_at'],
             'direction' => ['nullable', 'string', 'in:asc,desc'],
             'search' => ['nullable', 'string', 'max:255'],
             'per_page' => ['nullable', 'integer', 'min:1'],

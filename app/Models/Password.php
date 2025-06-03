@@ -30,6 +30,7 @@ class Password extends Model
         'cli',
         'is_expired',
         'is_expired_soon',
+        'last_used_at_formatted',
     ];
 
     protected $casts = [
@@ -68,7 +69,14 @@ class Password extends Model
     public function isExpiredSoon(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->expires_at && $this->expires_at <= now()->addDays(15),
+            get: fn() => $this->expires_at && $this->expires_at <= now()->addDays(15) && $this->expires_at > now(),
+        );
+    }
+
+    public function lastUsedAtFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : $this->updated_at->diffForHumans(),
         );
     }
 
@@ -83,7 +91,14 @@ class Password extends Model
     public function scopeExpiresSoon($query)
     {
         return $query->whereNotNull('expires_at')
-            ->where('expires_at', '<=', now()->addDays(15));
+            ->where('expires_at', '<=', now()->addDays(15))
+            ->where('expires_at', '>', now());
+    }
+
+    public function scopeWhereExpired($query)
+    {
+        return $query->whereNotNull('expires_at')
+            ->where('expires_at', '<', now());
     }
 
     public function scopeSortByLastUsed($query)

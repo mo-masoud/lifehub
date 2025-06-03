@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Passwords;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\IndexPasswordsRequest;
-use App\Models\Password;
 
 class PasswordController extends Controller
 {
@@ -34,14 +33,42 @@ class PasswordController extends Controller
                 $query->expiresSoon();
             })
             ->when($request->filled('sort'), function ($query) use ($request) {
-                $query->orderBy($request->sort, $request->direction ?? 'asc');
+                $query->orderBy($request->sort ?? 'last_used_at', $request->direction ?? 'desc');
             }, function ($query) {
-                $query->orderBy('last_copied_at', 'desc');
+                $query->orderBy('last_used_at', 'desc');
             })
-            ->paginate($request->per_page ?? 15);
+            ->paginate($request->per_page ?? 10);
+
+        $folders = auth()->user()->folders()
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+
+        $expirySoonCount = auth()->user()->passwords()
+            ->expiresSoon()
+            ->count();
+
+        $expiredCount = auth()->user()->passwords()
+            ->whereExpired()
+            ->count();
+
+        $filters = [
+            'folderId' => $request->folder_id,
+            'sort' => $request->sort ?? 'last_used_at',
+            'direction' => $request->direction ?? 'desc',
+            'search' => $request->search,
+            'perPage' => $request->per_page ?? 10,
+            'expired' => $request->expired,
+            'type' => $request->type,
+            'expireSoon' => $request->expire_soon,
+        ];
 
         return inertia('passwords/index', [
             'passwords' => $passwords,
+            'folders' => $folders,
+            'expirySoonCount' => $expirySoonCount,
+            'expiredCount' => $expiredCount,
+            'filters' => $filters,
         ]);
     }
 }
