@@ -43,8 +43,6 @@ type Filters = {
     sort: SortKey;
     direction: 'asc' | 'desc';
     search?: string;
-    expirySoon?: boolean;
-    expired?: boolean;
     type?: 'normal' | 'ssh';
     perPage?: number;
 };
@@ -52,8 +50,6 @@ type Filters = {
 interface PasswordsPageProps extends SharedData {
     passwords: Pagination<Password>;
     folders: Folder[];
-    expirySoonCount: number;
-    expiredCount: number;
     filters: Filters;
 }
 
@@ -61,7 +57,7 @@ export default function PasswordsPage() {
     const isInitialRender = useRef(true);
     const isMobile = useIsMobile();
 
-    const { passwords, folders, expirySoonCount, expiredCount, filters } = usePage<PasswordsPageProps>().props;
+    const { passwords, folders, filters } = usePage<PasswordsPageProps>().props;
 
     const [showCharts, setShowCharts] = useState<boolean>(false);
     const [showFilters, setShowFilters] = useState<boolean>(false);
@@ -206,15 +202,7 @@ export default function PasswordsPage() {
                                 leaveTo="opacity-0 transform translate-x-4"
                                 as="div"
                             >
-                                <PasswordsFilter
-                                    folders={folders}
-                                    expirySoonCount={expirySoonCount}
-                                    expiredCount={expiredCount}
-                                    setFolderId={setFolderId}
-                                    folderId={folderId}
-                                    setType={setType}
-                                    type={type}
-                                />
+                                <PasswordsFilter folders={folders} setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
                             </Transition>
                         </div>
 

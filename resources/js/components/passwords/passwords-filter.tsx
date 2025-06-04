@@ -1,24 +1,19 @@
 import { FoldersCombobox } from '@/components/folders/folders-combobox';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Folder } from '@/types/models';
-import { KeyRound, RectangleEllipsis, Terminal, TimerOff, TriangleAlert } from 'lucide-react';
+import { KeyRound, RectangleEllipsis, Terminal } from 'lucide-react';
 import { FC } from 'react';
-import { Button } from '../ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 interface PasswordsFilterProps {
     folders: Folder[];
-    expirySoonCount: number;
-    expiredCount: number;
     setType: (type: 'ssh' | 'normal' | undefined) => void;
     type: 'ssh' | 'normal' | undefined;
     setFolderId: (folderId: string) => void;
     folderId: string;
 }
 
-export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonCount, expiredCount, setFolderId, folderId, setType, type }) => {
-    const isMobile = useIsMobile();
-
+export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, setFolderId, folderId, setType, type }) => {
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
@@ -65,25 +60,6 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonC
                     </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-            {expirySoonCount > 0 && (
-                <Button variant="warning-outline" size={isMobile ? 'icon' : 'default'}>
-                    <span className="hidden md:block">Expiry soon</span>
-                    <TriangleAlert className="md:hidden" />
-                    <span className="bg-warning text-warning-foreground hidden size-5 items-center justify-center rounded-full p-1 text-[11px] font-bold md:inline-flex">
-                        {expirySoonCount > 9 ? '9+' : expirySoonCount}
-                    </span>
-                </Button>
-            )}
-            {expiredCount > 0 && (
-                <Button variant="destructive-outline" size={isMobile ? 'icon' : 'default'}>
-                    <span className="hidden md:block">Expired</span>
-                    <TimerOff className="md:hidden" />
-
-                    <span className="bg-destructive text-muted hidden size-5 items-center justify-center rounded-full p-1 text-[11px] font-bold md:inline-flex">
-                        {expiredCount > 9 ? '9+' : expiredCount}
-                    </span>
-                </Button>
-            )}
 
             <FoldersCombobox folders={folders} onSelectFolder={setFolderId} selectedFolder={folderId} />
         </div>

@@ -9,6 +9,7 @@ class PasswordController extends Controller
 {
     public function index(IndexPasswordsRequest $request)
     {
+        logs()->info('request', [$request->all()]);
         $passwords = auth()->user()->passwords()
             ->with('folder')
             ->when($request->filled('folder_id') && $request->folder_id !== 'all', function ($query) use ($request) {
@@ -24,13 +25,6 @@ class PasswordController extends Controller
                         ->orWhere('url', 'like', '%' . $request->search . '%')
                         ->orWhere('notes', 'like', '%' . $request->search . '%');
                 });
-            })
-            ->when($request->filled('expired'), function ($query) {
-                $query->whereNotNull('expires_at')
-                    ->where('expires_at', '<', now());
-            })
-            ->when($request->filled('expire_soon'), function ($query) {
-                $query->expiresSoon();
             })
             ->when($request->filled('sort'), function ($query) use ($request) {
                 $query->orderBy($request->sort ?? 'last_used_at', $request->direction ?? 'desc');
@@ -58,9 +52,7 @@ class PasswordController extends Controller
             'direction' => $request->direction,
             'search' => $request->search,
             'perPage' => $request->per_page,
-            'expired' => $request->expired,
             'type' => $request->type,
-            'expireSoon' => $request->expire_soon,
         ];
 
         return inertia('passwords/index', [
