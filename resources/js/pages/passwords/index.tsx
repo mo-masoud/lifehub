@@ -62,8 +62,6 @@ export default function PasswordsPage() {
 
     const { passwords, folders, expirySoonCount, expiredCount, filters } = usePage<PasswordsPageProps>().props;
 
-    console.log(passwords);
-
     const [showCharts, setShowCharts] = useState<boolean>(false);
     const [showFilters, setShowFilters] = useState<boolean>(false);
 
