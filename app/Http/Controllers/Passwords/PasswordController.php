@@ -11,8 +11,8 @@ class PasswordController extends Controller
     {
         $passwords = auth()->user()->passwords()
             ->with('folder')
-            ->when($request->filled('folder_id'), function ($query) use ($request) {
-                $query->where('folder_id', $request->folder_id);
+            ->when($request->filled('folder_id') && $request->folder_id !== 'all', function ($query) use ($request) {
+                $query->where('folder_id', $request->folder_id === 'none' ? null : $request->folder_id);
             })
             ->when($request->filled('type'), function ($query) use ($request) {
                 $query->where('type', $request->type);

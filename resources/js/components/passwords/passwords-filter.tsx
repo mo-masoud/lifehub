@@ -10,9 +10,11 @@ interface PasswordsFilterProps {
     folders: Folder[];
     expirySoonCount: number;
     expiredCount: number;
+    setFolderId: (folderId: string) => void;
+    folderId: string;
 }
 
-export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonCount, expiredCount }) => {
+export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonCount, expiredCount, setFolderId, folderId }) => {
     const isMobile = useIsMobile();
 
     const [passwordType, setPasswordType] = useState<string>('all');
@@ -82,7 +84,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonC
                 </Button>
             )}
 
-            <FoldersCombobox folders={folders} />
+            <FoldersCombobox folders={folders} onSelectFolder={setFolderId} selectedFolder={folderId} />
         </div>
     );
 };

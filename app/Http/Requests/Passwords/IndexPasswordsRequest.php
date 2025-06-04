@@ -24,7 +24,7 @@ class IndexPasswordsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'folder_id' => ['nullable', 'integer', 'exists:folders,id'],
+            'folder_id' => ['nullable', 'string'],
             'sort' => ['nullable', 'string', 'in:name,username,last_used_at'],
             'direction' => ['nullable', 'string', 'in:asc,desc'],
             'search' => ['nullable', 'string', 'max:255'],

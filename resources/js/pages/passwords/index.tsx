@@ -39,7 +39,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 type SortKey = 'name' | 'username' | 'last_used_at';
 
 type Filters = {
-    folderId?: number | null;
+    folderId?: string;
     sort: SortKey;
     direction: 'asc' | 'desc';
     search?: string;
@@ -69,6 +69,7 @@ export default function PasswordsPage() {
     const [sortKey, setSortKey] = useState<SortKey>(filters.sort);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction);
     const [search, setSearch] = useState<string>(filters.search || '');
+    const [folderId, setFolderId] = useState<string>(filters.folderId || 'all');
 
     const handleSortChange = (key: SortKey) => {
         if (sortKey === key) {
@@ -85,13 +86,13 @@ export default function PasswordsPage() {
     };
 
     const handleFilters = useCallback(() => {
-        console.log('handleFilters');
         if (isInitialRender.current) {
             isInitialRender.current = false;
             return;
         }
 
-        const data: Partial<Filters> = {};
+        const data: Record<string, string | number | boolean | undefined | null> = {};
+
         if (sortKey) {
             data.sort = sortKey;
         }
@@ -104,12 +105,18 @@ export default function PasswordsPage() {
             data.search = search.trim();
         }
 
+        if (folderId !== undefined) {
+            data.folder_id = folderId;
+        }
+
+        console.log(data);
+
         router.visit(route('passwords.index', data), {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
         });
-    }, [sortKey, sortDirection, search]);
+    }, [sortKey, sortDirection, search, folderId]);
 
     useEffect(() => {
         handleFilters();
@@ -194,10 +201,15 @@ export default function PasswordsPage() {
                                 leave="transition ease-in duration-200"
                                 leaveFrom="opacity-100 transform translate-x-0"
                                 leaveTo="opacity-0 transform translate-x-4"
+                                as="div"
                             >
-                                <div>
-                                    <PasswordsFilter folders={folders} expirySoonCount={expirySoonCount} expiredCount={expiredCount} />
-                                </div>
+                                <PasswordsFilter
+                                    folders={folders}
+                                    expirySoonCount={expirySoonCount}
+                                    expiredCount={expiredCount}
+                                    setFolderId={setFolderId}
+                                    folderId={folderId}
+                                />
                             </Transition>
                         </div>
 

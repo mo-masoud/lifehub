@@ -9,11 +9,12 @@ import { FC, useState } from 'react';
 
 interface FoldersComboboxProps {
     folders: Folder[];
-    selectedFolder?: Folder | null;
+    selectedFolder?: string;
+    onSelectFolder: (folderId: string) => void;
 }
-export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFolder }) => {
+export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFolder, onSelectFolder }) => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState<number | null | undefined>(selectedFolder?.id || undefined);
+    const [value, setValue] = useState<string>(selectedFolder || 'all');
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -21,7 +22,11 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFol
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
                     <span className="flex items-center gap-2">
                         <FolderIcon className="opacity-70" />
-                        {value ? folders.find((folder) => folder.id == value)?.name : 'Select folder...'}
+                        {value === 'all'
+                            ? 'All folders'
+                            : value === 'none'
+                              ? 'No folder'
+                              : folders.find((folder) => folder.id.toString() == value)?.name || 'Select folder...'}
                     </span>
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -34,7 +39,8 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFol
                         <CommandGroup>
                             <CommandItem
                                 onSelect={() => {
-                                    setValue(undefined);
+                                    setValue('all');
+                                    onSelectFolder('all');
                                     setOpen(false);
                                 }}
                             >
@@ -42,11 +48,12 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFol
                                     <Folders className="opacity-70" />
                                     <span>All folders</span>
                                 </span>
-                                <Check className={cn('ml-auto', value === undefined ? 'opacity-100' : 'opacity-0')} />
+                                <Check className={cn('ml-auto', value === 'all' ? 'opacity-100' : 'opacity-0')} />
                             </CommandItem>
                             <CommandItem
                                 onSelect={() => {
-                                    setValue(null);
+                                    setValue('none');
+                                    onSelectFolder('none');
                                     setOpen(false);
                                 }}
                             >
@@ -54,7 +61,7 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFol
                                     <FolderOpen className="opacity-70" />
                                     <span>No folder</span>
                                 </span>
-                                <Check className={cn('ml-auto', value === null ? 'opacity-100' : 'opacity-0')} />
+                                <Check className={cn('ml-auto', value === 'none' ? 'opacity-100' : 'opacity-0')} />
                             </CommandItem>
                             <CommandSeparator />
                             {folders.map((folder) => (
@@ -62,12 +69,13 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({ folders, selectedFol
                                     keywords={[folder.name]}
                                     key={folder.id}
                                     onSelect={() => {
-                                        setValue(folder.id);
+                                        setValue(folder.id.toString());
+                                        onSelectFolder(folder.id.toString());
                                         setOpen(false);
                                     }}
                                 >
                                     {folder.name}
-                                    <Check className={cn('ml-auto', value === folder.id ? 'opacity-100' : 'opacity-0')} />
+                                    <Check className={cn('ml-auto', value === folder.id.toString() ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
