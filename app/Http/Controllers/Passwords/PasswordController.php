@@ -4,63 +4,54 @@ namespace App\Http\Controllers\Passwords;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\IndexPasswordsRequest;
+use App\Services\PasswordQueryService;
 
 class PasswordController extends Controller
 {
+    public function __construct(
+        protected PasswordQueryService $passwordQueryService
+    ) {}
+
     public function index(IndexPasswordsRequest $request)
     {
-        logs()->info('request', [$request->all()]);
-        $passwords = auth()->user()->passwords()
-            ->with('folder')
-            ->when($request->filled('folder_id') && $request->folder_id !== 'all', function ($query) use ($request) {
-                $query->where('folder_id', $request->folder_id === 'none' ? null : $request->folder_id);
-            })
-            ->when($request->filled('type'), function ($query) use ($request) {
-                $query->where('type', $request->type);
-            })
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where(function ($q) use ($request) {
-                    $q->where('name', 'like', '%' . $request->search . '%')
-                        ->orWhere('username', 'like', '%' . $request->search . '%')
-                        ->orWhere('url', 'like', '%' . $request->search . '%')
-                        ->orWhere('notes', 'like', '%' . $request->search . '%');
-                });
-            })
-            ->when($request->filled('sort'), function ($query) use ($request) {
-                $query->orderBy($request->sort ?? 'last_used_at', $request->direction ?? 'desc');
-            }, function ($query) {
-                $query->orderBy('last_used_at', 'desc');
-            })
-            ->paginate($request->per_page ?? 10);
+        $filters = $this->passwordQueryService->getFilterArray($request);
+        $perPage = $request->per_page ?? 10;
 
-        $folders = auth()->user()->folders()
-            ->select('id', 'name')
-            ->orderBy('name')
-            ->get();
+        $passwords = $this->passwordQueryService->getFilteredPasswords(
+            auth()->user(),
+            $filters,
+            paginate: true,
+            perPage: $perPage
+        );
 
-        $expirySoonCount = auth()->user()->passwords()
-            ->expiresSoon()
-            ->count();
-
-        $expiredCount = auth()->user()->passwords()
-            ->whereExpired()
-            ->count();
-
-        $filters = [
-            'folderId' => $request->folder_id,
-            'sort' => $request->sort,
-            'direction' => $request->direction,
-            'search' => $request->search,
-            'perPage' => $request->per_page,
-            'type' => $request->type,
-        ];
+        $folders = $this->getFolders();
+        $webFilters = $this->getFilters($request, $filters);
 
         return inertia('passwords/index', [
             'passwords' => $passwords,
             'folders' => $folders,
-            'expirySoonCount' => $expirySoonCount,
-            'expiredCount' => $expiredCount,
-            'filters' => $filters,
+            'filters' => $webFilters,
         ]);
+    }
+
+    protected function getFolders()
+    {
+        return auth()->user()->folders()
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+    }
+
+    protected function getFilters(IndexPasswordsRequest $request, array $filters): array
+    {
+        logs()->info('filters', [$filters]);
+        return [
+            'folderId' => $filters['folder_id'],
+            'sort' => $filters['sort'],
+            'direction' => $filters['direction'],
+            'search' => $filters['search'],
+            'perPage' => $request->per_page,
+            'type' => $filters['type'],
+        ];
     }
 }

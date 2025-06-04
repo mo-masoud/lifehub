@@ -52,6 +52,7 @@ export default function PasswordsPage() {
     const [search, setSearch] = useState<string>(filters.search || '');
     const [folderId, setFolderId] = useState<string>(filters.folderId || 'all');
     const [type, setType] = useState<'ssh' | 'normal' | undefined>(filters.type);
+    const [perPage, setPerPage] = useState<number>(filters.perPage || 10);
 
     const handleSortChange = (key: SortKey) => {
         if (sortKey === key) {
@@ -65,6 +66,10 @@ export default function PasswordsPage() {
     const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
         const value = event.target.value;
         setSearch(value);
+    };
+
+    const handlePerPageChange = (newPerPage: number) => {
+        setPerPage(newPerPage);
     };
 
     const handleFilters = useCallback(() => {
@@ -95,12 +100,16 @@ export default function PasswordsPage() {
             data.type = type;
         }
 
+        if (perPage && perPage !== 10) {
+            data.per_page = perPage;
+        }
+
         router.visit(route('passwords.index', data), {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
         });
-    }, [sortKey, sortDirection, search, folderId, type]);
+    }, [sortKey, sortDirection, search, folderId, type, perPage]);
 
     useEffect(() => {
         handleFilters();
@@ -124,7 +133,7 @@ export default function PasswordsPage() {
                     </div>
                 </div>
 
-                <div className="relative flex min-h-[100vh] flex-1 flex-col overflow-hidden md:min-h-min">
+                <div className="relative flex flex-1 flex-col overflow-hidden">
                     <div className="absolute inset-0 size-full p-1">
                         {/* Search & Filters */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
@@ -204,7 +213,20 @@ export default function PasswordsPage() {
                         </div>
 
                         {/* Pagination */}
-                        <TablePagination pagination={passwords} className="mt-4" />
+                        <TablePagination
+                            pagination={passwords}
+                            className="mt-4"
+                            currentFilters={{
+                                sort: sortKey,
+                                direction: sortDirection,
+                                search: search || undefined,
+                                folder_id: folderId !== 'all' ? folderId : undefined,
+                                type: type || undefined,
+                            }}
+                            routeName="passwords.index"
+                            perPage={perPage}
+                            onPerPageChange={handlePerPageChange}
+                        />
                     </div>
                 </div>
             </div>
