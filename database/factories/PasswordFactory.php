@@ -29,8 +29,8 @@ class PasswordFactory extends Factory
             'notes' => $this->faker->optional()->paragraph(),
             'folder_id' => $this->faker->optional()->passthrough(Folder::factory()->create()->id),
             'copied' => $this->faker->numberBetween(0, 100),
-            'last_used_at' => $this->faker->optional()->dateTime(),
-            'expires_at' => $this->faker->optional()->dateTimeBetween('now', '+1 year'),
+            'last_used_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
+            'expires_at' => $this->faker->optional()->dateTimeBetween('-1 year', '+1 year'),
         ];
     }
 }

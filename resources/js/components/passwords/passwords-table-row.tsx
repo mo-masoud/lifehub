@@ -33,7 +33,7 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="group"
+                        className={cn('group', password.is_expired && 'hover:bg-destructive/20', password.is_expired_soon && 'hover:bg-warning/20')}
                         onClick={(e) => {
                             e.stopPropagation();
                             console.log('SSH button clicked');
@@ -45,7 +45,7 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="group"
+                        className={cn('group', password.is_expired && 'hover:bg-destructive/20', password.is_expired_soon && 'hover:bg-warning/20')}
                         onClick={(e) => {
                             e.stopPropagation();
                             console.log('User button clicked');
@@ -57,7 +57,7 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="group"
+                    className={cn('group', password.is_expired && 'hover:bg-destructive/20', password.is_expired_soon && 'hover:bg-warning/20')}
                     onClick={(e) => {
                         e.stopPropagation();
                         console.log('Copy password clicked');
