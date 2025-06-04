@@ -54,10 +54,10 @@ class PasswordController extends Controller
 
         $filters = [
             'folderId' => $request->folder_id,
-            'sort' => $request->sort ?? 'last_used_at',
-            'direction' => $request->direction ?? 'desc',
+            'sort' => $request->sort,
+            'direction' => $request->direction,
             'search' => $request->search,
-            'perPage' => $request->per_page ?? 10,
+            'perPage' => $request->per_page,
             'expired' => $request->expired,
             'type' => $request->type,
             'expireSoon' => $request->expire_soon,

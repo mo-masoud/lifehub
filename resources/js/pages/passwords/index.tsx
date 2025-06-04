@@ -23,7 +23,7 @@ import { Transition } from '@headlessui/react';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ChartArea, ChevronDown, Cog, Filter, LockKeyhole, Search } from 'lucide-react';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -40,8 +40,8 @@ type SortKey = 'name' | 'username' | 'last_used_at';
 
 type Filters = {
     folderId?: number | null;
-    sort?: SortKey;
-    direction?: 'asc' | 'desc';
+    sort: SortKey;
+    direction: 'asc' | 'desc';
     search?: string;
     expirySoon?: boolean;
     expired?: boolean;
@@ -58,6 +58,7 @@ interface PasswordsPageProps extends SharedData {
 }
 
 export default function PasswordsPage() {
+    const isInitialRender = useRef(true);
     const isMobile = useIsMobile();
 
     const { passwords, folders, expirySoonCount, expiredCount, filters } = usePage<PasswordsPageProps>().props;
@@ -65,8 +66,8 @@ export default function PasswordsPage() {
     const [showCharts, setShowCharts] = useState<boolean>(false);
     const [showFilters, setShowFilters] = useState<boolean>(false);
 
-    const [sortKey, setSortKey] = useState<SortKey>(filters.sort || 'last_used_at');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction || 'desc');
+    const [sortKey, setSortKey] = useState<SortKey>(filters.sort);
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction);
     const [search, setSearch] = useState<string>(filters.search || '');
 
     const handleSortChange = (key: SortKey) => {
@@ -76,30 +77,30 @@ export default function PasswordsPage() {
             setSortKey(key);
             setSortDirection('desc'); // Reset to default direction when changing sort key
         }
-        filter();
     };
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
         const value = event.target.value;
         setSearch(value);
-        filter();
     };
 
-    const filter = () => {
-        // Build data object with only meaningful values
+    const handleFilters = () => {
         const data: Partial<Filters> = {};
 
-        // Always include sort and direction as they have meaningful defaults
-        data.sort = sortKey;
-        data.direction = sortDirection;
-
-        // Only include other parameters if they have meaningful values
-        if (filters.folderId) {
-            data.folderId = filters.folderId;
+        if (sortKey) {
+            data.sort = sortKey;
         }
 
-        if (filters.search) {
+        if (sortDirection) {
+            data.direction = sortDirection;
+        }
+
+        if (search) {
             data.search = search.trim();
+        }
+
+        if (filters.folderId) {
+            data.folderId = filters.folderId;
         }
 
         if (filters.expirySoon) {
@@ -114,18 +115,25 @@ export default function PasswordsPage() {
             data.type = filters.type;
         }
 
-        // Only include perPage if it's different from the default (10)
         if (filters.perPage && filters.perPage !== 10) {
             data.perPage = filters.perPage;
         }
 
-        router.visit('/passwords', {
+        router.visit(route('passwords.index', data), {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
-            data,
         });
     };
+
+    useEffect(() => {
+        if (isInitialRender.current) {
+            isInitialRender.current = false;
+            return;
+        }
+
+        handleFilters();
+    }, [sortKey, sortDirection, search]);
 
     useEffect(() => {
         setShowCharts(!isMobile);
