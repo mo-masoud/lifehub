@@ -2,7 +2,7 @@ import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Folder } from '@/types/models';
 import { KeyRound, RectangleEllipsis, Terminal, TimerOff, TriangleAlert } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
@@ -10,23 +10,21 @@ interface PasswordsFilterProps {
     folders: Folder[];
     expirySoonCount: number;
     expiredCount: number;
+    setType: (type: 'ssh' | 'normal' | undefined) => void;
+    type: 'ssh' | 'normal' | undefined;
     setFolderId: (folderId: string) => void;
     folderId: string;
 }
 
-export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonCount, expiredCount, setFolderId, folderId }) => {
+export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonCount, expiredCount, setFolderId, folderId, setType, type }) => {
     const isMobile = useIsMobile();
 
-    const [passwordType, setPasswordType] = useState<string>('all');
-
     const renderPasswordTypeIcon = () => {
-        switch (passwordType) {
+        switch (type) {
             case 'normal':
                 return <KeyRound className="text-rose-700" />;
             case 'ssh':
                 return <Terminal className="text-green-700" />;
-            case 'all':
-                return <RectangleEllipsis className="text-sky-700" />;
             default:
                 return <RectangleEllipsis className="text-sky-700" />;
         }
@@ -42,7 +40,10 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonC
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-28" align="end">
-                    <DropdownMenuRadioGroup value={passwordType} onValueChange={setPasswordType}>
+                    <DropdownMenuRadioGroup
+                        value={type || 'all'}
+                        onValueChange={(value) => setType(value === 'all' ? undefined : (value as 'ssh' | 'normal'))}
+                    >
                         <DropdownMenuRadioItem value="all" className="[&&>span]:text-sky-700">
                             <span className="flex items-center justify-end gap-2">
                                 <RectangleEllipsis />

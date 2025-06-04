@@ -70,6 +70,7 @@ export default function PasswordsPage() {
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction);
     const [search, setSearch] = useState<string>(filters.search || '');
     const [folderId, setFolderId] = useState<string>(filters.folderId || 'all');
+    const [type, setType] = useState<'ssh' | 'normal' | undefined>(filters.type);
 
     const handleSortChange = (key: SortKey) => {
         if (sortKey === key) {
@@ -109,14 +110,16 @@ export default function PasswordsPage() {
             data.folder_id = folderId;
         }
 
-        console.log(data);
+        if (type) {
+            data.type = type;
+        }
 
         router.visit(route('passwords.index', data), {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
         });
-    }, [sortKey, sortDirection, search, folderId]);
+    }, [sortKey, sortDirection, search, folderId, type]);
 
     useEffect(() => {
         handleFilters();
@@ -209,6 +212,8 @@ export default function PasswordsPage() {
                                     expiredCount={expiredCount}
                                     setFolderId={setFolderId}
                                     folderId={folderId}
+                                    setType={setType}
+                                    type={type}
                                 />
                             </Transition>
                         </div>
