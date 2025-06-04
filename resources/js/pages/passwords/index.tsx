@@ -3,25 +3,14 @@ import { PasswordsFilter } from '@/components/passwords/passwords-filter';
 import { PasswordsTableRow } from '@/components/passwords/passwords-table-row';
 import { TablePagination } from '@/components/table-pagination';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useIsMobile } from '@/hooks/use-mobile';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { Folder, Password } from '@/types/models';
-import { Transition } from '@headlessui/react';
 import { Head, router, usePage } from '@inertiajs/react';
-import { ChartArea, ChevronDown, Cog, Filter, LockKeyhole, Search } from 'lucide-react';
+import { ChevronDown, LockKeyhole, Search } from 'lucide-react';
 
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -55,12 +44,8 @@ interface PasswordsPageProps extends SharedData {
 
 export default function PasswordsPage() {
     const isInitialRender = useRef(true);
-    const isMobile = useIsMobile();
 
     const { passwords, folders, filters } = usePage<PasswordsPageProps>().props;
-
-    const [showCharts, setShowCharts] = useState<boolean>(false);
-    const [showFilters, setShowFilters] = useState<boolean>(false);
 
     const [sortKey, setSortKey] = useState<SortKey>(filters.sort);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction);
@@ -121,16 +106,11 @@ export default function PasswordsPage() {
         handleFilters();
     }, [handleFilters]);
 
-    useEffect(() => {
-        setShowCharts(!isMobile);
-        setShowFilters(!isMobile);
-    }, [isMobile]);
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Passwords" />
 
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-full flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <Heading
                         title="Passwords"
@@ -140,50 +120,11 @@ export default function PasswordsPage() {
                     />
 
                     <div className="flex items-center gap-4">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <Cog className="size-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-48" align="end">
-                                <DropdownMenuLabel>Settings</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuCheckboxItem checked={showCharts} onCheckedChange={setShowCharts}>
-                                    <span>Show Charts</span>
-                                    <ChartArea className="ml-auto" />
-                                </DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem checked={showFilters} onCheckedChange={setShowFilters}>
-                                    <span>Show Filters</span>
-                                    <Filter className="ml-auto" />
-                                </DropdownMenuCheckboxItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
                         <Button>Create</Button>
                     </div>
                 </div>
-                <Transition
-                    show={showCharts}
-                    enter="transition ease-out duration-300"
-                    enterFrom="opacity-0 transform -translate-y-4"
-                    enterTo="opacity-100 transform translate-y-0"
-                    leave="transition ease-in duration-200"
-                    leaveFrom="opacity-100 transform translate-y-0"
-                    leaveTo="opacity-0 transform -translate-y-4"
-                >
-                    <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                        <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                            <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                        </div>
-                        <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                            <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                        </div>
-                        <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                            <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                        </div>
-                    </div>
-                </Transition>
-                <div className="relative mt-4 flex min-h-[100vh] flex-1 flex-col overflow-hidden md:min-h-min">
+
+                <div className="relative flex min-h-[100vh] flex-1 flex-col overflow-hidden md:min-h-min">
                     <div className="absolute inset-0 size-full p-1">
                         {/* Search & Filters */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
@@ -192,18 +133,7 @@ export default function PasswordsPage() {
                                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={handleSearch} />
                             </div>
 
-                            <Transition
-                                show={showFilters}
-                                enter="transition ease-out duration-300"
-                                enterFrom="opacity-0 transform translate-x-4"
-                                enterTo="opacity-100 transform translate-x-0"
-                                leave="transition ease-in duration-200"
-                                leaveFrom="opacity-100 transform translate-x-0"
-                                leaveTo="opacity-0 transform translate-x-4"
-                                as="div"
-                            >
-                                <PasswordsFilter folders={folders} setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
-                            </Transition>
+                            <PasswordsFilter folders={folders} setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
                         </div>
 
                         {/* Table */}

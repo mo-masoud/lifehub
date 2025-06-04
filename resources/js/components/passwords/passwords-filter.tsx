@@ -26,7 +26,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, setFolderId
     };
 
     return (
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
