@@ -88,20 +88,44 @@ export default function PasswordsPage() {
     };
 
     const filter = () => {
+        // Build data object with only meaningful values
+        const data: Partial<Filters> = {};
+
+        // Always include sort and direction as they have meaningful defaults
+        data.sort = sortKey;
+        data.direction = sortDirection;
+
+        // Only include other parameters if they have meaningful values
+        if (filters.folderId) {
+            data.folderId = filters.folderId;
+        }
+
+        if (filters.search) {
+            data.search = search.trim();
+        }
+
+        if (filters.expirySoon) {
+            data.expirySoon = filters.expirySoon;
+        }
+
+        if (filters.expired) {
+            data.expired = filters.expired;
+        }
+
+        if (filters.type) {
+            data.type = filters.type;
+        }
+
+        // Only include perPage if it's different from the default (10)
+        if (filters.perPage && filters.perPage !== 10) {
+            data.perPage = filters.perPage;
+        }
+
         router.visit('/passwords', {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
-            data: {
-                folderId: filters.folderId,
-                sort: sortKey,
-                direction: sortDirection,
-                search: search,
-                expirySoon: filters.expirySoon,
-                expired: filters.expired,
-                type: filters.type,
-                perPage: filters.perPage || 10,
-            },
+            data,
         });
     };
 
@@ -194,7 +218,7 @@ export default function PasswordsPage() {
                         {/* Table */}
                         <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-120px)] overflow-auto rounded-xl border">
                             <div className="relative w-full">
-                                <table className="w-full caption-bottom text-sm">
+                                <table className="w-full caption-bottom text-sm select-none">
                                     {!passwords.data.length && (
                                         <TableCaption className="text-muted-foreground mt-4 text-sm">
                                             No passwords found. Create a new password to get started.
@@ -203,6 +227,7 @@ export default function PasswordsPage() {
 
                                     <TableHeader className="sticky top-0 z-15 bg-slate-50 dark:bg-slate-900">
                                         <TableRow>
+                                            <TableHead>ID</TableHead>
                                             <TableHead className="cursor-pointer" onClick={() => handleSortChange('name')}>
                                                 <span className="flex items-center gap-1 text-xs font-bold text-slate-800 uppercase dark:text-slate-200">
                                                     Name

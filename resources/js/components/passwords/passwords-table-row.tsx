@@ -19,6 +19,7 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
             )}
             onClick={() => console.log('Row clicked:', password.name)}
         >
+            <TableCell className="text-primary text-xs font-bold">{password.id}</TableCell>
             <TableCell>
                 <span className="flex items-center gap-2">
                     {password.type === 'ssh' ? <Terminal className="size-4 text-green-700" /> : <KeyRound className="size-4 text-rose-700" />}

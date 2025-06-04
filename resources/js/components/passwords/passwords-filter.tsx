@@ -66,8 +66,8 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonC
                 <Button variant="warning-outline" size={isMobile ? 'icon' : 'default'}>
                     <span className="hidden md:block">Expiry soon</span>
                     <TriangleAlert className="md:hidden" />
-                    <span className="bg-warning text-warning-foreground hidden size-4 items-center justify-center rounded-full p-1 text-xs md:inline-flex">
-                        {expirySoonCount}
+                    <span className="bg-warning text-warning-foreground hidden size-5 items-center justify-center rounded-full p-1 text-[11px] font-bold md:inline-flex">
+                        {expirySoonCount > 9 ? '9+' : expirySoonCount}
                     </span>
                 </Button>
             )}
@@ -76,8 +76,8 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, expirySoonC
                     <span className="hidden md:block">Expired</span>
                     <TimerOff className="md:hidden" />
 
-                    <span className="bg-destructive text-muted hidden size-4 items-center justify-center rounded-full p-1 text-xs md:inline-flex">
-                        {expiredCount}
+                    <span className="bg-destructive text-muted hidden size-5 items-center justify-center rounded-full p-1 text-[11px] font-bold md:inline-flex">
+                        {expiredCount > 9 ? '9+' : expiredCount}
                     </span>
                 </Button>
             )}
