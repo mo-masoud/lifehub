@@ -23,7 +23,7 @@ import { Transition } from '@headlessui/react';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ChartArea, ChevronDown, Cog, Filter, LockKeyhole, Search } from 'lucide-react';
 
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -84,9 +84,14 @@ export default function PasswordsPage() {
         setSearch(value);
     };
 
-    const handleFilters = () => {
-        const data: Partial<Filters> = {};
+    const handleFilters = useCallback(() => {
+        console.log('handleFilters');
+        if (isInitialRender.current) {
+            isInitialRender.current = false;
+            return;
+        }
 
+        const data: Partial<Filters> = {};
         if (sortKey) {
             data.sort = sortKey;
         }
@@ -99,41 +104,16 @@ export default function PasswordsPage() {
             data.search = search.trim();
         }
 
-        if (filters.folderId) {
-            data.folderId = filters.folderId;
-        }
-
-        if (filters.expirySoon) {
-            data.expirySoon = filters.expirySoon;
-        }
-
-        if (filters.expired) {
-            data.expired = filters.expired;
-        }
-
-        if (filters.type) {
-            data.type = filters.type;
-        }
-
-        if (filters.perPage && filters.perPage !== 10) {
-            data.perPage = filters.perPage;
-        }
-
         router.visit(route('passwords.index', data), {
             method: 'get',
             preserveState: true,
             preserveScroll: true,
         });
-    };
+    }, [sortKey, sortDirection, search]);
 
     useEffect(() => {
-        if (isInitialRender.current) {
-            isInitialRender.current = false;
-            return;
-        }
-
         handleFilters();
-    }, [sortKey, sortDirection, search]);
+    }, [handleFilters]);
 
     useEffect(() => {
         setShowCharts(!isMobile);
@@ -226,9 +206,7 @@ export default function PasswordsPage() {
                             <div className="relative w-full">
                                 <table className="w-full caption-bottom text-sm select-none">
                                     {!passwords.data.length && (
-                                        <TableCaption className="text-muted-foreground mt-4 text-sm">
-                                            No passwords found. Create a new password to get started.
-                                        </TableCaption>
+                                        <TableCaption className="text-muted-foreground my-4 text-sm">No passwords found.</TableCaption>
                                     )}
 
                                     <TableHeader className="sticky top-0 z-15 bg-slate-50 dark:bg-slate-900">
