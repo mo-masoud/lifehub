@@ -60,6 +60,9 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+
     --animate-wiggle: wiggle 1s ease-in-out infinite;
 }
 
@@ -116,6 +119,8 @@
     --sidebar-ring: oklch(0.623 0.214 259.815);
     --warning: oklch(0.769 0.188 70.08);
     --warning-foreground: oklch(0.984 0.003 247.858);
+    --success: oklch(0.72 0.19 150);
+    --success-foreground: oklch(0.984 0.003 247.858);
 }
 
 .dark {

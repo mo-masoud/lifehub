@@ -25,6 +25,10 @@ const buttonVariants = cva(
           "bg-warning text-warning-foreground shadow-xs hover:bg-warning/90 focus-visible:ring-warning/20 dark:focus-visible:ring-warning/40",
         'warning-outline':
             "border border-warning bg-background text-warning shadow-xs hover:bg-warning/10 focus-visible:ring-warning/20 dark:focus-visible:ring-warning/40",
+        success:
+          "bg-success text-success-foreground shadow-xs hover:bg-success/90 focus-visible:ring-success/20 dark:focus-visible:ring-success/40",
+        'success-outline':
+          "border border-success bg-background text-success shadow-xs hover:bg-success/10 focus-visible:ring-success/20 dark:focus-visible:ring-success/40",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

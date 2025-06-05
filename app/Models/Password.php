@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PasswordTypes;
+use App\Services\PasswordStrengthCalculator;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,8 @@ class Password extends Model
         'is_expired',
         'is_expired_soon',
         'last_used_at_formatted',
+        'expires_at_formatted',
+        'password_power',
     ];
 
     protected $casts = [
@@ -66,6 +69,13 @@ class Password extends Model
         );
     }
 
+    public function passwordPower(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => (new PasswordStrengthCalculator())->calculateStrength($this->password),
+        );
+    }
+
     public function isExpiredSoon(): Attribute
     {
         return Attribute::make(
@@ -77,6 +87,13 @@ class Password extends Model
     {
         return Attribute::make(
             get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : $this->updated_at->diffForHumans(),
+        );
+    }
+
+    public function expiresAtFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->expires_at ? $this->expires_at->diffForHumans() : '-',
         );
     }
 
