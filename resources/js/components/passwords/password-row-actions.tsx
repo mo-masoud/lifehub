@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { usePasswords } from '@/hooks/use-passwords';
 import { Password } from '@/types/models';
-import { Edit, FolderInput, FolderOutput, KeyRound, MoreHorizontal, TerminalSquare, Trash2, User } from 'lucide-react';
+import { KeyRound, TerminalSquare, User } from 'lucide-react';
 import { FC } from 'react';
 
 interface PasswordRowActionsProps {
@@ -56,63 +55,6 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
             >
                 <KeyRound />
             </Button>
-
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:bg-accent-foreground/5"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                    >
-                        <MoreHorizontal />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                    >
-                        <Edit />
-                        Edit
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                    >
-                        <FolderInput />
-                        Move to folder
-                    </DropdownMenuItem>
-
-                    {password.folder && (
-                        <DropdownMenuItem
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                        >
-                            <FolderOutput />
-                            Remove from folder
-                        </DropdownMenuItem>
-                    )}
-
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                        variant="destructive"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                    >
-                        <Trash2 />
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
         </>
     );
 };

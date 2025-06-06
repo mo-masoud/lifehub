@@ -32,7 +32,7 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
         cli: password?.cli ?? '',
         folder_id: password?.folder_id ?? null,
         notes: password?.notes ?? '',
-        expires_at: password?.expires_at,
+        expires_at: password?.expires_at ? new Date(password.expires_at) : null,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -222,10 +222,9 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
                     type="date"
                     className="mt-1 block w-full"
                     min={new Date().toISOString().split('T')[0]}
-                    value={data.expires_at?.toISOString().split('T')[0]}
+                    value={data.expires_at ? data.expires_at.toISOString().split('T')[0] : ''}
                     onChange={(e) => setData('expires_at', new Date(e.target.value))}
                 />
-                {/* <DateInput placeholder="Pick a date" value={data.expires_at} onChange={(date) => setData('expires_at', date)} minDate={new Date()} /> */}
             </div>
 
             {/* URL */}
