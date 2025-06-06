@@ -1,7 +1,7 @@
 import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { KeyRound, RectangleEllipsis, Terminal } from 'lucide-react';
+import { KeyRound, List, Terminal } from 'lucide-react';
 import { FC } from 'react';
 
 interface PasswordsFilterProps {
@@ -19,7 +19,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
             case 'ssh':
                 return <Terminal />;
             default:
-                return <RectangleEllipsis />;
+                return <List />;
         }
     };
 
@@ -39,7 +39,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
                     >
                         <DropdownMenuRadioItem value="all">
                             <span className="flex items-center justify-end gap-2">
-                                <RectangleEllipsis />
+                                <List />
                                 All
                             </span>
                         </DropdownMenuRadioItem>
