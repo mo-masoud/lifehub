@@ -66,4 +66,9 @@ class PasswordService
 
         return $password;
     }
+
+    public function delete(Password $password)
+    {
+        $password->delete();
+    }
 }

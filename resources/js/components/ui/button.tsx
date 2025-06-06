@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         'destructive-outline':
-          "border border-destructive bg-background text-destructive shadow-xs hover:bg-destructive/10 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+          "border border-destructive bg-background text-destructive shadow-xs hover:bg-destructive/10 focus-visible:ring-destructive/20 focus-visible:border-destructive dark:focus-visible:ring-destructive/40",
         warning:
           "bg-warning text-warning-foreground shadow-xs hover:bg-warning/90 focus-visible:ring-warning/20 dark:focus-visible:ring-warning/40",
         'warning-outline':

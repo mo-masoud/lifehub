@@ -19,11 +19,11 @@ import {
     Terminal,
     Timer,
     TimerOff,
-    Trash2,
     User,
 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { MarkdownReader } from '../markdown-reader';
+import { DeletePasswordDialog } from './delete-password-dialog';
 import { EditPasswordSheet } from './edit-password-sheet';
 
 interface ViewPasswordSheetProps {
@@ -91,10 +91,7 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                                 Edit
                             </Button>
                         </EditPasswordSheet>
-                        <Button variant="destructive-outline">
-                            <Trash2 />
-                            Delete
-                        </Button>
+                        <DeletePasswordDialog password={password} />
                     </div>
 
                     <div className="border-border bg-background mt-4 flex w-full flex-col items-center justify-center divide-y rounded-md border p-4">

@@ -72,4 +72,13 @@ class PasswordController extends Controller
 
         return response()->json(['message' => 'Password copied to clipboard.', 'password' => $password]);
     }
+
+    public function destroy(Password $password)
+    {
+        $this->authorize('delete', $password);
+
+        $this->passwordService->delete($password);
+
+        return redirect()->route('passwords.index')->with('success', 'Password deleted successfully.');
+    }
 }
