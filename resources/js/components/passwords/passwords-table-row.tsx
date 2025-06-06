@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
@@ -9,9 +10,11 @@ import { ViewPasswordSheet } from './view-password-sheet';
 
 interface PasswordTableRowProps {
     password: Password;
+    isSelected?: boolean;
+    onSelectionChange?: (checked: boolean) => void;
 }
 
-export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
+export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
     return (
         <ViewPasswordSheet password={password}>
             <TableRow
@@ -19,10 +22,14 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password }) => {
                     'min-h-20 cursor-pointer',
                     password.is_expired && 'bg-destructive/5 hover:bg-destructive/10',
                     password.is_expired_soon && 'bg-warning/5 hover:bg-warning/10',
+                    isSelected && 'bg-accent/50',
                 )}
-                onClick={() => console.log('Row clicked:', password.name)}
             >
-                <TableCell className="text-primary text-xs font-bold">{password.id}</TableCell>
+                <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
+                    {onSelectionChange && (
+                        <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
+                    )}
+                </TableCell>
                 <TableCell>
                     <span className="flex items-center gap-2">
                         {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}

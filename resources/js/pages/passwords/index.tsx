@@ -1,9 +1,11 @@
 import Heading from '@/components/heading';
 import { CreatePasswordSheet } from '@/components/passwords/create-password-sheet';
+import { PasswordBulkActions } from '@/components/passwords/password-bulk-actions';
 import { PasswordsFilter } from '@/components/passwords/passwords-filter';
 import { PasswordsTableRow } from '@/components/passwords/passwords-table-row';
 import { TablePagination } from '@/components/table-pagination';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
@@ -53,6 +55,36 @@ export default function PasswordsPage() {
     const [folderId, setFolderId] = useState<string>(filters.folderId || 'all');
     const [type, setType] = useState<'ssh' | 'normal' | undefined>(filters.type);
     const [perPage, setPerPage] = useState<number>(filters.perPage || 10);
+
+    // Selection state
+    const [selectedPasswordIds, setSelectedPasswordIds] = useState<Set<number>>(new Set());
+
+    // Selection handlers
+    const handleSelectAll = (checked: boolean) => {
+        if (checked) {
+            setSelectedPasswordIds(new Set(passwords.data.map((p) => p.id)));
+        } else {
+            setSelectedPasswordIds(new Set());
+        }
+    };
+
+    const handleSelectPassword = (passwordId: number, checked: boolean) => {
+        const newSelected = new Set(selectedPasswordIds);
+        if (checked) {
+            newSelected.add(passwordId);
+        } else {
+            newSelected.delete(passwordId);
+        }
+        setSelectedPasswordIds(newSelected);
+    };
+
+    const isAllSelected = passwords.data.length > 0 && selectedPasswordIds.size === passwords.data.length;
+    const isIndeterminate = selectedPasswordIds.size > 0 && selectedPasswordIds.size < passwords.data.length;
+
+    // Clear selection when passwords change (e.g., page change, filter change)
+    useEffect(() => {
+        setSelectedPasswordIds(new Set());
+    }, [passwords.data]);
 
     const handleSortChange = (key: SortKey) => {
         if (sortKey === key) {
@@ -119,11 +151,13 @@ export default function PasswordsPage() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Passwords" />
 
-            <div className="flex h-full flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-full flex-col gap-4 rounded-md p-4">
                 <div className="flex items-center justify-between">
                     <Heading title="Passwords" description="Manage your passwords securely." icon={LockKeyhole} />
 
                     <div className="flex items-center gap-2">
+                        {/* Bulk Actions */}
+                        {selectedPasswordIds.size > 0 && <PasswordBulkActions selectedPasswordIds={selectedPasswordIds} />}
                         <Button variant="ghost" asChild size="icon">
                             <Link href={route('passwords.index')} prefetch>
                                 <RefreshCcw className="size-4" />
@@ -143,12 +177,11 @@ export default function PasswordsPage() {
                                 <Search className="text-muted-foreground absolute top-1/2 left-4 size-5 -translate-y-1/2" />
                                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={handleSearch} />
                             </div>
-
                             <PasswordsFilter setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
                         </div>
 
                         {/* Table */}
-                        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-120px)] overflow-auto rounded-xl border">
+                        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-120px)] overflow-auto rounded-md border">
                             <div className="relative w-full">
                                 <table className="w-full caption-bottom text-sm select-none">
                                     {!passwords.data.length && (
@@ -157,7 +190,14 @@ export default function PasswordsPage() {
 
                                     <TableHeader className="bg-muted sticky top-0 z-15">
                                         <TableRow>
-                                            <TableHead className="text-muted-foreground text-xs font-bold">ID</TableHead>
+                                            <TableHead className="w-12">
+                                                <Checkbox
+                                                    checked={isAllSelected || isIndeterminate}
+                                                    onCheckedChange={handleSelectAll}
+                                                    aria-label="Select all passwords"
+                                                    indeterminate={isIndeterminate}
+                                                />
+                                            </TableHead>
                                             <TableHead className="cursor-pointer" onClick={() => handleSortChange('name')}>
                                                 <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                                                     Name
@@ -207,7 +247,12 @@ export default function PasswordsPage() {
 
                                     <TableBody>
                                         {passwords.data.map((password) => (
-                                            <PasswordsTableRow key={password.id} password={password} />
+                                            <PasswordsTableRow
+                                                key={password.id}
+                                                password={password}
+                                                isSelected={selectedPasswordIds.has(password.id)}
+                                                onSelectionChange={(checked) => handleSelectPassword(password.id, checked)}
+                                            />
                                         ))}
                                     </TableBody>
                                 </table>
