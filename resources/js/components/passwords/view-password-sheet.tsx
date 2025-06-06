@@ -152,9 +152,13 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                                     </a>
                                 }
                                 actions={
-                                    <Button variant="ghost" size="icon" onClick={() => handleCopy('url', password)}>
-                                        <Copy />
-                                    </Button>
+                                    password.url && (
+                                        <>
+                                            <Button variant="ghost" size="icon" onClick={() => handleCopy('url', password)}>
+                                                <Copy />
+                                            </Button>
+                                        </>
+                                    )
                                 }
                             />
                         )}
@@ -167,12 +171,12 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                                 <p className="flex items-center gap-2 text-sm font-bold italic">
                                     {password.expires_at ? new Date(password.expires_at).toLocaleDateString() : '-'}
                                     {password.is_expired && (
-                                        <span className="flex items-center gap-1 text-xs text-red-500">
+                                        <span className="text-destructive flex items-center gap-1 text-xs">
                                             (Expired {password.expires_at_formatted}) <TimerOff className="size-4" />
                                         </span>
                                     )}
                                     {password.is_expired_soon && (
-                                        <span className="flex items-center gap-1 text-xs text-yellow-500">
+                                        <span className="text-warning flex items-center gap-1 text-xs">
                                             (Expiring soon {password.expires_at_formatted}) <Timer className="size-4" />
                                         </span>
                                     )}

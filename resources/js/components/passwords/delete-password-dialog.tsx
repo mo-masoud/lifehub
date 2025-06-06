@@ -37,7 +37,7 @@ export const DeletePasswordDialog: FC<DeletePasswordDialogProps> = ({ password }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="destructive-outline">
+                <Button variant="destructive">
                     <Trash2 />
                     Delete
                 </Button>
