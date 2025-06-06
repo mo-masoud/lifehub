@@ -140,7 +140,7 @@ export default function PasswordsPage() {
                         {/* Search & Filters */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
                             <div className="relative w-full max-w-md">
-                                <Search className="absolute top-1/2 left-4 size-5 -translate-y-1/2 text-slate-500" />
+                                <Search className="text-muted-foreground absolute top-1/2 left-4 size-5 -translate-y-1/2" />
                                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={handleSearch} />
                             </div>
 
@@ -155,11 +155,11 @@ export default function PasswordsPage() {
                                         <TableCaption className="text-muted-foreground my-4 text-sm">No passwords found.</TableCaption>
                                     )}
 
-                                    <TableHeader className="sticky top-0 z-15 bg-slate-50 dark:bg-slate-900">
+                                    <TableHeader className="bg-muted sticky top-0 z-15">
                                         <TableRow>
-                                            <TableHead>ID</TableHead>
+                                            <TableHead className="text-muted-foreground text-xs font-bold">ID</TableHead>
                                             <TableHead className="cursor-pointer" onClick={() => handleSortChange('name')}>
-                                                <span className="flex items-center gap-1 text-xs font-bold text-slate-800 uppercase dark:text-slate-200">
+                                                <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                                                     Name
                                                     <ChevronDown
                                                         className={cn(
@@ -171,7 +171,7 @@ export default function PasswordsPage() {
                                                 </span>
                                             </TableHead>
                                             <TableHead className="cursor-pointer" onClick={() => handleSortChange('username')}>
-                                                <span className="flex items-center gap-1 text-xs font-bold text-slate-800 uppercase dark:text-slate-200">
+                                                <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                                                     Username
                                                     <ChevronDown
                                                         className={cn(
@@ -183,12 +183,12 @@ export default function PasswordsPage() {
                                                 </span>
                                             </TableHead>
                                             <TableHead>
-                                                <span className="flex items-center gap-1 text-xs font-bold text-slate-800 uppercase dark:text-slate-200">
+                                                <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                                                     Folder
                                                 </span>
                                             </TableHead>
                                             <TableHead className="cursor-pointer" onClick={() => handleSortChange('last_used_at')}>
-                                                <span className="flex items-center gap-1 text-xs font-bold text-slate-800 uppercase dark:text-slate-200">
+                                                <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                                                     Last used
                                                     <ChevronDown
                                                         className={cn(

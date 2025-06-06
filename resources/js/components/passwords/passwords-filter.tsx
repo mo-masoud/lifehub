@@ -15,11 +15,11 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
-                return <KeyRound className="text-rose-700" />;
+                return <KeyRound />;
             case 'ssh':
-                return <Terminal className="text-green-700" />;
+                return <Terminal />;
             default:
-                return <RectangleEllipsis className="text-sky-700" />;
+                return <RectangleEllipsis />;
         }
     };
 
@@ -37,19 +37,19 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
                         value={type || 'all'}
                         onValueChange={(value) => setType(value === 'all' ? undefined : (value as 'ssh' | 'normal'))}
                     >
-                        <DropdownMenuRadioItem value="all" className="[&&>span]:text-sky-700">
+                        <DropdownMenuRadioItem value="all">
                             <span className="flex items-center justify-end gap-2">
                                 <RectangleEllipsis />
                                 All
                             </span>
                         </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="normal" className="[&&>span]:text-rose-700">
+                        <DropdownMenuRadioItem value="normal">
                             <span className="flex items-center justify-end gap-2">
                                 <KeyRound />
                                 Normal
                             </span>
                         </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="ssh" className="[&&>span]:text-green-700">
+                        <DropdownMenuRadioItem value="ssh">
                             <span className="flex items-center justify-end gap-2">
                                 <Terminal />
                                 SSH
