@@ -158,7 +158,7 @@ export default function PasswordsPage() {
                     <div className="flex items-center gap-2">
                         {/* Bulk Actions */}
                         {selectedPasswordIds.size > 0 && <PasswordBulkActions selectedPasswordIds={selectedPasswordIds} />}
-                        <Button variant="ghost" asChild size="icon">
+                        <Button variant="ghost" asChild size="icon" className="hidden md:inline-flex">
                             <Link href={route('passwords.index')} prefetch>
                                 <RefreshCcw className="size-4" />
                             </Link>
@@ -169,7 +169,7 @@ export default function PasswordsPage() {
                     </div>
                 </div>
 
-                <div className="relative flex flex-1 flex-col overflow-hidden">
+                <div className="relative flex flex-1 flex-col">
                     <div className="absolute inset-0 size-full p-1">
                         {/* Search & Filters */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
@@ -181,7 +181,7 @@ export default function PasswordsPage() {
                         </div>
 
                         {/* Table */}
-                        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-120px)] overflow-auto rounded-md border">
+                        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-180px)] overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
                             <div className="relative w-full">
                                 <table className="w-full caption-bottom text-sm select-none">
                                     {!passwords.data.length && (

@@ -6,4 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::resource('passwords', PasswordController::class)
         ->except(['create', 'show', 'edit']);
+
+    Route::post('passwords/{password}/copy', [PasswordController::class, 'copy'])->name('passwords.copy');
 });

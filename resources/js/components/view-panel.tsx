@@ -22,7 +22,7 @@ export const ViewPanel: FC<ViewPanelProps> = ({ label, value, valueContent, acti
     const { className, ...rest } = props;
     return (
         <div className={cn('flex h-16 w-full items-center justify-between py-6', className)} {...rest}>
-            <div className="text-muted-foreground flex w-1/4 items-center gap-2">
+            <div className="text-primary/70 flex w-1/4 items-center gap-2">
                 {Icon && <Icon className={cn('size-4', iconClassName)} />}
                 <span className="text-sm font-medium">{label}</span>
             </div>

@@ -50,4 +50,11 @@ class PasswordService
     {
         return str($cli)->after('@')->trim();
     }
+
+    public function copy(Password $password)
+    {
+        $password->update(['last_used_at' => now(), 'copied' => $password->copied + 1]);
+
+        return $password;
+    }
 }

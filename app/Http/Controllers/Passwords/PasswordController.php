@@ -7,6 +7,7 @@ use App\Http\Requests\Passwords\IndexPasswordsRequest;
 use App\Http\Requests\Passwords\StorePasswordRequest;
 use App\Services\PasswordService;
 use App\Services\PasswordQueryService;
+use App\Models\Password;
 
 class PasswordController extends Controller
 {
@@ -50,5 +51,14 @@ class PasswordController extends Controller
         );
 
         return redirect()->route('passwords.index')->with('success', 'Password created successfully.');
+    }
+
+    public function copy(Password $password)
+    {
+        $this->authorize('view', $password);
+
+        $password = $this->passwordService->copy($password);
+
+        return response()->json(['message' => 'Password copied to clipboard.', 'password' => $password]);
     }
 }

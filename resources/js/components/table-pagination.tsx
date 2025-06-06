@@ -63,11 +63,11 @@ export const TablePagination: FC<TablePaginationProps> = ({
                 Showing {pagination.from} to {pagination.to} of {pagination.total} results.
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 md:flex">
                 <span className="text-muted-foreground text-sm">Items per page:</span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 gap-1">
+                        <Button variant="outline" size="sm" className="h-8 gap-1 rounded-md">
                             {perPage}
                             <ChevronDown className="h-4 w-4" />
                         </Button>

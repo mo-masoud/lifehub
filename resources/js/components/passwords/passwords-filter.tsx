@@ -59,7 +59,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="w-[200px]">
+            <div className="w-full md:w-[200px]">
                 <FoldersCombobox onSelectFolder={setFolderId} selectedFolder={folderId} />
             </div>
         </div>

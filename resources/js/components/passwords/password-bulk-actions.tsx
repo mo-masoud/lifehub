@@ -1,21 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { FolderInput, FolderOutput, Share2, TableOfContents, Trash2 } from 'lucide-react';
+import { FolderInput, FolderOutput, TableOfContents, Trash2 } from 'lucide-react';
 
 export function PasswordBulkActions({ selectedPasswordIds }: { selectedPasswordIds: Set<number> }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                    Selected ({selectedPasswordIds.size})
+                    <span className="hidden md:block">Selected ({selectedPasswordIds.size})</span>
                     <TableOfContents />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem className="cursor-pointer">
-                    <Share2 />
-                    Share
-                </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
                     <FolderInput />
                     Move to folder

@@ -1,11 +1,10 @@
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
-import { KeyRound, Terminal, TerminalSquare, User } from 'lucide-react';
+import { Folder, KeyRound, Terminal } from 'lucide-react';
 import { FC } from 'react';
-import { QuickTooltip } from '../quick-tooltip';
+import { PasswordRowActions } from './password-row-actions';
 import { ViewPasswordSheet } from './view-password-sheet';
 
 interface PasswordTableRowProps {
@@ -17,14 +16,7 @@ interface PasswordTableRowProps {
 export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
     return (
         <ViewPasswordSheet password={password}>
-            <TableRow
-                className={cn(
-                    'min-h-20 cursor-pointer',
-                    password.is_expired && 'bg-destructive/5 hover:bg-destructive/10',
-                    password.is_expired_soon && 'bg-warning/5 hover:bg-warning/10',
-                    isSelected && 'bg-accent/50',
-                )}
-            >
+            <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')}>
                 <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
                     {onSelectionChange && (
                         <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
@@ -32,53 +24,24 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelec
                 </TableCell>
                 <TableCell>
                     <span className="flex items-center gap-2">
-                        {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}
+                        {password.type === 'ssh' ? <Terminal className="size-3.5" /> : <KeyRound className="size-3.5" />}
                         <span className="font-semibold capitalize">{password.name}</span>
                     </span>
                 </TableCell>
-                <TableCell>{password.username}</TableCell>
-                <TableCell className="capitalize">{password.folder?.name || '-'}</TableCell>
-                <TableCell>{password.last_used_at_formatted}</TableCell>
-                <TableCell className={cn('flex items-center justify-end md:gap-2')}>
-                    {password.type === 'ssh' ? (
-                        <QuickTooltip content="Copy SSH command" asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    console.log('SSH button clicked');
-                                }}
-                            >
-                                <TerminalSquare />
-                            </Button>
-                        </QuickTooltip>
+                <TableCell className="max-w-20 truncate">{password.username}</TableCell>
+                <TableCell>
+                    {password.folder ? (
+                        <span className="inline-flex items-center gap-1 capitalize">
+                            <Folder className="size-3.5" />
+                            {password.folder.name}
+                        </span>
                     ) : (
-                        <QuickTooltip content="Copy username" asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    console.log('User button clicked');
-                                }}
-                            >
-                                <User />
-                            </Button>
-                        </QuickTooltip>
+                        '-'
                     )}
-                    <QuickTooltip content="Copy password" asChild>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                console.log('Copy password clicked');
-                            }}
-                        >
-                            <KeyRound />
-                        </Button>
-                    </QuickTooltip>
+                </TableCell>
+                <TableCell>{password.last_used_at_formatted}</TableCell>
+                <TableCell className={cn('flex items-center justify-end')}>
+                    <PasswordRowActions password={password} />
                 </TableCell>
             </TableRow>
         </ViewPasswordSheet>
