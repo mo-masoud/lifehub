@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Passwords;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\IndexPasswordsRequest;
 use App\Http\Requests\Passwords\StorePasswordRequest;
+use App\Http\Requests\Passwords\UpdatePasswordRequest;
 use App\Services\PasswordService;
 use App\Services\PasswordQueryService;
 use App\Models\Password;
@@ -51,6 +52,16 @@ class PasswordController extends Controller
         );
 
         return redirect()->route('passwords.index')->with('success', 'Password created successfully.');
+    }
+
+    public function update(UpdatePasswordRequest $request, Password $password)
+    {
+        $this->passwordService->updatePassword(
+            $password,
+            $request->validated()
+        );
+
+        return redirect()->route('passwords.index')->with('success', 'Password updated successfully.');
     }
 
     public function copy(Password $password)

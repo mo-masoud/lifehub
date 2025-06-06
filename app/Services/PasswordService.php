@@ -15,6 +15,15 @@ class PasswordService
         return $user->passwords()->create($data);
     }
 
+    public function updatePassword(Password $password, array $data): Password
+    {
+        $data = $this->prepareData($data);
+
+        $password->update($data);
+
+        return $password->fresh();
+    }
+
     protected function prepareData(array $data): array
     {
         if ($data['type'] === 'ssh') {
