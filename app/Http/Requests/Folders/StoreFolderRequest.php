@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Folders;
 
+use App\Models\Folder;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFolderRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreFolderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('create', Folder::class);
     }
 
     /**
@@ -22,7 +23,12 @@ class StoreFolderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:folders,name,NULL,id,user_id,' . auth()->id(),
+            ],
         ];
     }
 }

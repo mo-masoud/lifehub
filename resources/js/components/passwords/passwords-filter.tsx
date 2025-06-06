@@ -1,19 +1,17 @@
 import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Folder } from '@/types/models';
 import { KeyRound, RectangleEllipsis, Terminal } from 'lucide-react';
 import { FC } from 'react';
 
 interface PasswordsFilterProps {
-    folders: Folder[];
     setType: (type: 'ssh' | 'normal' | undefined) => void;
     type: 'ssh' | 'normal' | undefined;
     setFolderId: (folderId: string) => void;
     folderId: string;
 }
 
-export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, setFolderId, folderId, setType, type }) => {
+export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderId, setType, type }) => {
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
@@ -61,7 +59,9 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ folders, setFolderId
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <FoldersCombobox folders={folders} onSelectFolder={setFolderId} selectedFolder={folderId} />
+            <div className="w-[200px]">
+                <FoldersCombobox onSelectFolder={setFolderId} selectedFolder={folderId} />
+            </div>
         </div>
     );
 };

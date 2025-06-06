@@ -1,4 +1,5 @@
 import Heading from '@/components/heading';
+import { CreatePasswordSheet } from '@/components/passwords/create-password-sheet';
 import { PasswordsFilter } from '@/components/passwords/passwords-filter';
 import { PasswordsTableRow } from '@/components/passwords/passwords-table-row';
 import { TablePagination } from '@/components/table-pagination';
@@ -8,7 +9,7 @@ import { TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/com
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
-import { Folder, Password } from '@/types/models';
+import { Password } from '@/types/models';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ChevronDown, LockKeyhole, Search } from 'lucide-react';
 
@@ -38,14 +39,13 @@ type Filters = {
 
 interface PasswordsPageProps extends SharedData {
     passwords: Pagination<Password>;
-    folders: Folder[];
     filters: Filters;
 }
 
 export default function PasswordsPage() {
     const isInitialRender = useRef(true);
 
-    const { passwords, folders, filters } = usePage<PasswordsPageProps>().props;
+    const { passwords, filters } = usePage<PasswordsPageProps>().props;
 
     const [sortKey, setSortKey] = useState<SortKey>(filters.sort);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(filters.direction);
@@ -129,7 +129,9 @@ export default function PasswordsPage() {
                     />
 
                     <div className="flex items-center gap-4">
-                        <Button>Create</Button>
+                        <CreatePasswordSheet>
+                            <Button>Create</Button>
+                        </CreatePasswordSheet>
                     </div>
                 </div>
 
@@ -142,7 +144,7 @@ export default function PasswordsPage() {
                                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={handleSearch} />
                             </div>
 
-                            <PasswordsFilter folders={folders} setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
+                            <PasswordsFilter setFolderId={setFolderId} folderId={folderId} setType={setType} type={type} />
                         </div>
 
                         {/* Table */}

@@ -1,6 +1,6 @@
-import { ViewPanel } from '@/components/shared/view-panel';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ViewPanel } from '@/components/view-panel';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
 import {
@@ -22,7 +22,7 @@ import {
     User,
 } from 'lucide-react';
 import { FC, useState } from 'react';
-import { MarkdownReader } from '../shared/markdown-reader';
+import { MarkdownReader } from '../markdown-reader';
 import { SharePassword } from './share-password';
 
 interface ViewPasswordSheetProps {
@@ -54,11 +54,11 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                     <div className="flex items-center gap-2">
                         <span
                             className={cn(
-                                'flex size-8 items-center justify-center rounded-xl',
+                                'flex size-8 items-center justify-center rounded-xl text-white',
                                 password.type === 'ssh' ? 'bg-green-700' : 'bg-rose-700',
                             )}
                         >
-                            {password.type === 'ssh' ? <Terminal className="size-4 text-white" /> : <KeyRound className="size-4 text-white" />}
+                            {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
                     </div>
