@@ -123,7 +123,7 @@ export default function PasswordsPage() {
                 <div className="flex items-center justify-between">
                     <Heading title="Passwords" description="Manage your passwords securely." icon={LockKeyhole} />
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                         <Button variant="ghost" asChild size="icon">
                             <Link href={route('passwords.index')} prefetch>
                                 <RefreshCcw className="size-4" />
