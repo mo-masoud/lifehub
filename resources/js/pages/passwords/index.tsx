@@ -10,8 +10,8 @@ import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { Password } from '@/types/models';
-import { Head, router, usePage } from '@inertiajs/react';
-import { ChevronDown, LockKeyhole, Search } from 'lucide-react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { ChevronDown, LockKeyhole, RefreshCcw, Search } from 'lucide-react';
 
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -121,14 +121,14 @@ export default function PasswordsPage() {
 
             <div className="flex h-full flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
-                    <Heading
-                        title="Passwords"
-                        description="Manage your passwords securely."
-                        icon={LockKeyhole}
-                        iconClassName="text-sky-700 dark:text-sky-400"
-                    />
+                    <Heading title="Passwords" description="Manage your passwords securely." icon={LockKeyhole} />
 
                     <div className="flex items-center gap-4">
+                        <Button variant="ghost" asChild size="icon">
+                            <Link href={route('passwords.index')} prefetch>
+                                <RefreshCcw className="size-4" />
+                            </Link>
+                        </Button>
                         <CreatePasswordSheet>
                             <Button>Create</Button>
                         </CreatePasswordSheet>
