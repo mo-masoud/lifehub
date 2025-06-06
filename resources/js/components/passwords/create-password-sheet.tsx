@@ -11,7 +11,7 @@ export const CreatePasswordSheet: FC<CreatePasswordSheetProps> = ({ children }) 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>{children}</SheetTrigger>
-            <SheetContent className="min-w-lg overflow-y-auto">
+            <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
                 <SheetHeader>
                     <SheetTitle>Create Password</SheetTitle>
                     <SheetDescription>Create a new password to store in your vault.</SheetDescription>

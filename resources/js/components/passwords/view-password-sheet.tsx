@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { MarkdownReader } from '../markdown-reader';
-import { SharePassword } from './share-password';
 
 interface ViewPasswordSheetProps {
     password: Password;
@@ -59,7 +58,7 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
             <SheetTrigger asChild onClick={() => setOpen(true)}>
                 {children}
             </SheetTrigger>
-            <SheetContent className="overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()} aria-hidden={false}>
+            <SheetContent className="w-full overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()} aria-hidden={false}>
                 <SheetHeader>
                     <SheetTitle>
                         <span className="flex items-center gap-2">
@@ -71,17 +70,14 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                 </SheetHeader>
 
                 <div className="flex flex-col items-center gap-4 px-4 select-none">
-                    <div className="flex items-center gap-2">
-                        <span className={cn('bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md')}>
+                    <div className="flex w-full items-center gap-2">
+                        <span className={cn('bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-sm')}>
                             {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
-                    </div>
 
-                    <div className="mt-4 flex w-full items-center justify-between gap-4">
-                        <SharePassword />
-                        <Button variant="outline" className="w-full">
-                            <History />
+                        <Button variant="outline" className="ml-auto">
+                            <History className="size-4" />
                             History
                         </Button>
                     </div>
