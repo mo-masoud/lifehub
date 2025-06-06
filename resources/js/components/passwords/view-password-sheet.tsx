@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
 import {
     Copy,
+    Edit,
     Eye,
     EyeOff,
     Folder,
@@ -18,10 +19,12 @@ import {
     Terminal,
     Timer,
     TimerOff,
+    Trash2,
     User,
 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { MarkdownReader } from '../markdown-reader';
+import { EditPasswordSheet } from './edit-password-sheet';
 
 interface ViewPasswordSheetProps {
     password: Password;
@@ -70,15 +73,27 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
                 </SheetHeader>
 
                 <div className="flex flex-col items-center gap-4 px-4 select-none">
-                    <div className="flex w-full items-center gap-2">
+                    <div className="flex w-full items-center justify-center gap-2">
                         <span className={cn('bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-sm')}>
                             {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
+                    </div>
 
-                        <Button variant="outline" className="ml-auto">
-                            <History className="size-4" />
+                    <div className="grid grid-cols-3 gap-2">
+                        <Button variant="outline">
+                            <History />
                             History
+                        </Button>
+                        <EditPasswordSheet password={password}>
+                            <Button variant="outline">
+                                <Edit />
+                                Edit
+                            </Button>
+                        </EditPasswordSheet>
+                        <Button variant="destructive-outline">
+                            <Trash2 />
+                            Delete
                         </Button>
                     </div>
 

@@ -168,13 +168,13 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
 
             {/* Password */}
             <div className="flex flex-col gap-2">
-                <Label htmlFor="password">
+                <Label htmlFor="saved_password">
                     Password
                     <span className="text-destructive ml-px text-xs">*</span>
                 </Label>
                 <div className="flex items-center gap-1">
                     <Input
-                        id="password"
+                        id="saved_password"
                         type={showPassword ? 'text' : 'password'}
                         className="mt-1 block w-full"
                         autoComplete="off"
