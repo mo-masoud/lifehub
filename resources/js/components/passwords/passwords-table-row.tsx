@@ -40,7 +40,7 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelec
                     )}
                 </TableCell>
                 <TableCell>{password.last_used_at_formatted}</TableCell>
-                <TableCell className={cn('flex items-center justify-end')}>
+                <TableCell className="flex items-center justify-end gap-1">
                     <PasswordRowActions password={password} />
                 </TableCell>
             </TableRow>
