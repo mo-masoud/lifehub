@@ -1,6 +1,6 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { FC } from 'react';
 import { PasswordForm } from './password-form';
 

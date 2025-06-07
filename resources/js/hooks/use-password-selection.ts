@@ -1,4 +1,4 @@
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { useEffect, useState } from 'react';
 
 interface UsePasswordSelectionProps {

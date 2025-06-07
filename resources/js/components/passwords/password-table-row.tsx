@@ -1,7 +1,7 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { Folder, KeyRound, Terminal } from 'lucide-react';
 import { FC, useState } from 'react';
 import { PasswordRowActions } from './password-row-actions';

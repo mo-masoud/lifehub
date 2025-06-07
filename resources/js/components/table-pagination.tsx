@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/types';
-import { BaseModel } from '@/types/models';
+import { BaseModel } from '@/types/passwords';
 import { router } from '@inertiajs/react';
 import { ChevronDown, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { FC } from 'react';

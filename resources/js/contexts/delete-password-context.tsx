@@ -1,4 +1,4 @@
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
 
 interface DeletePasswordContextType {

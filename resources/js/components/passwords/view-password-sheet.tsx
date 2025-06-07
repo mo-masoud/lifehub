@@ -5,7 +5,7 @@ import { useDeletePassword } from '@/contexts/delete-password-context';
 import { useEditPassword } from '@/contexts/edit-password-context';
 import { usePasswords } from '@/hooks/use-passwords';
 import { cn } from '@/lib/utils';
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { Link } from '@inertiajs/react';
 import {
     Copy,

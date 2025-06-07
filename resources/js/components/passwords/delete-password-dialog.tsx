@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import { router } from '@inertiajs/react';
 import { FC } from 'react';
 import { toast } from 'sonner';

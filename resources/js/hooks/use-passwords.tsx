@@ -1,4 +1,4 @@
-import { Password } from '@/types/models';
+import { Password } from '@/types/passwords';
 import axios from 'axios';
 import { toast } from 'sonner';
 

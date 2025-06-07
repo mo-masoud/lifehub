@@ -1,6 +1,5 @@
 import { TableBody, TableCaption } from '@/components/ui/table';
-import { Password } from '@/types/models';
-import { SortDirection, SortKey } from '@/types/passwords';
+import { Password, SortDirection, SortKey } from '@/types/passwords';
 import { FC } from 'react';
 import { PasswordTableRow } from './password-table-row';
 import { PasswordsTableHeader } from './passwords-table-header';
