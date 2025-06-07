@@ -40,22 +40,19 @@ class AuditLogService
         ?Request $request = null,
         ?array $metadata = null
     ): void {
-        $logs = [];
         $timestamp = now();
 
         foreach ($passwordIds as $passwordId) {
-            $logs[] = [
+            PasswordAuditLog::create([
                 'password_id' => $passwordId,
                 'user_id' => $user->id,
                 'action' => $action,
                 'ip_address' => $request?->ip(),
                 'context' => $this->determineContext($request),
-                'metadata' => $metadata ? json_encode($metadata) : null,
+                'metadata' => $metadata,
                 'created_at' => $timestamp,
-            ];
+            ]);
         }
-
-        PasswordAuditLog::insert($logs);
     }
 
     /**

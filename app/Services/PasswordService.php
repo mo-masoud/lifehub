@@ -147,7 +147,7 @@ class PasswordService
 
         abort_if($passwords->isEmpty(), 403, 'You are not authorized to delete these passwords.');
 
-        // Log bulk deletion
+        // Log bulk deletion before deleting passwords
         $this->auditLogService->logBulkPasswordAction(
             $ids,
             $passwords->first()->user,

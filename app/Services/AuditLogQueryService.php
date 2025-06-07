@@ -51,7 +51,7 @@ class AuditLogQueryService
 
         // Filter by date range
         if (!empty($filters['start_date']) || !empty($filters['end_date'])) {
-            $query->inDateRange($filters['start_date'], $filters['end_date']);
+            $query->inDateRange($filters['start_date'] ?? null, $filters['end_date'] ?? null);
         }
 
         // Search functionality
