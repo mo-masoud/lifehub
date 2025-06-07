@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ViewPanel } from '@/components/view-panel';
+import { useDeletePassword } from '@/contexts/delete-password-context';
+import { useEditPassword } from '@/contexts/edit-password-context';
 import { usePasswords } from '@/hooks/use-passwords';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
 import { Link } from '@inertiajs/react';
 import {
     Copy,
+    Edit,
     Eye,
     EyeOff,
     Folder,
@@ -19,6 +22,7 @@ import {
     Terminal,
     Timer,
     TimerOff,
+    Trash2,
     User,
 } from 'lucide-react';
 import { FC, useState } from 'react';
@@ -33,6 +37,8 @@ interface ViewPasswordSheetProps {
 export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, setOpen }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { handleCopy } = usePasswords();
+    const { openSheet: openEditSheet } = useEditPassword();
+    const { openDialog: openDeleteDialog } = useDeletePassword();
 
     const renderPasswordStrength = () => {
         let color = 'text-destructive';
@@ -52,6 +58,16 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
                 <span className={cn('text-xs font-bold italic', color)}>{password.password_power?.label}</span>
             </>
         );
+    };
+
+    const handleEditPassword = () => {
+        setOpen(false);
+        openEditSheet(password);
+    };
+
+    const handleDeletePassword = () => {
+        setOpen(false);
+        openDeleteDialog(password);
     };
 
     return (
@@ -79,6 +95,12 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
                                 <Link href={route('passwords.audit-logs.index', { password_id: password.id })}>
                                     <History />
                                 </Link>
+                            </Button>
+                            <Button variant="outline" size="icon" onClick={handleEditPassword}>
+                                <Edit />
+                            </Button>
+                            <Button variant="destructive-outline" size="icon" onClick={handleDeletePassword}>
+                                <Trash2 />
                             </Button>
                         </div>
                     </div>
