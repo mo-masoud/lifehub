@@ -13,12 +13,19 @@ interface PasswordTableRowProps {
     onSelectionChange?: (checked: boolean) => void;
 }
 
-export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
-    const [open, setOpen] = useState(false);
+export const PasswordTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
+    const [viewSheetOpen, setViewSheetOpen] = useState(false);
+
+    const handleRowClick = () => {
+        // Small delay to prevent conflict with sheet closing events
+        setTimeout(() => {
+            setViewSheetOpen(true);
+        }, 50);
+    };
 
     return (
         <>
-            <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')} onClick={() => setOpen(true)}>
+            <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')} onClick={handleRowClick}>
                 <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
                     {onSelectionChange && (
                         <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
@@ -42,12 +49,12 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelec
                     )}
                 </TableCell>
                 <TableCell>{password.last_used_at_formatted}</TableCell>
-                <TableCell className="flex items-center justify-end gap-1">
+                <TableCell className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
                     <PasswordRowActions password={password} />
                 </TableCell>
             </TableRow>
 
-            <ViewPasswordSheet password={password} open={open} setOpen={setOpen} />
+            <ViewPasswordSheet password={password} open={viewSheetOpen} setOpen={setViewSheetOpen} />
         </>
     );
 };

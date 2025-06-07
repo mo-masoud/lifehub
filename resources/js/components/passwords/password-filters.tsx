@@ -1,17 +1,18 @@
 import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { PasswordType } from '@/types/passwords';
 import { KeyRound, List, Terminal } from 'lucide-react';
 import { FC } from 'react';
 
-interface PasswordsFilterProps {
-    setType: (type: 'ssh' | 'normal' | undefined) => void;
-    type: 'ssh' | 'normal' | undefined;
+interface PasswordFiltersProps {
+    setType: (type: PasswordType | undefined) => void;
+    type: PasswordType | undefined;
     setFolderId: (folderId: string) => void;
     folderId: string;
 }
 
-export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderId, setType, type }) => {
+export const PasswordFilters: FC<PasswordFiltersProps> = ({ setFolderId, folderId, setType, type }) => {
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
@@ -35,7 +36,7 @@ export const PasswordsFilter: FC<PasswordsFilterProps> = ({ setFolderId, folderI
                 <DropdownMenuContent className="w-28" align="end">
                     <DropdownMenuRadioGroup
                         value={type || 'all'}
-                        onValueChange={(value) => setType(value === 'all' ? undefined : (value as 'ssh' | 'normal'))}
+                        onValueChange={(value) => setType(value === 'all' ? undefined : (value as PasswordType))}
                     >
                         <DropdownMenuRadioItem value="all">
                             <span className="flex items-center justify-end gap-2">
