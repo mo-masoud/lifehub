@@ -7,6 +7,7 @@ use App\Models\PasswordAuditLog;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class AuditLogQueryService
 {
@@ -18,7 +19,7 @@ class AuditLogQueryService
         array $filters,
         bool $paginate = true,
         ?int $perPage = null
-    ): LengthAwarePaginator {
+    ): LengthAwarePaginator|Collection {
         $query = PasswordAuditLog::query()
             ->forPasswordsOwnedBy($user)
             ->with(['password:id,name,folder_id', 'password.folder:id,name'])

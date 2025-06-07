@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            // Optimized index for email-based lookups in audit contexts
+            $table->index(['email', 'id'], 'idx_users_email_id');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

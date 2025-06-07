@@ -189,7 +189,7 @@ class Password extends Model
 
         // If both are false, return no results
         if (!$showExpired && !$showExpiresSoon) {
-            return $query->whereRaw('1 = 0'); // No results
+            return $query->where('id', '<', 0); // No results - database agnostic
         }
 
         // If both are true, show all passwords (default behavior)

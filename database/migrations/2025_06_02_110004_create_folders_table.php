@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -19,6 +20,12 @@ return new class extends Migration
 
             $table->unique(['user_id', 'name']);
             $table->index(['user_id', 'name']);
+
+            // Optimized indexes for better join performance
+            $table->index(['user_id', 'name', 'id'], 'idx_folders_user_name_id');
+
+            // Data integrity constraints would be added here in production MySQL
+            // Skipped for SQLite compatibility in development
         });
     }
 

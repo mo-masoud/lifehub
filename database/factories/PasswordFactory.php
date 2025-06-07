@@ -23,7 +23,7 @@ class PasswordFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'type' => $this->faker->randomElement(PasswordTypes::cases()),
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->word() . '_' . $this->faker->randomNumber(4),
             'username' => $this->faker->userName(),
             'password' => 'temp_password', // Temporary value, will be replaced
             'url' => $this->faker->url(),
