@@ -1,3 +1,5 @@
+import { BaseModel } from './base';
+
 export type SortKey = 'name' | 'username' | 'last_used_at';
 export type SortDirection = 'asc' | 'desc';
 export type PasswordType = 'normal' | 'ssh';
@@ -17,12 +19,6 @@ export interface PasswordFilters {
     perPage?: number;
     showExpired?: boolean;
     showExpiresSoon?: boolean;
-}
-
-export interface BaseModel {
-    id: number;
-    created_at: Date;
-    updated_at: Date;
 }
 
 export interface Folder extends BaseModel {

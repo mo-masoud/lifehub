@@ -1,4 +1,4 @@
-import { NavGroup } from '@/types';
+import { NavGroup } from '@/types/navigation';
 import { FileText, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
 
 export const getDefaultNavigation = (passwordsCount: number, openSheet: () => void): NavGroup[] => [
