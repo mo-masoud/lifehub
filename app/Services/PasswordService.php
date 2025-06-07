@@ -5,13 +5,16 @@ namespace App\Services;
 use App\Models\Password;
 use App\Models\User;
 use App\Services\EnvelopeEncryptionService;
+use App\Services\AuditLogService;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class PasswordService
 {
     public function __construct(
-        private EnvelopeEncryptionService $encryptionService
+        private EnvelopeEncryptionService $encryptionService,
+        private AuditLogService $auditLogService
     ) {}
 
     public function createPassword(User $user, array $data): Password
@@ -24,7 +27,17 @@ class PasswordService
             $data = $this->encryptPassword($data);
         }
 
-        return Password::create($data);
+        $password = Password::create($data);
+
+        // Log the creation
+        $this->auditLogService->logPasswordAction(
+            $password,
+            $user,
+            'created',
+            request()
+        );
+
+        return $password;
     }
 
     public function updatePassword(Password $password, array $data): Password
@@ -37,6 +50,14 @@ class PasswordService
         }
 
         $password->update($data);
+
+        // Log the update
+        $this->auditLogService->logPasswordAction(
+            $password,
+            $password->user,
+            'updated',
+            request()
+        );
 
         return $password->fresh();
     }
@@ -96,11 +117,27 @@ class PasswordService
     {
         $password->update(['last_used_at' => now(), 'copied' => $password->copied + 1]);
 
+        // Log the copy action
+        $this->auditLogService->logPasswordAction(
+            $password,
+            $password->user,
+            'copied',
+            request()
+        );
+
         return $password;
     }
 
     public function delete(Password $password)
     {
+        // Log the deletion before deleting
+        $this->auditLogService->logPasswordAction(
+            $password,
+            $password->user,
+            'deleted',
+            request()
+        );
+
         $password->delete();
     }
 
@@ -109,6 +146,14 @@ class PasswordService
         $passwords = Password::whereIn('id', $ids)->where('user_id', auth()->id())->get();
 
         abort_if($passwords->isEmpty(), 403, 'You are not authorized to delete these passwords.');
+
+        // Log bulk deletion
+        $this->auditLogService->logBulkPasswordAction(
+            $ids,
+            $passwords->first()->user,
+            'bulk_deleted',
+            request()
+        );
 
         $passwords->each->delete();
     }
@@ -122,6 +167,15 @@ class PasswordService
         $passwords->each(function (Password $password) use ($folderId) {
             $password->update(['folder_id' => $folderId]);
         });
+
+        // Log bulk move to folder
+        $this->auditLogService->logBulkPasswordAction(
+            $ids,
+            $passwords->first()->user,
+            'moved_to_folder',
+            request(),
+            ['folder_id' => $folderId]
+        );
     }
 
     public function removeFromFolder(array $ids)
@@ -133,5 +187,13 @@ class PasswordService
         $passwords->each(function (Password $password) {
             $password->update(['folder_id' => null]);
         });
+
+        // Log bulk remove from folder
+        $this->auditLogService->logBulkPasswordAction(
+            $ids,
+            $passwords->first()->user,
+            'removed_from_folder',
+            request()
+        );
     }
 }

@@ -12,7 +12,7 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronRight, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
+import { ChevronRight, FileText, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
 
 export const NavMain = () => {
     const page = usePage();
@@ -73,6 +73,16 @@ export const NavMain = () => {
                                                 <ShieldPlus className="size-4" />
                                             </span>
                                             <span>New Password</span>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                    <SidebarMenuSubItem>
+                                        <SidebarMenuSubButton asChild isActive={page.url === '/audit-logs'}>
+                                            <Link href={route('passwords.audit-logs.index')} prefetch>
+                                                <span className="text-purple-700 dark:text-purple-300">
+                                                    <FileText className="size-4" />
+                                                </span>
+                                                <span>Audit Log</span>
+                                            </Link>
                                         </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
                                 </SidebarMenuSub>

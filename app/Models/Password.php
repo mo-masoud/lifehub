@@ -65,6 +65,11 @@ class Password extends Model
         return $this->belongsTo(Folder::class);
     }
 
+    public function auditLogs()
+    {
+        return $this->hasMany(PasswordAuditLog::class);
+    }
+
     public function cli(): Attribute
     {
         return Attribute::make(
@@ -96,7 +101,7 @@ class Password extends Model
     public function lastUsedAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : $this->updated_at->diffForHumans(),
+            get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : '-',
         );
     }
 

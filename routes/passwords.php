@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Passwords\PasswordController;
+use App\Http\Controllers\AuditLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -11,4 +12,6 @@ Route::middleware('auth')->group(function () {
     Route::post('passwords/destroy-bulk', [PasswordController::class, 'destroyBulk'])->name('passwords.destroy-bulk');
     Route::post('passwords/move-to-folder', [PasswordController::class, 'moveToFolder'])->name('passwords.move-to-folder');
     Route::post('passwords/remove-from-folder', [PasswordController::class, 'removeFromFolder'])->name('passwords.remove-from-folder');
+
+    Route::get('passwords/audit-logs', [AuditLogController::class, 'index'])->name('passwords.audit-logs.index');
 });
