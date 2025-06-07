@@ -1,0 +1,16 @@
+import { useEditPassword } from '@/contexts/edit-password-context';
+import { EditPasswordSheet } from './edit-password-sheet';
+
+export const GlobalEditPasswordSheet = () => {
+    const { isOpen, password, closeSheet } = useEditPassword();
+
+    const handleSetOpen = (open: boolean) => {
+        if (!open) {
+            closeSheet();
+        }
+    };
+
+    if (!password) return null;
+
+    return <EditPasswordSheet password={password} open={isOpen} setOpen={handleSetOpen} />;
+};

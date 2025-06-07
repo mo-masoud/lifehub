@@ -13,12 +13,7 @@ interface EditPasswordSheetProps {
 export const EditPasswordSheet: FC<EditPasswordSheetProps> = ({ password, open, setOpen }) => {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-            <SheetContent
-                className="w-full overflow-y-auto pb-8 sm:max-w-xl"
-                onOpenAutoFocus={(e) => e.preventDefault()}
-                aria-hidden={false}
-                onClick={(e) => e.stopPropagation()}
-            >
+            <SheetContent className="w-full overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()}>
                 <SheetHeader>
                     <SheetTitle>Edit Password</SheetTitle>
                     <SheetDescription>Edit the password details</SheetDescription>

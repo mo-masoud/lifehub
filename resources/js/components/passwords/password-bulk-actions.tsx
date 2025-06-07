@@ -1,20 +1,20 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useDeletePassword } from '@/contexts/delete-password-context';
 import { FolderInput, FolderOutput, TableOfContents, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { DeletePasswordDialog } from './delete-password-dialog';
 import { MoveToFolderDialog } from './move-to-folder-dialog';
 import { RemoveFromFolderDialog } from './remove-from-folder-dialog';
 
 export function PasswordBulkActions({ selectedPasswordIds }: { selectedPasswordIds: Set<number> }) {
+    const { openBulkDialog: openBulkDeleteDialog } = useDeletePassword();
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [moveToFolderDialogOpen, setMoveToFolderDialogOpen] = useState(false);
     const [removeFromFolderDialogOpen, setRemoveFromFolderDialogOpen] = useState(false);
 
     const handleOpenDeleteDialog = () => {
         setDropdownOpen(false);
-        setDeleteDialogOpen(true);
+        openBulkDeleteDialog(selectedPasswordIds);
     };
 
     const handleOpenMoveToFolderDialog = () => {
@@ -52,7 +52,6 @@ export function PasswordBulkActions({ selectedPasswordIds }: { selectedPasswordI
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <DeletePasswordDialog open={deleteDialogOpen} setOpen={setDeleteDialogOpen} selectedPasswordIds={selectedPasswordIds} />
             <MoveToFolderDialog open={moveToFolderDialogOpen} setOpen={setMoveToFolderDialogOpen} selectedPasswordIds={selectedPasswordIds} />
             <RemoveFromFolderDialog
                 open={removeFromFolderDialogOpen}

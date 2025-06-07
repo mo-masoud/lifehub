@@ -17,10 +17,7 @@ export const PasswordTableRow: FC<PasswordTableRowProps> = ({ password, isSelect
     const [viewSheetOpen, setViewSheetOpen] = useState(false);
 
     const handleRowClick = () => {
-        // Small delay to prevent conflict with sheet closing events
-        setTimeout(() => {
-            setViewSheetOpen(true);
-        }, 50);
+        setViewSheetOpen(true);
     };
 
     return (

@@ -14,6 +14,11 @@ export { EditPasswordSheet } from './edit-password-sheet';
 export { PasswordForm } from './password-form';
 export { ViewPasswordSheet } from './view-password-sheet';
 
+// Global components
+export { GlobalCreatePasswordSheet } from './global-create-password-sheet';
+export { GlobalDeletePasswordDialog } from './global-delete-password-dialog';
+export { GlobalEditPasswordSheet } from './global-edit-password-sheet';
+
 // Action components
 export { PasswordBulkActions } from './password-bulk-actions';
 export { PasswordRowActions } from './password-row-actions';
