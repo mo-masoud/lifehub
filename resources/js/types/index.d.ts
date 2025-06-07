@@ -10,16 +10,36 @@ export interface BreadcrumbItem {
     href: string;
 }
 
-export interface NavGroup {
-    title: string;
-    items: NavItem[];
+export interface NavSubItem {
+    label: string;
+    icon?: LucideIcon;
+    href?: string;
+    onClick?: () => void;
+    isActive?: () => boolean;
+    badge?: string | number;
+    tooltip?: string;
 }
 
 export interface NavItem {
-    title: string;
-    href: string;
-    icon?: LucideIcon | null;
-    isActive?: boolean;
+    label: string;
+    icon: LucideIcon;
+    href?: string;
+    onClick?: () => void;
+    isActive?: () => boolean;
+    tooltip?: string;
+    badge?: string | number;
+    collapsible?: boolean;
+    defaultOpen?: boolean;
+    subItems?: NavSubItem[];
+}
+
+export interface NavGroup {
+    label?: string;
+    items: NavItem[];
+}
+
+export interface NavMainProps {
+    groups?: NavGroup[];
 }
 
 export interface SharedData {

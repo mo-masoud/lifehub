@@ -12,88 +12,118 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { useCreatePassword } from '@/contexts/create-password-context';
-import { SharedData } from '@/types';
+import { getDefaultNavigation } from '@/lib/navigation-config';
+import { NavGroup, NavItem, NavMainProps, NavSubItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronRight, FileText, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
-export const NavMain = () => {
+export const NavMain = ({ groups }: NavMainProps = {}) => {
     const page = usePage<SharedData>();
     const { open } = useSidebar();
     const { openSheet } = useCreatePassword();
 
-    const handleNewPassword = () => {
-        openSheet();
+    // Use provided groups or default navigation
+    const navigationGroups = groups || getDefaultNavigation(page.props.passwordsCount, openSheet);
+
+    const renderSubItem = (subItem: NavSubItem, index: number) => {
+        const isActive = subItem.isActive?.() || false;
+
+        return (
+            <SidebarMenuSubItem key={index}>
+                <SidebarMenuSubButton
+                    isActive={isActive}
+                    asChild={!!subItem.href}
+                    className={subItem.onClick ? 'cursor-pointer' : undefined}
+                    onClick={subItem.onClick}
+                >
+                    {subItem.href ? (
+                        <Link href={subItem.href} prefetch>
+                            {subItem.icon && <subItem.icon className="size-4" />}
+                            <span>{subItem.label}</span>
+                            {subItem.badge && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
+                        </Link>
+                    ) : (
+                        <>
+                            {subItem.icon && <subItem.icon className="size-4" />}
+                            <span>{subItem.label}</span>
+                            {subItem.badge && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
+                        </>
+                    )}
+                </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+        );
     };
 
-    const passwordsCount = page.props.passwordsCount > 99 ? '99+' : page.props.passwordsCount;
+    const renderItem = (item: NavItem, index: number) => {
+        const isActive = item.isActive?.() || false;
+        const tooltip = { children: item.tooltip || item.label };
 
-    return (
-        <>
-            <SidebarGroup className="px-2 py-0">
-                <SidebarGroupLabel>Platform</SidebarGroupLabel>
-                <SidebarMenu>
+        if (item.collapsible && item.subItems) {
+            return (
+                <Collapsible key={index} defaultOpen={item.defaultOpen} className="group/collapsible">
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild isActive={route().current('dashboard')} tooltip={{ children: 'Dashboard' }}>
-                            <Link href="/dashboard" prefetch>
-                                <LayoutDashboard />
-                                <span>Dashboard</span>
-                            </Link>
-                        </SidebarMenuButton>
+                        <CollapsibleTrigger asChild>
+                            <SidebarMenuButton tooltip={tooltip} isActive={isActive} asChild={!open} onClick={item.onClick}>
+                                {open ? (
+                                    <>
+                                        <item.icon />
+                                        <span>{item.label}</span>
+                                        <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                    </>
+                                ) : item.href ? (
+                                    <Link href={item.href} prefetch>
+                                        <item.icon />
+                                        <span>{item.label}</span>
+                                    </Link>
+                                ) : (
+                                    <>
+                                        <item.icon />
+                                        <span>{item.label}</span>
+                                    </>
+                                )}
+                            </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                            <SidebarMenuSub className="mr-0 pr-0">{item.subItems.map(renderSubItem)}</SidebarMenuSub>
+                        </CollapsibleContent>
                     </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarGroup>
+                </Collapsible>
+            );
+        }
 
-            <SidebarGroup className="px-2 py-0">
-                <SidebarMenu>
-                    <Collapsible defaultOpen className="group/collapsible">
-                        <SidebarMenuItem>
-                            <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip={{ children: 'Passwords' }} isActive={route().current('passwords.*')} asChild={!open}>
-                                    {open ? (
-                                        <>
-                                            <LockKeyhole />
-                                            <span>Passwords</span>
-                                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                                        </>
-                                    ) : (
-                                        <Link href={route('passwords.index')} prefetch>
-                                            <LockKeyhole />
-                                            <span>Passwords</span>
-                                        </Link>
-                                    )}
-                                </SidebarMenuButton>
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                                <SidebarMenuSub className="mr-0 pr-0">
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton isActive={route().current('passwords.index')} asChild>
-                                            <Link href={route('passwords.index')} prefetch>
-                                                <List className="size-4" />
-                                                <span>All Passwords</span>
-                                                <SidebarMenuBadge>{passwordsCount}</SidebarMenuBadge>
-                                            </Link>
-                                        </SidebarMenuSubButton>
-                                    </SidebarMenuSubItem>
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton className="cursor-pointer" onClick={handleNewPassword}>
-                                            <ShieldPlus className="size-4" />
-                                            <span>New Password</span>
-                                        </SidebarMenuSubButton>
-                                    </SidebarMenuSubItem>
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton asChild isActive={route().current('passwords.audit-logs.index')}>
-                                            <Link href={route('passwords.audit-logs.index')} prefetch>
-                                                <FileText className="size-4" />
-                                                <span>Audit Log</span>
-                                            </Link>
-                                        </SidebarMenuSubButton>
-                                    </SidebarMenuSubItem>
-                                </SidebarMenuSub>
-                            </CollapsibleContent>
-                        </SidebarMenuItem>
-                    </Collapsible>
-                </SidebarMenu>
-            </SidebarGroup>
-        </>
+        return (
+            <SidebarMenuItem key={index}>
+                <SidebarMenuButton
+                    asChild={!!item.href}
+                    isActive={isActive}
+                    tooltip={tooltip}
+                    onClick={item.onClick}
+                    className={item.onClick ? 'cursor-pointer' : undefined}
+                >
+                    {item.href ? (
+                        <Link href={item.href} prefetch>
+                            <item.icon />
+                            <span>{item.label}</span>
+                            {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                        </Link>
+                    ) : (
+                        <>
+                            <item.icon />
+                            <span>{item.label}</span>
+                            {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                        </>
+                    )}
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        );
+    };
+
+    const renderGroup = (group: NavGroup, index: number) => (
+        <SidebarGroup key={index} className="px-2 py-0">
+            {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+            <SidebarMenu>{group.items.map(renderItem)}</SidebarMenu>
+        </SidebarGroup>
     );
+
+    return <>{navigationGroups.map(renderGroup)}</>;
 };
