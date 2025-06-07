@@ -25,7 +25,10 @@ export const EditPasswordProvider: FC<EditPasswordProviderProps> = ({ children }
 
     const closeSheet = () => {
         setIsOpen(false);
-        setPassword(null);
+        // Delay clearing password to allow sheet close animation to complete
+        setTimeout(() => {
+            setPassword(null);
+        }, 300);
     };
 
     return <EditPasswordContext.Provider value={{ isOpen, password, openSheet, closeSheet }}>{children}</EditPasswordContext.Provider>;

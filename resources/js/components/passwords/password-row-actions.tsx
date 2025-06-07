@@ -23,12 +23,18 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
 
     const handleEditPassword = () => {
         setMoreActionsDropdownOpen(false);
-        openEditSheet(password);
+        // Small delay to allow dropdown close animation to complete before opening sheet
+        setTimeout(() => {
+            openEditSheet(password);
+        }, 150);
     };
 
     const handleDeletePassword = () => {
         setMoreActionsDropdownOpen(false);
-        openDeleteDialog(password);
+        // Small delay to allow dropdown close animation to complete before opening dialog
+        setTimeout(() => {
+            openDeleteDialog(password);
+        }, 150);
     };
 
     return (
