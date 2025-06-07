@@ -18,7 +18,9 @@ return new class extends Migration
             $table->enum('type', PasswordTypes::values())->default('normal');
             $table->string('name');
             $table->string('username');
-            $table->string('password');
+            $table->text('password');
+            $table->text('encrypted_key')->nullable();
+            $table->unsignedTinyInteger('key_version')->nullable();
             $table->string('url')->nullable();
             $table->text('notes')->nullable();
             $table->foreignId('folder_id')->nullable()->constrained()->nullOnDelete();
@@ -29,6 +31,9 @@ return new class extends Migration
 
             $table->unique(['user_id', 'name']);
             $table->index(['user_id', 'name']);
+            $table->index(['user_id', 'type', 'created_at']);
+            $table->index(['user_id', 'folder_id', 'last_used_at']);
+            $table->index(['user_id', 'expires_at']);
         });
     }
 

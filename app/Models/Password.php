@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\PasswordTypes;
 use App\Services\PasswordStrengthCalculator;
+use App\Services\EnvelopeEncryptionService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Password extends Model
 {
@@ -19,6 +21,8 @@ class Password extends Model
         'name',
         'username',
         'password',
+        'encrypted_key',
+        'key_version',
         'url',
         'notes',
         'folder_id',
@@ -40,10 +44,16 @@ class Password extends Model
         'user_id' => 'integer',
         'type' => PasswordTypes::class,
         'folder_id' => 'integer',
+        'key_version' => 'integer',
         'copied' => 'integer',
         'last_used_at' => 'datetime',
         'expires_at' => 'date',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
 
     public function user()
     {
@@ -100,8 +110,32 @@ class Password extends Model
     public function password(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => decrypt($value),
-            set: fn($value) => encrypt($value),
+            get: function ($value) {
+                // Return null if no password value
+                if (empty($value)) {
+                    return null;
+                }
+
+                // Get encrypted key and version
+                $encryptedKey = $this->encrypted_key;
+                $keyVersion = $this->key_version;
+
+                // If we don't have the required fields, this might be legacy data or an error
+                if (empty($encryptedKey) || empty($keyVersion)) {
+                    throw new \RuntimeException('Password is missing envelope encryption fields (encrypted_key or key_version)');
+                }
+
+                try {
+                    $encryptionService = app(EnvelopeEncryptionService::class);
+                    return $encryptionService->decrypt($value, $encryptedKey, $keyVersion);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to decrypt password with envelope encryption', [
+                        'password_id' => $this->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    throw $e;
+                }
+            }
         );
     }
 

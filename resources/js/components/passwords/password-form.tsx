@@ -89,7 +89,7 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
 
             {/* Username */}
             <div className="grid gap-2">
-                <Label htmlFor="username" className="flex items-center">
+                <Label htmlFor="saved_username" className="flex items-center">
                     Username
                     {data.type === 'normal' ? (
                         <span className="text-destructive ml-px text-xs">*</span>
@@ -100,7 +100,7 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
                     )}
                 </Label>
                 <Input
-                    id="username"
+                    id="saved_username"
                     type="text"
                     className="mt-1 block w-full"
                     autoComplete="off"

@@ -4,11 +4,23 @@ use App\Enums\PasswordTypes;
 use App\Models\Folder;
 use App\Models\Password;
 use App\Models\User;
+use App\Services\EnvelopeEncryptionService;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use App\Services\PasswordService;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    // Set up test encryption keys for envelope encryption
+    Config::set('encryption.master_keys', [
+        1 => EnvelopeEncryptionService::generateTestKey('test_key_v1'),
+        2 => EnvelopeEncryptionService::generateTestKey('test_key_v2'),
+    ]);
+    Config::set('encryption.master_key_version', 1);
+});
 
 describe('Password Model', function () {
     test('can create a password', function () {
@@ -41,6 +53,8 @@ describe('Password Model', function () {
             'name',
             'username',
             'password',
+            'encrypted_key',
+            'key_version',
             'url',
             'notes',
             'folder_id',
@@ -57,6 +71,7 @@ describe('Password Model', function () {
         expect($casts)->toHaveKey('user_id', 'integer')
             ->and($casts)->toHaveKey('type', PasswordTypes::class)
             ->and($casts)->toHaveKey('folder_id', 'integer')
+            ->and($casts)->toHaveKey('key_version', 'integer')
             ->and($casts)->toHaveKey('copied', 'integer')
             ->and($casts)->toHaveKey('last_used_at', 'datetime')
             ->and($casts)->toHaveKey('expires_at', 'date');
@@ -65,7 +80,14 @@ describe('Password Model', function () {
     test('has appended attributes', function () {
         $password = new Password();
 
-        expect($password->getAppends())->toBe(['cli']);
+        expect($password->getAppends())->toBe([
+            'cli',
+            'is_expired',
+            'is_expired_soon',
+            'last_used_at_formatted',
+            'expires_at_formatted',
+            'password_power',
+        ]);
     });
 
     test('belongs to a user', function () {
@@ -93,23 +115,89 @@ describe('Password Model', function () {
 
     test('password is encrypted and decrypted correctly', function () {
         $plainPassword = 'mySecretPassword123';
-        $password = Password::factory()->create(['password' => $plainPassword]);
+
+        // Create password using the factory
+        $password = Password::factory()->withPlainPassword($plainPassword)->create();
+
+        // Refresh the model to ensure we get fresh data from database
+        $password->refresh();
 
         // Password should be encrypted in database
         $rawPassword = DB::table('passwords')->where('id', $password->id)->value('password');
         expect($rawPassword)->not->toBe($plainPassword);
 
+        // Should have envelope encryption fields
+        $passwordRecord = DB::table('passwords')->where('id', $password->id)->first();
+        expect($passwordRecord->encrypted_key)->not->toBeNull();
+        expect($passwordRecord->key_version)->not->toBeNull();
+
         // But accessible as plain text through accessor
         expect($password->password)->toBe($plainPassword);
     });
 
+    test('can create password with specific key version', function () {
+        $plainPassword = 'mySecretPassword123';
+
+        $password = Password::factory()->withPlainPassword($plainPassword, 1)->create();
+
+        expect($password->key_version)->toBe(1);
+        expect($password->password)->toBe($plainPassword);
+    });
+
+    test('can create password through service', function () {
+        $user = User::factory()->create();
+        $plainPassword = 'mySecretPassword123';
+        $passwordService = app(PasswordService::class);
+
+        $password = $passwordService->createPassword($user, [
+            'type' => 'normal',
+            'name' => 'Service Test Password',
+            'username' => 'serviceuser',
+            'password' => $plainPassword,
+        ]);
+
+        expect($password)->toBeInstanceOf(Password::class);
+        expect($password->name)->toBe('Service Test Password');
+        expect($password->username)->toBe('serviceuser');
+        expect($password->password)->toBe($plainPassword);
+        expect($password->encrypted_key)->not->toBeNull();
+        expect($password->key_version)->not->toBeNull();
+    });
+
+    test('can update password through service', function () {
+        $password = Password::factory()->withPlainPassword('oldPassword123')->create();
+        $newPassword = 'newPassword456';
+        $passwordService = app(PasswordService::class);
+
+        $updatedPassword = $passwordService->updatePassword($password, [
+            'name' => 'Updated Password Name',
+            'password' => $newPassword,
+        ]);
+
+        expect($updatedPassword->name)->toBe('Updated Password Name');
+        expect($updatedPassword->password)->toBe($newPassword);
+        expect($updatedPassword->encrypted_key)->not->toBeNull();
+        expect($updatedPassword->key_version)->not->toBeNull();
+    });
+
     test('cli attribute generates correct ssh command', function () {
         $password = Password::factory()->create([
+            'type' => PasswordTypes::SSH,
             'username' => 'admin',
             'url' => 'server.example.com',
         ]);
 
         expect($password->cli)->toBe('ssh admin@server.example.com');
+    });
+
+    test('cli attribute is null for non-ssh passwords', function () {
+        $password = Password::factory()->create([
+            'type' => PasswordTypes::Normal,
+            'username' => 'admin',
+            'url' => 'server.example.com',
+        ]);
+
+        expect($password->cli)->toBeNull();
     });
 
     test('password name is unique per user', function () {

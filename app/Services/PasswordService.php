@@ -4,20 +4,37 @@ namespace App\Services;
 
 use App\Models\Password;
 use App\Models\User;
+use App\Services\EnvelopeEncryptionService;
 use Illuminate\Validation\ValidationException;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class PasswordService
 {
+    public function __construct(
+        private EnvelopeEncryptionService $encryptionService
+    ) {}
+
     public function createPassword(User $user, array $data): Password
     {
         $data = $this->prepareData($data);
+        $data['user_id'] = $user->id;
 
-        return $user->passwords()->create($data);
+        // Handle password encryption if provided
+        if (isset($data['password'])) {
+            $data = $this->encryptPassword($data);
+        }
+
+        return Password::create($data);
     }
 
     public function updatePassword(Password $password, array $data): Password
     {
         $data = $this->prepareData($data);
+
+        // Handle password encryption if provided
+        if (isset($data['password'])) {
+            $data = $this->encryptPassword($data);
+        }
 
         $password->update($data);
 
@@ -26,7 +43,7 @@ class PasswordService
 
     protected function prepareData(array $data): array
     {
-        if ($data['type'] === 'ssh') {
+        if (isset($data['type']) && $data['type'] === 'ssh') {
             if (isset($data['cli'])) {
                 $data['username'] = $this->extractUsernameFromCli($data['cli']);
                 $data['url'] = $this->extractUrlFromCli($data['cli']);
@@ -58,6 +75,21 @@ class PasswordService
     protected function extractUrlFromCli(string $cli): string
     {
         return str($cli)->after('@')->trim();
+    }
+
+    protected function encryptPassword(array $data): array
+    {
+        if (empty($data['password'])) {
+            return $data;
+        }
+
+        $encrypted = $this->encryptionService->encrypt($data['password']);
+
+        $data['password'] = $encrypted['encrypted_data'];
+        $data['encrypted_key'] = $encrypted['encrypted_key'];
+        $data['key_version'] = $encrypted['key_version'];
+
+        return $data;
     }
 
     public function copy(Password $password)
