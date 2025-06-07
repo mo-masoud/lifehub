@@ -31,6 +31,27 @@ class IndexPasswordsRequest extends FormRequest
             'per_page' => ['nullable', 'integer', 'min:1'],
             'page' => ['nullable', 'integer', 'min:1'],
             'type' => ['nullable', 'string', 'in:' . implode(',', PasswordTypes::values())],
+            'show_expired' => ['nullable', 'boolean'],
+            'show_expires_soon' => ['nullable', 'boolean'],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        // Convert string boolean values to actual booleans
+        if ($this->has('show_expired')) {
+            $this->merge([
+                'show_expired' => filter_var($this->show_expired, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
+        }
+
+        if ($this->has('show_expires_soon')) {
+            $this->merge([
+                'show_expires_soon' => filter_var($this->show_expires_soon, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+            ]);
+        }
     }
 }

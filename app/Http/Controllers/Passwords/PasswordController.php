@@ -39,6 +39,8 @@ class PasswordController extends Controller
             'search' => $filters['search'],
             'perPage' => $request->per_page,
             'type' => $filters['type'],
+            'showExpired' => $filters['show_expired'] ?? true,
+            'showExpiresSoon' => $filters['show_expires_soon'] ?? true,
         ];
 
         return inertia('passwords/index', [

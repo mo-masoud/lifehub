@@ -74,11 +74,13 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
 
-                        <Button variant="outline" size="icon" className="ml-auto" asChild>
-                            <Link href={route('passwords.audit-logs.index', { password_id: password.id })}>
-                                <History />
-                            </Link>
-                        </Button>
+                        <div className="ml-auto flex items-center justify-center gap-2">
+                            <Button variant="outline" size="icon" asChild>
+                                <Link href={route('passwords.audit-logs.index', { password_id: password.id })}>
+                                    <History />
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="border-border bg-background mt-4 flex w-full flex-col items-center justify-center divide-y rounded-md border p-4">

@@ -454,4 +454,147 @@ describe('Password Model', function () {
         expect($password->fresh()->last_used_at->toDateTimeString())
             ->toBe($now->toDateTimeString());
     });
+
+    test('filter by expiry scope handles both filters enabled', function () {
+        $expired = Password::factory()->create([
+            'expires_at' => now()->subDays(5),
+        ]);
+
+        $expiresSoon = Password::factory()->create([
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $notExpiring = Password::factory()->create([
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        $noExpiry = Password::factory()->create([
+            'expires_at' => null,
+        ]);
+
+        // Both filters enabled should return all passwords
+        $results = Password::filterByExpiry([
+            'show_expired' => true,
+            'show_expires_soon' => true,
+        ])->get();
+
+        expect($results->pluck('id')->toArray())
+            ->toContain($expired->id)
+            ->toContain($expiresSoon->id)
+            ->toContain($notExpiring->id)
+            ->toContain($noExpiry->id);
+    });
+
+    test('filter by expiry scope handles only expired filter enabled', function () {
+        $expired = Password::factory()->create([
+            'expires_at' => now()->subDays(5),
+        ]);
+
+        $expiresSoon = Password::factory()->create([
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $notExpiring = Password::factory()->create([
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        $noExpiry = Password::factory()->create([
+            'expires_at' => null,
+        ]);
+
+        // Only expired filter enabled should return only expired passwords
+        $results = Password::filterByExpiry([
+            'show_expired' => true,
+            'show_expires_soon' => false,
+        ])->get();
+
+        expect($results->pluck('id')->toArray())
+            ->toContain($expired->id)
+            ->not->toContain($expiresSoon->id)
+            ->not->toContain($notExpiring->id)
+            ->not->toContain($noExpiry->id);
+    });
+
+    test('filter by expiry scope handles only expires soon filter enabled', function () {
+        $expired = Password::factory()->create([
+            'expires_at' => now()->subDays(5),
+        ]);
+
+        $expiresSoon = Password::factory()->create([
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $notExpiring = Password::factory()->create([
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        $noExpiry = Password::factory()->create([
+            'expires_at' => null,
+        ]);
+
+        // Only expires soon filter enabled should return only expiring soon passwords
+        $results = Password::filterByExpiry([
+            'show_expired' => false,
+            'show_expires_soon' => true,
+        ])->get();
+
+        expect($results->pluck('id')->toArray())
+            ->not->toContain($expired->id)
+            ->toContain($expiresSoon->id)
+            ->not->toContain($notExpiring->id)
+            ->not->toContain($noExpiry->id);
+    });
+
+    test('filter by expiry scope handles both filters disabled', function () {
+        $expired = Password::factory()->create([
+            'expires_at' => now()->subDays(5),
+        ]);
+
+        $expiresSoon = Password::factory()->create([
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $notExpiring = Password::factory()->create([
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        $noExpiry = Password::factory()->create([
+            'expires_at' => null,
+        ]);
+
+        // Both filters disabled should return no passwords
+        $results = Password::filterByExpiry([
+            'show_expired' => false,
+            'show_expires_soon' => false,
+        ])->get();
+
+        expect($results)->toHaveCount(0);
+    });
+
+    test('filter by expiry scope handles default parameters', function () {
+        $expired = Password::factory()->create([
+            'expires_at' => now()->subDays(5),
+        ]);
+
+        $expiresSoon = Password::factory()->create([
+            'expires_at' => now()->addDays(10),
+        ]);
+
+        $notExpiring = Password::factory()->create([
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        $noExpiry = Password::factory()->create([
+            'expires_at' => null,
+        ]);
+
+        // Default parameters should return all passwords (both filters true by default)
+        $results = Password::filterByExpiry()->get();
+
+        expect($results->pluck('id')->toArray())
+            ->toContain($expired->id)
+            ->toContain($expiresSoon->id)
+            ->toContain($notExpiring->id)
+            ->toContain($noExpiry->id);
+    });
 });

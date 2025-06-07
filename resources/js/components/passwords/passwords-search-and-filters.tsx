@@ -11,6 +11,10 @@ interface PasswordsSearchAndFiltersProps {
     onFolderIdChange: (folderId: string) => void;
     type: PasswordType | undefined;
     onTypeChange: (type: PasswordType | undefined) => void;
+    showExpired: boolean;
+    onShowExpiredChange: (show: boolean) => void;
+    showExpiresSoon: boolean;
+    onShowExpiresSoonChange: (show: boolean) => void;
 }
 
 export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
@@ -20,6 +24,10 @@ export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
     onFolderIdChange,
     type,
     onTypeChange,
+    showExpired,
+    onShowExpiredChange,
+    showExpiresSoon,
+    onShowExpiresSoonChange,
 }) => {
     return (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
@@ -27,7 +35,16 @@ export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
                 <Search className="text-muted-foreground absolute top-1/2 left-4 size-5 -translate-y-1/2" />
                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={onSearchChange} />
             </div>
-            <PasswordFilters setFolderId={onFolderIdChange} folderId={folderId} setType={onTypeChange} type={type} />
+            <PasswordFilters
+                setFolderId={onFolderIdChange}
+                folderId={folderId}
+                setType={onTypeChange}
+                type={type}
+                showExpired={showExpired}
+                setShowExpired={onShowExpiredChange}
+                showExpiresSoon={showExpiresSoon}
+                setShowExpiresSoon={onShowExpiresSoonChange}
+            />
         </div>
     );
 };

@@ -31,8 +31,23 @@ export default function PasswordsPage() {
     const { passwords, filters } = usePage<PasswordsPageProps>().props;
 
     // Use custom hooks for state management
-    const { sortKey, sortDirection, search, folderId, type, perPage, setSearch, setFolderId, setType, setPerPage, handleSortChange } =
-        usePasswordListState({ initialFilters: filters });
+    const {
+        sortKey,
+        sortDirection,
+        search,
+        folderId,
+        type,
+        perPage,
+        showExpired,
+        showExpiresSoon,
+        setSearch,
+        setFolderId,
+        setType,
+        setPerPage,
+        setShowExpired,
+        setShowExpiresSoon,
+        handleSortChange,
+    } = usePasswordListState({ initialFilters: filters });
 
     const { selectedPasswordIds, handleSelectAll, handleSelectPassword, isAllSelected, isIndeterminate } = usePasswordSelection({
         passwords: passwords.data,
@@ -63,6 +78,10 @@ export default function PasswordsPage() {
                             onFolderIdChange={setFolderId}
                             type={type}
                             onTypeChange={setType}
+                            showExpired={showExpired}
+                            onShowExpiredChange={setShowExpired}
+                            showExpiresSoon={showExpiresSoon}
+                            onShowExpiresSoonChange={setShowExpiresSoon}
                         />
 
                         <PasswordsTable
@@ -87,6 +106,8 @@ export default function PasswordsPage() {
                                 search: search || undefined,
                                 folder_id: folderId !== 'all' ? folderId : undefined,
                                 type: type || undefined,
+                                show_expired: showExpired !== true ? showExpired : undefined,
+                                show_expires_soon: showExpiresSoon !== true ? showExpiresSoon : undefined,
                             }}
                             routeName="passwords.index"
                             perPage={perPage}

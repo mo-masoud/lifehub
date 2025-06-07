@@ -39,6 +39,15 @@ class PasswordQueryService
             $query->where('type', $filters['type']);
         }
 
+        // Expiry filter
+        if (isset($filters['show_expired']) || isset($filters['show_expires_soon'])) {
+            $expiryFilters = [
+                'show_expired' => $filters['show_expired'] ?? true,
+                'show_expires_soon' => $filters['show_expires_soon'] ?? true,
+            ];
+            $query->filterByExpiry($expiryFilters);
+        }
+
         // Search filter
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
@@ -67,6 +76,8 @@ class PasswordQueryService
             'search' => $request->search,
             'sort' => $request->sort,
             'direction' => $request->direction,
+            'show_expired' => $request->show_expired,
+            'show_expires_soon' => $request->show_expires_soon,
         ];
     }
 }

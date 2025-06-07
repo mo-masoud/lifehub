@@ -21,7 +21,7 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
     };
 
     return (
-        <div onClick={(e) => e.stopPropagation()}>
+        <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-end gap-1">
             {password.is_expired && <span className="text-destructive text-xs italic">Expired</span>}
             {password.is_expired_soon && <span className="text-warning text-xs italic">Expiring soon</span>}
             {password.type === 'ssh' ? (

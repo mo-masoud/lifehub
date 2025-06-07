@@ -14,4 +14,6 @@ export interface PasswordFilters {
     search?: string;
     type?: PasswordType;
     perPage?: number;
+    showExpired?: boolean;
+    showExpiresSoon?: boolean;
 }
