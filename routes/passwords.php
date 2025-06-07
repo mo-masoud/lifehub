@@ -9,4 +9,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('passwords/{password}/copy', [PasswordController::class, 'copy'])->name('passwords.copy');
     Route::post('passwords/destroy-bulk', [PasswordController::class, 'destroyBulk'])->name('passwords.destroy-bulk');
+    Route::post('passwords/move-to-folder', [PasswordController::class, 'moveToFolder'])->name('passwords.move-to-folder');
+    Route::post('passwords/remove-from-folder', [PasswordController::class, 'removeFromFolder'])->name('passwords.remove-from-folder');
 });

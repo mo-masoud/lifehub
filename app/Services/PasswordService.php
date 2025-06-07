@@ -80,4 +80,26 @@ class PasswordService
 
         $passwords->each->delete();
     }
+
+    public function moveToFolder(array $ids, ?int $folderId)
+    {
+        $passwords = Password::whereIn('id', $ids)->where('user_id', auth()->id())->get();
+
+        abort_if($passwords->isEmpty(), 403, 'You are not authorized to move these passwords.');
+
+        $passwords->each(function (Password $password) use ($folderId) {
+            $password->update(['folder_id' => $folderId]);
+        });
+    }
+
+    public function removeFromFolder(array $ids)
+    {
+        $passwords = Password::whereIn('id', $ids)->where('user_id', auth()->id())->get();
+
+        abort_if($passwords->isEmpty(), 403, 'You are not authorized to remove these passwords from folder.');
+
+        $passwords->each(function (Password $password) {
+            $password->update(['folder_id' => null]);
+        });
+    }
 }

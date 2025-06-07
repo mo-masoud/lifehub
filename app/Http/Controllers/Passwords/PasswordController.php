@@ -7,6 +7,8 @@ use App\Http\Requests\Passwords\IndexPasswordsRequest;
 use App\Http\Requests\Passwords\StorePasswordRequest;
 use App\Http\Requests\Passwords\UpdatePasswordRequest;
 use App\Http\Requests\Passwords\BulkDeletePasswordsRequest;
+use App\Http\Requests\Passwords\BulkMoveToFolderRequest;
+use App\Http\Requests\Passwords\BulkRemoveFromFolderRequest;
 use App\Models\Password;
 use App\Services\PasswordQueryService;
 use App\Services\PasswordService;
@@ -88,5 +90,22 @@ class PasswordController extends Controller
         $this->passwordService->destroyBulk($request->validated('ids'));
 
         return redirect()->route('passwords.index')->with('success', 'Passwords deleted successfully.');
+    }
+
+    public function moveToFolder(BulkMoveToFolderRequest $request)
+    {
+        $this->passwordService->moveToFolder(
+            $request->validated('ids'),
+            $request->validated('folder_id')
+        );
+
+        return redirect()->route('passwords.index')->with('success', 'Passwords moved to folder successfully.');
+    }
+
+    public function removeFromFolder(BulkRemoveFromFolderRequest $request)
+    {
+        $this->passwordService->removeFromFolder($request->validated('ids'));
+
+        return redirect()->route('passwords.index')->with('success', 'Passwords removed from folder successfully.');
     }
 }
