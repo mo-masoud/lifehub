@@ -49,7 +49,7 @@ export const PasswordTableRow: FC<PasswordTableRowProps> = ({ password, isSelect
                     )}
                 </TableCell>
                 <TableCell>{password.last_used_at_formatted}</TableCell>
-                <TableCell className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                <TableCell className="flex items-center justify-end gap-1">
                     <PasswordRowActions password={password} />
                 </TableCell>
             </TableRow>

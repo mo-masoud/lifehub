@@ -21,7 +21,7 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
     };
 
     return (
-        <>
+        <div onClick={(e) => e.stopPropagation()}>
             {password.is_expired && <span className="text-destructive text-xs italic">Expired</span>}
             {password.is_expired_soon && <span className="text-warning text-xs italic">Expiring soon</span>}
             {password.type === 'ssh' ? (
@@ -94,6 +94,6 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
 
             <EditPasswordSheet password={password} open={editPasswordSheetOpen} setOpen={setEditPasswordSheetOpen} />
             <DeletePasswordDialog password={password} open={deletePasswordDialogOpen} setOpen={setDeletePasswordDialogOpen} />
-        </>
+        </div>
     );
 };

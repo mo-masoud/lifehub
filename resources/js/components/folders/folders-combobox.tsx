@@ -158,7 +158,7 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
                                     </span>
                                     <Check className={cn('ml-auto', value === 'none' ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
-                                <CommandSeparator className="my-1" />
+                                {folders.length > 0 && <CommandSeparator className="my-1" />}
                                 {folders.map((folder) => (
                                     <CommandItem
                                         keywords={[folder.name]}

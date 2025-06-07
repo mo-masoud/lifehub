@@ -36,6 +36,15 @@ class PasswordAuditLog extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $appends = [
+        'action_display',
+        'masked_password_name',
+        'created_at_formatted',
+    ];
+
+    /**
      * The attributes that should be cast.
      */
     protected $casts = [

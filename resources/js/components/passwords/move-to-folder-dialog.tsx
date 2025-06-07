@@ -62,7 +62,7 @@ export const MoveToFolderDialog: FC<MoveToFolderDialogProps> = ({ open, setOpen,
                     <DialogDescription>Select the folder where you want to move the selected passwords.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
-                    <FoldersCombobox selectedFolder={selectedFolder} onSelectFolder={setSelectedFolder} canCreateFolder={true} />
+                    <FoldersCombobox selectedFolder={selectedFolder} onSelectFolder={setSelectedFolder} canCreateFolder hideAllFolderOption />
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>

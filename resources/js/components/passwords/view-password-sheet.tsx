@@ -4,6 +4,7 @@ import { ViewPanel } from '@/components/view-panel';
 import { usePasswords } from '@/hooks/use-passwords';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
+import { Link } from '@inertiajs/react';
 import {
     Copy,
     Eye,
@@ -11,7 +12,7 @@ import {
     Folder,
     History,
     KeyRound,
-    Link,
+    LinkIcon,
     LockKeyhole,
     ShieldCheck,
     StickyNote,
@@ -73,8 +74,10 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
 
-                        <Button variant="outline" size="icon" className="ml-auto">
-                            <History />
+                        <Button variant="outline" size="icon" className="ml-auto" asChild>
+                            <Link href={route('passwords.audit-logs.index', { password_id: password.id })}>
+                                <History />
+                            </Link>
                         </Button>
                     </div>
 
@@ -124,7 +127,7 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
                         {password.type === 'normal' && (
                             <ViewPanel
                                 label="URL"
-                                icon={Link}
+                                icon={LinkIcon}
                                 valueContent={
                                     <a
                                         href={password.url!}

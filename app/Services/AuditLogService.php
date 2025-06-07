@@ -68,7 +68,7 @@ class AuditLogService
         }
 
         // Check for API requests
-        if ($request->is('api/*') || $request->expectsJson()) {
+        if ($request->is('api/*')) {
             return 'api';
         }
 
