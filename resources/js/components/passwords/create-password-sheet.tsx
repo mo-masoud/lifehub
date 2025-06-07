@@ -1,16 +1,15 @@
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { FC, useState } from 'react';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { FC } from 'react';
 import { PasswordForm } from './password-form';
 
 interface CreatePasswordSheetProps {
-    children: React.ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
-export const CreatePasswordSheet: FC<CreatePasswordSheetProps> = ({ children }) => {
-    const [open, setOpen] = useState(false);
+export const CreatePasswordSheet: FC<CreatePasswordSheetProps> = ({ open, setOpen }) => {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
                 <SheetHeader>
                     <SheetTitle>Create Password</SheetTitle>

@@ -11,12 +11,21 @@ import {
     SidebarMenuSubItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { useCreatePassword } from '@/contexts/create-password-context';
+import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight, FileText, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
 
 export const NavMain = () => {
-    const page = usePage();
+    const page = usePage<SharedData>();
     const { open } = useSidebar();
+    const { openSheet } = useCreatePassword();
+
+    const handleNewPassword = () => {
+        openSheet();
+    };
+
+    const passwordsCount = page.props.passwordsCount > 99 ? '99+' : page.props.passwordsCount;
 
     return (
         <>
@@ -24,7 +33,7 @@ export const NavMain = () => {
                 <SidebarGroupLabel>Platform</SidebarGroupLabel>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild isActive={page.url === '/dashboard'} tooltip={{ children: 'Dashboard' }}>
+                        <SidebarMenuButton asChild isActive={route().current('dashboard')} tooltip={{ children: 'Dashboard' }}>
                             <Link href="/dashboard" prefetch>
                                 <LayoutDashboard />
                                 <span>Dashboard</span>
@@ -39,7 +48,7 @@ export const NavMain = () => {
                     <Collapsible defaultOpen className="group/collapsible">
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip={{ children: 'Passwords' }} isActive={page.url.startsWith('/passwords')} asChild={!open}>
+                                <SidebarMenuButton tooltip={{ children: 'Passwords' }} isActive={route().current('passwords.*')} asChild={!open}>
                                     {open ? (
                                         <>
                                             <LockKeyhole />
@@ -47,7 +56,7 @@ export const NavMain = () => {
                                             <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                                         </>
                                     ) : (
-                                        <Link href="/passwords" prefetch>
+                                        <Link href={route('passwords.index')} prefetch>
                                             <LockKeyhole />
                                             <span>Passwords</span>
                                         </Link>
@@ -57,30 +66,24 @@ export const NavMain = () => {
                             <CollapsibleContent>
                                 <SidebarMenuSub className="mr-0 pr-0">
                                     <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton asChild isActive={page.url === '/passwords'}>
-                                            <Link href="/passwords" prefetch>
-                                                <span className="text-sky-700 dark:text-sky-300">
-                                                    <List className="size-4" />
-                                                </span>
+                                        <SidebarMenuSubButton isActive={route().current('passwords.index')} asChild>
+                                            <Link href={route('passwords.index')} prefetch>
+                                                <List className="size-4" />
                                                 <span>All Passwords</span>
-                                                <SidebarMenuBadge className="bg-sky-100">24</SidebarMenuBadge>
+                                                <SidebarMenuBadge>{passwordsCount}</SidebarMenuBadge>
                                             </Link>
                                         </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
                                     <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton className="cursor-pointer">
-                                            <span className="text-emerald-700 dark:text-emerald-300">
-                                                <ShieldPlus className="size-4" />
-                                            </span>
+                                        <SidebarMenuSubButton className="cursor-pointer" onClick={handleNewPassword}>
+                                            <ShieldPlus className="size-4" />
                                             <span>New Password</span>
                                         </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
                                     <SidebarMenuSubItem>
-                                        <SidebarMenuSubButton asChild isActive={page.url === '/audit-logs'}>
+                                        <SidebarMenuSubButton asChild isActive={route().current('passwords.audit-logs.index')}>
                                             <Link href={route('passwords.audit-logs.index')} prefetch>
-                                                <span className="text-purple-700 dark:text-purple-300">
-                                                    <FileText className="size-4" />
-                                                </span>
+                                                <FileText className="size-4" />
                                                 <span>Audit Log</span>
                                             </Link>
                                         </SidebarMenuSubButton>

@@ -1,9 +1,9 @@
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
+import { useCreatePassword } from '@/contexts/create-password-context';
 import { Link } from '@inertiajs/react';
 import { LockKeyhole, RefreshCcw } from 'lucide-react';
 import { FC } from 'react';
-import { CreatePasswordSheet } from './create-password-sheet';
 import { PasswordBulkActions } from './password-bulk-actions';
 
 interface PasswordsHeaderProps {
@@ -11,6 +11,8 @@ interface PasswordsHeaderProps {
 }
 
 export const PasswordsHeader: FC<PasswordsHeaderProps> = ({ selectedPasswordIds }) => {
+    const { openSheet } = useCreatePassword();
+
     return (
         <div className="flex items-center justify-between">
             <Heading title="Passwords" description="Manage your passwords securely." icon={LockKeyhole} />
@@ -23,9 +25,7 @@ export const PasswordsHeader: FC<PasswordsHeaderProps> = ({ selectedPasswordIds 
                         <RefreshCcw className="size-4" />
                     </Link>
                 </Button>
-                <CreatePasswordSheet>
-                    <Button>Create</Button>
-                </CreatePasswordSheet>
+                <Button onClick={openSheet}>Create</Button>
             </div>
         </div>
     );
