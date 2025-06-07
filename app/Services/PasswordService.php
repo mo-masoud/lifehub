@@ -71,4 +71,13 @@ class PasswordService
     {
         $password->delete();
     }
+
+    public function destroyBulk(array $ids)
+    {
+        $passwords = Password::whereIn('id', $ids)->where('user_id', auth()->id())->get();
+
+        abort_if($passwords->isEmpty(), 403, 'You are not authorized to delete these passwords.');
+
+        $passwords->each->delete();
+    }
 }

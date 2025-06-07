@@ -1,12 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { ViewPanel } from '@/components/view-panel';
 import { usePasswords } from '@/hooks/use-passwords';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
 import {
     Copy,
-    Edit,
     Eye,
     EyeOff,
     Folder,
@@ -23,16 +22,14 @@ import {
 } from 'lucide-react';
 import { FC, useState } from 'react';
 import { MarkdownReader } from '../markdown-reader';
-import { DeletePasswordDialog } from './delete-password-dialog';
-import { EditPasswordSheet } from './edit-password-sheet';
 
 interface ViewPasswordSheetProps {
     password: Password;
-    children: React.ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
-export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, children }) => {
-    const [open, setOpen] = useState(false);
+export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, setOpen }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { handleCopy } = usePasswords();
 
@@ -58,9 +55,6 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild onClick={() => setOpen(true)}>
-                {children}
-            </SheetTrigger>
             <SheetContent className="w-full overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()} aria-hidden={false}>
                 <SheetHeader>
                     <SheetTitle>
@@ -74,24 +68,14 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, childr
 
                 <div className="flex flex-col items-center gap-4 px-4 select-none">
                     <div className="flex w-full items-center justify-center gap-2">
-                        <span className={cn('bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-sm')}>
+                        <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-sm">
                             {password.type === 'ssh' ? <Terminal className="size-4" /> : <KeyRound className="size-4" />}
                         </span>
                         <h3 className="text-center text-lg font-semibold capitalize">{password.name}</h3>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-2">
-                        <Button variant="outline">
+                        <Button variant="outline" size="icon" className="ml-auto">
                             <History />
-                            History
                         </Button>
-                        <EditPasswordSheet password={password}>
-                            <Button variant="outline">
-                                <Edit />
-                                Edit
-                            </Button>
-                        </EditPasswordSheet>
-                        <DeletePasswordDialog password={password} />
                     </div>
 
                     <div className="border-border bg-background mt-4 flex w-full flex-col items-center justify-center divide-y rounded-md border p-4">

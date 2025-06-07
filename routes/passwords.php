@@ -8,4 +8,5 @@ Route::middleware('auth')->group(function () {
         ->except(['create', 'show', 'edit']);
 
     Route::post('passwords/{password}/copy', [PasswordController::class, 'copy'])->name('passwords.copy');
+    Route::post('passwords/destroy-bulk', [PasswordController::class, 'destroyBulk'])->name('passwords.destroy-bulk');
 });

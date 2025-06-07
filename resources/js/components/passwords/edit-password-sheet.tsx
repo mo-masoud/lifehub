@@ -1,20 +1,24 @@
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 import { Password } from '@/types/models';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { PasswordForm } from './password-form';
 
 interface EditPasswordSheetProps {
     password: Password;
-    children: React.ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
-export const EditPasswordSheet: FC<EditPasswordSheetProps> = ({ password, children }) => {
-    const [open, setOpen] = useState(false);
+export const EditPasswordSheet: FC<EditPasswordSheetProps> = ({ password, open, setOpen }) => {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>{children}</SheetTrigger>
-            <SheetContent className="w-full overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()} aria-hidden={false}>
+            <SheetContent
+                className="w-full overflow-y-auto pb-8 sm:max-w-xl"
+                onOpenAutoFocus={(e) => e.preventDefault()}
+                aria-hidden={false}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <SheetHeader>
                     <SheetTitle>Edit Password</SheetTitle>
                     <SheetDescription>Edit the password details</SheetDescription>

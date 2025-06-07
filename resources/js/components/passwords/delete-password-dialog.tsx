@@ -1,51 +1,58 @@
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Password } from '@/types/models';
 import { router } from '@inertiajs/react';
-import { Trash2 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { toast } from 'sonner';
 
 interface DeletePasswordDialogProps {
-    password: Password;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    password?: Password;
+    selectedPasswordIds?: Set<number>;
 }
 
-export const DeletePasswordDialog: FC<DeletePasswordDialogProps> = ({ password }) => {
-    const [open, setOpen] = useState(false);
-
+export const DeletePasswordDialog: FC<DeletePasswordDialogProps> = ({ open, setOpen, password, selectedPasswordIds }) => {
     const handleDelete = () => {
-        router.delete(route('passwords.destroy', { password: password.id }), {
-            onSuccess: () => {
-                toast.success('Password deleted successfully');
-                setOpen(false);
-            },
-            onError: () => {
-                toast.error('Failed to delete password');
-            },
-        });
+        if (password) {
+            router.delete(route('passwords.destroy', { password: password.id }), {
+                onSuccess: () => {
+                    toast.success('Password deleted successfully');
+                    setOpen(false);
+                },
+                onError: () => {
+                    toast.error('Failed to delete password');
+                },
+            });
+        } else if (selectedPasswordIds) {
+            router.post(
+                route('passwords.destroy-bulk'),
+                {
+                    ids: Array.from(selectedPasswordIds),
+                },
+                {
+                    onSuccess: () => {
+                        toast.success('Passwords deleted successfully');
+                        setOpen(false);
+                    },
+                    onError: () => {
+                        toast.error('Failed to delete passwords');
+                    },
+                },
+            );
+        }
     };
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant="destructive">
-                    <Trash2 />
-                    Delete
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
+            <DialogContent onClick={(e) => e.stopPropagation()}>
                 <DialogHeader>
-                    <DialogTitle>Delete Password</DialogTitle>
-                    <DialogDescription>Are you sure you want to delete this password? This action cannot be undone.</DialogDescription>
+                    <DialogTitle>{password ? 'Delete Password' : `Delete ${selectedPasswordIds?.size} Passwords?`}</DialogTitle>
+                    <DialogDescription>
+                        {password
+                            ? 'Are you sure you want to delete this password? This action cannot be undone.'
+                            : 'Are you sure you want to delete these passwords? This action cannot be undone.'}
+                    </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>

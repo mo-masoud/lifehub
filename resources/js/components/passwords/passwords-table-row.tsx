@@ -3,7 +3,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/models';
 import { Folder, KeyRound, Terminal } from 'lucide-react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { PasswordRowActions } from './password-row-actions';
 import { ViewPasswordSheet } from './view-password-sheet';
 
@@ -14,9 +14,11 @@ interface PasswordTableRowProps {
 }
 
 export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
+    const [open, setOpen] = useState(false);
+
     return (
-        <ViewPasswordSheet password={password}>
-            <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')}>
+        <>
+            <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')} onClick={() => setOpen(true)}>
                 <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
                     {onSelectionChange && (
                         <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
@@ -44,6 +46,8 @@ export const PasswordsTableRow: FC<PasswordTableRowProps> = ({ password, isSelec
                     <PasswordRowActions password={password} />
                 </TableCell>
             </TableRow>
-        </ViewPasswordSheet>
+
+            <ViewPasswordSheet password={password} open={open} setOpen={setOpen} />
+        </>
     );
 };

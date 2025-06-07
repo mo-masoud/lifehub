@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\IndexPasswordsRequest;
 use App\Http\Requests\Passwords\StorePasswordRequest;
 use App\Http\Requests\Passwords\UpdatePasswordRequest;
-use App\Services\PasswordService;
-use App\Services\PasswordQueryService;
+use App\Http\Requests\Passwords\BulkDeletePasswordsRequest;
 use App\Models\Password;
+use App\Services\PasswordQueryService;
+use App\Services\PasswordService;
 
 class PasswordController extends Controller
 {
@@ -80,5 +81,12 @@ class PasswordController extends Controller
         $this->passwordService->delete($password);
 
         return redirect()->route('passwords.index')->with('success', 'Password deleted successfully.');
+    }
+
+    public function destroyBulk(BulkDeletePasswordsRequest $request)
+    {
+        $this->passwordService->destroyBulk($request->validated('ids'));
+
+        return redirect()->route('passwords.index')->with('success', 'Passwords deleted successfully.');
     }
 }
