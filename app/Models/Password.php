@@ -182,29 +182,21 @@ class Password extends Model
         return $query->whereNull('folder_id');
     }
 
-    public function scopeFilterByExpiry($query, array $expiryFilters = [])
+    public function scopeFilterByExpiry($query, ?string $expiryFilter = null)
     {
-        $showExpired = $expiryFilters['show_expired'] ?? true;
-        $showExpiresSoon = $expiryFilters['show_expires_soon'] ?? true;
-
-        // If both are false, return no results
-        if (!$showExpired && !$showExpiresSoon) {
-            return $query->where('id', '<', 0); // No results - database agnostic
-        }
-
-        // If both are true, show all passwords (default behavior)
-        if ($showExpired && $showExpiresSoon) {
+        // Default to showing all passwords if no filter is specified
+        if (!$expiryFilter || $expiryFilter === 'all') {
             return $query; // No additional filtering
         }
 
         // If only expired should be shown
-        if ($showExpired && !$showExpiresSoon) {
+        if ($expiryFilter === 'expired') {
             return $query->whereNotNull('expires_at')
                 ->where('expires_at', '<', now());
         }
 
         // If only expires soon should be shown
-        if (!$showExpired && $showExpiresSoon) {
+        if ($expiryFilter === 'expires_soon') {
             return $query->whereNotNull('expires_at')
                 ->where('expires_at', '<=', now()->addDays(15))
                 ->where('expires_at', '>', now());

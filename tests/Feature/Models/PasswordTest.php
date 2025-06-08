@@ -455,7 +455,7 @@ describe('Password Model', function () {
             ->toBe($now->toDateTimeString());
     });
 
-    test('filter by expiry scope handles both filters enabled', function () {
+    test('filter by expiry scope handles all filter', function () {
         $expired = Password::factory()->create([
             'expires_at' => now()->subDays(5),
         ]);
@@ -472,11 +472,8 @@ describe('Password Model', function () {
             'expires_at' => null,
         ]);
 
-        // Both filters enabled should return all passwords
-        $results = Password::filterByExpiry([
-            'show_expired' => true,
-            'show_expires_soon' => true,
-        ])->get();
+        // 'all' filter should return all passwords
+        $results = Password::filterByExpiry('all')->get();
 
         expect($results->pluck('id')->toArray())
             ->toContain($expired->id)
@@ -485,7 +482,7 @@ describe('Password Model', function () {
             ->toContain($noExpiry->id);
     });
 
-    test('filter by expiry scope handles only expired filter enabled', function () {
+    test('filter by expiry scope handles expired filter', function () {
         $expired = Password::factory()->create([
             'expires_at' => now()->subDays(5),
         ]);
@@ -502,11 +499,8 @@ describe('Password Model', function () {
             'expires_at' => null,
         ]);
 
-        // Only expired filter enabled should return only expired passwords
-        $results = Password::filterByExpiry([
-            'show_expired' => true,
-            'show_expires_soon' => false,
-        ])->get();
+        // 'expired' filter should return only expired passwords
+        $results = Password::filterByExpiry('expired')->get();
 
         expect($results->pluck('id')->toArray())
             ->toContain($expired->id)
@@ -515,7 +509,7 @@ describe('Password Model', function () {
             ->not->toContain($noExpiry->id);
     });
 
-    test('filter by expiry scope handles only expires soon filter enabled', function () {
+    test('filter by expiry scope handles expires soon filter', function () {
         $expired = Password::factory()->create([
             'expires_at' => now()->subDays(5),
         ]);
@@ -532,43 +526,14 @@ describe('Password Model', function () {
             'expires_at' => null,
         ]);
 
-        // Only expires soon filter enabled should return only expiring soon passwords
-        $results = Password::filterByExpiry([
-            'show_expired' => false,
-            'show_expires_soon' => true,
-        ])->get();
+        // 'expires_soon' filter should return only expiring soon passwords
+        $results = Password::filterByExpiry('expires_soon')->get();
 
         expect($results->pluck('id')->toArray())
             ->not->toContain($expired->id)
             ->toContain($expiresSoon->id)
             ->not->toContain($notExpiring->id)
             ->not->toContain($noExpiry->id);
-    });
-
-    test('filter by expiry scope handles both filters disabled', function () {
-        $expired = Password::factory()->create([
-            'expires_at' => now()->subDays(5),
-        ]);
-
-        $expiresSoon = Password::factory()->create([
-            'expires_at' => now()->addDays(10),
-        ]);
-
-        $notExpiring = Password::factory()->create([
-            'expires_at' => now()->addDays(30),
-        ]);
-
-        $noExpiry = Password::factory()->create([
-            'expires_at' => null,
-        ]);
-
-        // Both filters disabled should return no passwords
-        $results = Password::filterByExpiry([
-            'show_expired' => false,
-            'show_expires_soon' => false,
-        ])->get();
-
-        expect($results)->toHaveCount(0);
     });
 
     test('filter by expiry scope handles default parameters', function () {
@@ -588,7 +553,7 @@ describe('Password Model', function () {
             'expires_at' => null,
         ]);
 
-        // Default parameters should return all passwords (both filters true by default)
+        // Default parameters (null) should return all passwords
         $results = Password::filterByExpiry()->get();
 
         expect($results->pluck('id')->toArray())

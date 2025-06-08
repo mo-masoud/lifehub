@@ -37,14 +37,12 @@ export default function PasswordsPage() {
         folderId,
         type,
         perPage,
-        showExpired,
-        showExpiresSoon,
+        expiryFilter,
         setSearch,
         setFolderId,
         setType,
         setPerPage,
-        setShowExpired,
-        setShowExpiresSoon,
+        setExpiryFilter,
         handleSortChange,
     } = usePasswordListState({ initialFilters: filters });
 
@@ -77,10 +75,8 @@ export default function PasswordsPage() {
                             onFolderIdChange={setFolderId}
                             type={type}
                             onTypeChange={setType}
-                            showExpired={showExpired}
-                            onShowExpiredChange={setShowExpired}
-                            showExpiresSoon={showExpiresSoon}
-                            onShowExpiresSoonChange={setShowExpiresSoon}
+                            expiryFilter={expiryFilter}
+                            onExpiryFilterChange={setExpiryFilter}
                         />
 
                         <PasswordsTable
@@ -105,8 +101,7 @@ export default function PasswordsPage() {
                                 search: search || undefined,
                                 folder_id: folderId !== 'all' ? folderId : undefined,
                                 type: type || undefined,
-                                show_expired: showExpired !== true ? showExpired : undefined,
-                                show_expires_soon: showExpiresSoon !== true ? showExpiresSoon : undefined,
+                                expiry_filter: expiryFilter !== 'all' ? expiryFilter : undefined,
                             }}
                             routeName="passwords.index"
                             perPage={perPage}

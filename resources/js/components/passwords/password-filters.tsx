@@ -1,6 +1,5 @@
 import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { PasswordType } from '@/types/passwords';
 import { KeyRound, List, Terminal, Timer } from 'lucide-react';
@@ -11,22 +10,11 @@ interface PasswordFiltersProps {
     type: PasswordType | undefined;
     setFolderId: (folderId: string) => void;
     folderId: string;
-    showExpired: boolean;
-    setShowExpired: (show: boolean) => void;
-    showExpiresSoon: boolean;
-    setShowExpiresSoon: (show: boolean) => void;
+    expiryFilter: 'all' | 'expired' | 'expires_soon';
+    setExpiryFilter: (filter: 'all' | 'expired' | 'expires_soon') => void;
 }
 
-export const PasswordFilters: FC<PasswordFiltersProps> = ({
-    setFolderId,
-    folderId,
-    setType,
-    type,
-    showExpired,
-    setShowExpired,
-    showExpiresSoon,
-    setShowExpiresSoon,
-}) => {
+export const PasswordFilters: FC<PasswordFiltersProps> = ({ setFolderId, folderId, setType, type, expiryFilter, setExpiryFilter }) => {
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
@@ -82,26 +70,14 @@ export const PasswordFilters: FC<PasswordFiltersProps> = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end">
-                    <div className="space-y-2 p-2">
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="show_expired" checked={showExpired} onCheckedChange={setShowExpired} />
-                            <label
-                                htmlFor="show_expired"
-                                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                                Show expired passwords
-                            </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="show_expires_soon" checked={showExpiresSoon} onCheckedChange={setShowExpiresSoon} />
-                            <label
-                                htmlFor="show_expires_soon"
-                                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                                Show expiring soon
-                            </label>
-                        </div>
-                    </div>
+                    <DropdownMenuRadioGroup
+                        value={expiryFilter}
+                        onValueChange={(value) => setExpiryFilter(value as 'all' | 'expired' | 'expires_soon')}
+                    >
+                        <DropdownMenuRadioItem value="all">All passwords</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="expired">Expired only</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="expires_soon">Expiring soon only</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
 

@@ -15,8 +15,7 @@ export function usePasswordListState({ initialFilters }: UsePasswordListStatePro
     const [folderId, setFolderId] = useState<string>(initialFilters.folderId || 'all');
     const [type, setType] = useState<PasswordType | undefined>(initialFilters.type);
     const [perPage, setPerPage] = useState<number>(initialFilters.perPage || 10);
-    const [showExpired, setShowExpired] = useState<boolean>(initialFilters.showExpired ?? true);
-    const [showExpiresSoon, setShowExpiresSoon] = useState<boolean>(initialFilters.showExpiresSoon ?? true);
+    const [expiryFilter, setExpiryFilter] = useState<'all' | 'expired' | 'expires_soon'>(initialFilters.expiryFilter || 'all');
 
     const handleSortChange = (key: SortKey) => {
         if (sortKey === key) {
@@ -59,13 +58,9 @@ export function usePasswordListState({ initialFilters }: UsePasswordListStatePro
             data.per_page = perPage;
         }
 
-        // Only include expiry filters if they differ from defaults (true)
-        if (showExpired !== true) {
-            data.show_expired = showExpired;
-        }
-
-        if (showExpiresSoon !== true) {
-            data.show_expires_soon = showExpiresSoon;
+        // Only include expiry filter if it's not the default 'all'
+        if (expiryFilter !== 'all') {
+            data.expiry_filter = expiryFilter;
         }
 
         router.visit(route('passwords.index', data), {
@@ -73,7 +68,7 @@ export function usePasswordListState({ initialFilters }: UsePasswordListStatePro
             preserveState: true,
             preserveScroll: true,
         });
-    }, [sortKey, sortDirection, search, folderId, type, perPage, showExpired, showExpiresSoon]);
+    }, [sortKey, sortDirection, search, folderId, type, perPage, expiryFilter]);
 
     useEffect(() => {
         handleFilters();
@@ -86,14 +81,12 @@ export function usePasswordListState({ initialFilters }: UsePasswordListStatePro
         folderId,
         type,
         perPage,
-        showExpired,
-        showExpiresSoon,
+        expiryFilter,
         setSearch,
         setFolderId,
         setType,
         setPerPage,
-        setShowExpired,
-        setShowExpiresSoon,
+        setExpiryFilter,
         handleSortChange,
     };
 }

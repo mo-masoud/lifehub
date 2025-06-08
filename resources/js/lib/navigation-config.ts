@@ -28,6 +28,7 @@ export const getDefaultNavigation = (passwordsCount: number, openSheet: () => vo
                 icon: LockKeyhole,
                 isActive: () => route().current('passwords.*'),
                 tooltip: 'Passwords',
+                href: route('passwords.index'),
                 collapsible: true,
                 defaultOpen: true,
                 subItems: [

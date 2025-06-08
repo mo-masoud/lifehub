@@ -18,8 +18,7 @@ export interface PasswordFilters {
     search?: string;
     type?: PasswordType;
     perPage?: number;
-    showExpired?: boolean;
-    showExpiresSoon?: boolean;
+    expiryFilter?: 'all' | 'expired' | 'expires_soon';
 }
 
 export interface Password extends BaseModel {

@@ -33,10 +33,7 @@ test('password query service applies expiry filters correctly', function () {
     // Test showing only expired
     $expiredResults = $this->service->getFilteredPasswords(
         $this->user,
-        [
-            'show_expired' => true,
-            'show_expires_soon' => false,
-        ],
+        ['expiry_filter' => 'expired'],
         false
     );
 
@@ -49,10 +46,7 @@ test('password query service applies expiry filters correctly', function () {
     // Test showing only expires soon
     $expiresSoonResults = $this->service->getFilteredPasswords(
         $this->user,
-        [
-            'show_expired' => false,
-            'show_expires_soon' => true,
-        ],
+        ['expiry_filter' => 'expires_soon'],
         false
     );
 
@@ -62,33 +56,31 @@ test('password query service applies expiry filters correctly', function () {
         ->not->toContain($notExpiring->id)
         ->not->toContain($noExpiry->id);
 
-    // Test showing both
-    $bothResults = $this->service->getFilteredPasswords(
+    // Test showing all
+    $allResults = $this->service->getFilteredPasswords(
         $this->user,
-        [
-            'show_expired' => true,
-            'show_expires_soon' => true,
-        ],
+        ['expiry_filter' => 'all'],
         false
     );
 
-    expect($bothResults->pluck('id')->toArray())
+    expect($allResults->pluck('id')->toArray())
         ->toContain($expired->id)
         ->toContain($expiresSoon->id)
         ->toContain($notExpiring->id)
         ->toContain($noExpiry->id);
 
-    // Test showing neither
-    $neitherResults = $this->service->getFilteredPasswords(
+    // Test default behavior (no filter)
+    $defaultResults = $this->service->getFilteredPasswords(
         $this->user,
-        [
-            'show_expired' => false,
-            'show_expires_soon' => false,
-        ],
+        [],
         false
     );
 
-    expect($neitherResults)->toHaveCount(0);
+    expect($defaultResults->pluck('id')->toArray())
+        ->toContain($expired->id)
+        ->toContain($expiresSoon->id)
+        ->toContain($notExpiring->id)
+        ->toContain($noExpiry->id);
 });
 
 test('password query service handles expiry filters with other filters', function () {
@@ -110,8 +102,7 @@ test('password query service handles expiry filters with other filters', functio
     $results = $this->service->getFilteredPasswords(
         $this->user,
         [
-            'show_expired' => true,
-            'show_expires_soon' => false,
+            'expiry_filter' => 'expired',
             'type' => 'normal',
         ],
         false
@@ -125,8 +116,7 @@ test('password query service handles expiry filters with other filters', functio
     $searchResults = $this->service->getFilteredPasswords(
         $this->user,
         [
-            'show_expired' => false,
-            'show_expires_soon' => true,
+            'expiry_filter' => 'expires_soon',
             'search' => 'Expiring Soon',
         ],
         false
@@ -139,8 +129,7 @@ test('password query service handles expiry filters with other filters', functio
 
 test('password query service get filter array includes expiry filters', function () {
     $request = new class {
-        public $show_expired = true;
-        public $show_expires_soon = false;
+        public $expiry_filter = 'expired';
         public $type = 'normal';
         public $search = 'test';
         public $sort = 'name';
@@ -150,8 +139,6 @@ test('password query service get filter array includes expiry filters', function
 
     $filters = $this->service->getFilterArray($request);
 
-    expect($filters)->toHaveKey('show_expired')
-        ->and($filters['show_expired'])->toBe(true)
-        ->and($filters)->toHaveKey('show_expires_soon')
-        ->and($filters['show_expires_soon'])->toBe(false);
+    expect($filters)->toHaveKey('expiry_filter')
+        ->and($filters['expiry_filter'])->toBe('expired');
 });
