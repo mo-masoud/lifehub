@@ -31,7 +31,7 @@ export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
 }) => {
     return (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
-            <div className="relative w-full max-w-md">
+            <div className="relative w-full md:max-w-md">
                 <Search className="text-muted-foreground absolute top-1/2 left-4 size-5 -translate-y-1/2" />
                 <Input placeholder="Search passwords..." className="pl-10" value={search} onChange={onSearchChange} />
             </div>
