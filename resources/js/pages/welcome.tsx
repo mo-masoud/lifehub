@@ -1,11 +1,8 @@
 import { GradientButton } from '@/components/ui/grediant-button';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowRight, Brain, Goal, Heart, Sparkles } from 'lucide-react';
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
-
     return (
         <>
             <Head title="Welcome">

@@ -1,6 +1,6 @@
 import { FolderFilters, FolderSortKey } from '@/types/folders';
 import { router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface UseFolderListStateProps {
     initialFilters: FolderFilters;
@@ -13,7 +13,7 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
     const [perPage, setPerPage] = useState<number>(initialFilters.per_page || 10);
     const [featured, setFeatured] = useState<'all' | 'featured' | 'not_featured'>(initialFilters.featured || 'all');
 
-    const updateFilters = () => {
+    const updateFilters = useCallback(() => {
         const params: Record<string, string | number | undefined> = {
             search: search || undefined,
             sort: sortKey,
@@ -30,7 +30,7 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
             preserveScroll: true,
             replace: true,
         });
-    };
+    }, [search, sortKey, sortDirection, perPage, featured]);
 
     const handleSortChange = (newSortKey: FolderSortKey) => {
         if (newSortKey === sortKey) {
@@ -53,7 +53,7 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
         ); // Debounce search, immediate for other filters
 
         return () => clearTimeout(timer);
-    }, [search, sortKey, sortDirection, perPage, featured]);
+    }, [search, sortKey, sortDirection, perPage, featured, updateFilters]);
 
     return {
         sortKey,
