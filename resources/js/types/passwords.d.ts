@@ -1,4 +1,5 @@
 import { BaseModel } from './base';
+import { Folder } from './folders';
 
 export type SortKey = 'name' | 'username' | 'last_used_at';
 export type SortDirection = 'asc' | 'desc';
@@ -19,10 +20,6 @@ export interface PasswordFilters {
     perPage?: number;
     showExpired?: boolean;
     showExpiresSoon?: boolean;
-}
-
-export interface Folder extends BaseModel {
-    name: string;
 }
 
 export interface Password extends BaseModel {

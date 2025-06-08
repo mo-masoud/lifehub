@@ -29,6 +29,7 @@ class StoreFolderRequest extends FormRequest
                 'max:255',
                 'unique:folders,name,NULL,id,user_id,' . auth()->id(),
             ],
+            'featured' => ['sometimes', 'boolean'],
         ];
     }
 }

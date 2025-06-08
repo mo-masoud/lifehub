@@ -23,7 +23,7 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="overflow-y-auto">
                 <NavMain />
             </SidebarContent>
 

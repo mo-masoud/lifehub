@@ -3,7 +3,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { Folder } from '@/types/passwords';
+import { Folder } from '@/types/folders';
 import { useForm } from '@inertiajs/react';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import axios from 'axios';

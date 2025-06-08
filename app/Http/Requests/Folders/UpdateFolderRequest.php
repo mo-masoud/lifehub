@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Folders;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateFolderRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateFolderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('update', $this->route('folder'));
     }
 
     /**
@@ -21,8 +22,18 @@ class UpdateFolderRequest extends FormRequest
      */
     public function rules(): array
     {
+        $folder = $this->route('folder');
+
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('folders', 'name')
+                    ->where('user_id', auth()->id())
+                    ->ignore($folder->id),
+            ],
+            'featured' => ['sometimes', 'boolean'],
         ];
     }
 }

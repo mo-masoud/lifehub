@@ -33,15 +33,12 @@ class Folder extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->withCount('passwords')
+        return $query->withMax('passwords', 'updated_at')
+            ->withCount('passwords')
+            ->orderBy('passwords_max_updated_at', 'desc')
             ->orderBy('featured', 'desc')
             ->orderBy('passwords_count', 'desc')
             ->orderBy('updated_at', 'desc')
             ->orderBy('name', 'asc');
-    }
-
-    public function scopeTopForSidebar($query, $limit = 5)
-    {
-        return $query->ordered()->limit($limit);
     }
 }

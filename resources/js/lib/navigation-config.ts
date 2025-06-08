@@ -1,5 +1,5 @@
 import { NavGroup } from '@/types/navigation';
-import { FileText, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
+import { FileText, FolderOpen, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
 
 export const getDefaultNavigation = (passwordsCount: number, openSheet: () => void): NavGroup[] => [
     {
@@ -11,6 +11,13 @@ export const getDefaultNavigation = (passwordsCount: number, openSheet: () => vo
                 href: '/dashboard',
                 isActive: () => route().current('dashboard'),
                 tooltip: 'Dashboard',
+            },
+            {
+                label: 'Folders',
+                icon: FolderOpen,
+                href: route('folders.index'),
+                isActive: () => route().current('folders.index'),
+                tooltip: 'Folders',
             },
         ],
     },

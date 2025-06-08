@@ -14,7 +14,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('folders', FolderController::class)
-        ->only(['store', 'update', 'destroy', 'index']);
+        ->only(['index', 'store', 'update', 'destroy']);
+
+    Route::put('folders/bulk-update', [FolderController::class, 'bulkUpdate'])->name('folders.bulk-update');
+    Route::delete('folders/bulk-destroy', [FolderController::class, 'bulkDestroy'])->name('folders.bulk-destroy');
 });
 
 require __DIR__ . '/passwords.php';

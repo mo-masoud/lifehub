@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Folder;
 use App\Models\Password;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
