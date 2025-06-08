@@ -3,7 +3,7 @@ import { KeyRound, LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import { GradientButton } from '@/components/ui/grediant-button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -87,11 +87,11 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
-                    <GradientButton type="submit" className="group mt-4 w-full" disabled={processing}>
+                    <Button type="submit" className="group mt-4 w-full" disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Reset password
                         <KeyRound className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                    </GradientButton>
+                    </Button>
                 </div>
             </form>
         </AuthLayout>

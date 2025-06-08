@@ -50,7 +50,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased bg-gradient">
+<body class="font-sans antialiased">
     @inertia
 </body>
 

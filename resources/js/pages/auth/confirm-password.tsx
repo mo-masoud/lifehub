@@ -4,7 +4,7 @@ import { LoaderCircle, Lock } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import { GradientButton } from '@/components/ui/grediant-button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -48,11 +48,11 @@ export default function ConfirmPassword() {
                     </div>
 
                     <div className="flex items-center">
-                        <GradientButton type="submit" className="group w-full" disabled={processing}>
+                        <Button type="submit" className="group w-full" disabled={processing}>
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Confirm password
                             <Lock className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                        </GradientButton>
+                        </Button>
                     </div>
                 </div>
             </form>

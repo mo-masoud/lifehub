@@ -4,8 +4,8 @@ import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { GradientButton } from '@/components/ui/grediant-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -90,11 +90,11 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <Label htmlFor="remember">Remember me</Label>
                     </div>
 
-                    <GradientButton type="submit" className="group mt-4 w-full" tabIndex={4} disabled={processing}>
+                    <Button type="submit" className="group mt-4 w-full" tabIndex={4} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
                         <LogIn className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                    </GradientButton>
+                    </Button>
                 </div>
 
                 <div className="flex flex-col items-center gap-2">

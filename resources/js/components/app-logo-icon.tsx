@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
-import { HeartHandshake } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { HTMLAttributes } from 'react';
 
 export default function AppLogoIcon({ className }: HTMLAttributes<HTMLDivElement>) {
     return (
-        <div className={cn('relative size-12 rounded-md bg-gradient-to-br from-violet-600 to-cyan-600 text-white shadow', className)}>
-            <HeartHandshake className="absolute top-1/2 right-1/2 size-2/3 translate-x-1/2 -translate-y-1/2" />
+        <div className={cn('inline-flex size-8 items-center justify-center rounded-full bg-neutral-900 text-neutral-100', className)}>
+            <Sparkles className="size-5" />
         </div>
     );
 }

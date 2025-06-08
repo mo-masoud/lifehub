@@ -1,8 +1,12 @@
-import { GradientButton } from '@/components/ui/grediant-button';
-import { Head, Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
+import { SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ArrowRight, Brain, Goal, Heart, Sparkles } from 'lucide-react';
 
 export default function Welcome() {
+    const { auth } = usePage<SharedData>().props;
+    const isAuthenticated = auth.user !== null;
+
     return (
         <>
             <Head title="Welcome">
@@ -16,15 +20,23 @@ export default function Welcome() {
                     </Link>
 
                     <div className="flex items-center gap-2">
-                        <GradientButton variant="outline" className="w-24" asChild>
-                            <Link href={route('login')}>Sign in</Link>
-                        </GradientButton>
-                        <GradientButton className="w-28" asChild>
-                            <Link href={route('register')}>
-                                <Sparkles />
-                                <span>Sign up</span>
-                            </Link>
-                        </GradientButton>
+                        {isAuthenticated ? (
+                            <Button className="w-24" asChild>
+                                <Link href={route('dashboard')}>Dashboard</Link>
+                            </Button>
+                        ) : (
+                            <>
+                                <Button variant="outline" className="w-24" asChild>
+                                    <Link href={route('login')}>Sign in</Link>
+                                </Button>
+                                <Button className="w-28" asChild>
+                                    <Link href={route('register')}>
+                                        <Sparkles />
+                                        <span>Sign up</span>
+                                    </Link>
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </header>
 
@@ -40,16 +52,16 @@ export default function Welcome() {
                         </p>
 
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <GradientButton className="group" asChild>
+                            <Button className="group" asChild>
                                 <Link href={route('register')}>
                                     <span>Get Early Access</span>
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
                                 </Link>
-                            </GradientButton>
+                            </Button>
 
-                            <GradientButton variant="outline" size="lg">
+                            <Button variant="outline" size="lg">
                                 Learn More
-                            </GradientButton>
+                            </Button>
                         </div>
                     </div>
 

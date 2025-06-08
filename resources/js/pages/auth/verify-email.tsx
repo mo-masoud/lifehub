@@ -4,7 +4,7 @@ import { LoaderCircle, Mail } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import TextLink from '@/components/text-link';
-import { GradientButton } from '@/components/ui/grediant-button';
+import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function VerifyEmail({ status }: { status?: string }) {
@@ -27,11 +27,11 @@ export default function VerifyEmail({ status }: { status?: string }) {
             )}
 
             <form onSubmit={submit} className="space-y-6 text-center">
-                <GradientButton type="submit" disabled={processing} className="group w-full">
+                <Button type="submit" disabled={processing} className="group w-full">
                     {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                     Resend verification email
                     <Mail className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                </GradientButton>
+                </Button>
 
                 <TextLink
                     href={route('logout')}

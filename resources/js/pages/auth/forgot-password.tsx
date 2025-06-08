@@ -5,7 +5,7 @@ import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
-import { GradientButton } from '@/components/ui/grediant-button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
@@ -46,11 +46,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     </div>
 
                     <div className="my-6 flex items-center justify-start">
-                        <GradientButton type="submit" className="group w-full" disabled={processing}>
+                        <Button type="submit" className="group w-full" disabled={processing}>
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Email password reset link
                             <Mail className="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                        </GradientButton>
+                        </Button>
                     </div>
                 </form>
 
