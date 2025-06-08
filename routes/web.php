@@ -13,11 +13,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::resource('folders', FolderController::class)
-        ->only(['index', 'store', 'update', 'destroy']);
-
     Route::put('folders/bulk-update', [FolderController::class, 'bulkUpdate'])->name('folders.bulk-update');
     Route::delete('folders/bulk-destroy', [FolderController::class, 'bulkDestroy'])->name('folders.bulk-destroy');
+
+    Route::resource('folders', FolderController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 });
 
 require __DIR__ . '/passwords.php';

@@ -3,6 +3,7 @@
 use App\Models\Folder;
 use App\Models\User;
 use App\Services\FolderService;
+use Illuminate\Database\Eloquent\Collection;
 
 beforeEach(function () {
     $this->service = app(FolderService::class);
@@ -187,4 +188,35 @@ it('only returns folders belonging to the user', function () {
     $result = $this->service->getFolders($this->user, []);
 
     expect($result->count())->toBe(1);
+});
+
+it('can get folders collection without pagination', function () {
+    Folder::factory()->count(15)->create(['user_id' => $this->user->id]);
+
+    $result = $this->service->getFoldersCollection($this->user, []);
+
+    expect($result)->toBeInstanceOf(Collection::class)
+        ->and($result->count())->toBe(15);
+});
+
+it('can filter folders collection by search', function () {
+    Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Work Folder']);
+    Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Personal Folder']);
+    Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Other']);
+
+    $filters = ['search' => 'Folder'];
+    $result = $this->service->getFoldersCollection($this->user, $filters);
+
+    expect($result->count())->toBe(2);
+});
+
+it('can filter folders collection by featured status', function () {
+    Folder::factory()->create(['user_id' => $this->user->id, 'featured' => true]);
+    Folder::factory()->create(['user_id' => $this->user->id, 'featured' => false]);
+
+    $filters = ['featured' => 'featured'];
+    $result = $this->service->getFoldersCollection($this->user, $filters);
+
+    expect($result->count())->toBe(1)
+        ->and($result->first()->featured)->toBe(true);
 });

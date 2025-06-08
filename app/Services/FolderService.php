@@ -75,6 +75,24 @@ class FolderService
      */
     public function getFolders(User $user, array $filters = [])
     {
+        $query = $this->buildFoldersQuery($user, $filters);
+        return $query->paginate($filters['per_page'] ?? 10);
+    }
+
+    /**
+     * Get folders collection (non-paginated) with filtering.
+     */
+    public function getFoldersCollection(User $user, array $filters = []): Collection
+    {
+        $query = $this->buildFoldersQuery($user, $filters);
+        return $query->get();
+    }
+
+    /**
+     * Build the base query for folders with filters.
+     */
+    protected function buildFoldersQuery(User $user, array $filters = [])
+    {
         $query = $user->folders();
 
         // Apply search filter
@@ -101,6 +119,6 @@ class FolderService
             }
         }
 
-        return $query->ordered()->paginate($filters['per_page'] ?? 10);
+        return $query->ordered();
     }
 }

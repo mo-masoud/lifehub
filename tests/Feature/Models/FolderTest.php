@@ -28,6 +28,7 @@ describe('Folder Model', function () {
         expect($folder->getFillable())->toBe([
             'user_id',
             'name',
+            'featured',
         ]);
     });
 
