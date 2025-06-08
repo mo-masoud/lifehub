@@ -19,7 +19,7 @@ class FolderController extends Controller
     {
         $folders = $this->folderService->getFolders(auth()->user());
 
-        return response()->json($folders);
+        return api_response($folders);
     }
 
     /**
@@ -29,9 +29,10 @@ class FolderController extends Controller
     {
         $folder = $this->folderService->createFolder(auth()->user(), $request->validated());
 
-        return response()->json([
-            'success' => 'Folder created successfully',
-            'folder' => $folder,
-        ], 201);
+        return api_response(
+            data: ['folder' => $folder],
+            status: 201,
+            message: 'Folder created successfully'
+        );
     }
 }

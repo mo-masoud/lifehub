@@ -14,16 +14,22 @@ it('can get folders as json', function () {
     $response = $this->getJson(route('api.v1.folders.index'));
 
     $response->assertOk()
-        ->assertJsonCount(3)
         ->assertJsonStructure([
-            '*' => [
-                'id',
-                'name',
-                'featured',
-                'created_at',
-                'updated_at',
+            'status',
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'featured',
+                    'created_at',
+                    'updated_at',
+                ]
             ]
-        ]);
+        ])
+        ->assertJson([
+            'status' => 'success'
+        ])
+        ->assertJsonCount(3, 'data');
 });
 
 it('returns folders in correct order', function () {
@@ -32,9 +38,12 @@ it('returns folders in correct order', function () {
 
     $response = $this->getJson(route('api.v1.folders.index'));
 
-    $response->assertOk();
+    $response->assertOk()
+        ->assertJson([
+            'status' => 'success'
+        ]);
 
-    $folders = $response->json();
+    $folders = $response->json('data');
     // Should be ordered by the default ordering (ordered scope)
     expect($folders)->toHaveCount(2);
 });
@@ -48,8 +57,11 @@ it('only returns folders belonging to authenticated user', function () {
     $response = $this->getJson(route('api.v1.folders.index'));
 
     $response->assertOk()
-        ->assertJsonCount(1)
-        ->assertJsonPath('0.name', 'My Folder');
+        ->assertJson([
+            'status' => 'success'
+        ])
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.name', 'My Folder');
 });
 
 it('can create folder via api', function () {
@@ -62,18 +74,24 @@ it('can create folder via api', function () {
 
     $response->assertCreated()
         ->assertJsonStructure([
-            'success',
-            'folder' => [
-                'id',
-                'name',
-                'featured',
-                'created_at',
-                'updated_at',
+            'status',
+            'message',
+            'data' => [
+                'folder' => [
+                    'id',
+                    'name',
+                    'featured',
+                    'created_at',
+                    'updated_at',
+                ]
             ]
         ])
-        ->assertJsonPath('success', 'Folder created successfully')
-        ->assertJsonPath('folder.name', 'API Created Folder')
-        ->assertJsonPath('folder.featured', true);
+        ->assertJson([
+            'status' => 'success',
+            'message' => 'Folder created successfully'
+        ])
+        ->assertJsonPath('data.folder.name', 'API Created Folder')
+        ->assertJsonPath('data.folder.featured', true);
 
     $this->assertDatabaseHas('folders', [
         'user_id' => $this->user->id,

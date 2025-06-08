@@ -40,16 +40,19 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
         axios
             .post(route('api.v1.folders.store'), data)
             .then((res) => {
-                setFolders([res.data.folder, ...folders]);
-                setValue(res.data.folder.id.toString());
-                onSelectFolder(res.data.folder.id.toString());
+                const response = res.data;
+                setFolders([response.data.folder, ...folders]);
+                setValue(response.data.folder.id.toString());
+                onSelectFolder(response.data.folder.id.toString());
                 setOpen(false);
                 setCreateFolder(false);
                 reset();
-                toast.success(res.data.success);
+                toast.success(response.message);
             })
             .catch((err) => {
-                toast.error(err.response.data.errors.name);
+                const errorResponse = err.response?.data;
+                const errorMessage = errorResponse?.errors?.name?.[0] || errorResponse?.message || 'An error occurred';
+                toast.error(errorMessage);
             })
             .finally(() => {
                 setProcessing(false);
@@ -61,10 +64,13 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
         axios
             .get(route('api.v1.folders.index'))
             .then((res) => {
-                setFolders(res.data);
+                const response = res.data;
+                setFolders(response.data || []);
             })
             .catch((err) => {
-                toast.error(err.response.data.message);
+                const errorResponse = err.response?.data;
+                const errorMessage = errorResponse?.message || 'Failed to load folders';
+                toast.error(errorMessage);
             })
             .finally(() => {
                 setLoading(false);
