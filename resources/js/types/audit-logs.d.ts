@@ -1,4 +1,5 @@
-import { BaseModel, Password } from './models';
+import { BaseModel } from './base';
+import { Password } from './passwords';
 
 export type SortKey = 'created_at' | 'action';
 export type SortDirection = 'asc' | 'desc';

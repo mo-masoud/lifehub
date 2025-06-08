@@ -67,18 +67,18 @@ export const NavMain = ({ groups }: NavMainProps = {}) => {
                             <SidebarMenuButton tooltip={tooltip} isActive={isActive} asChild={!open} onClick={item.onClick}>
                                 {open ? (
                                     <>
-                                        <item.icon />
+                                        {item.icon && <item.icon />}
                                         <span>{item.label}</span>
                                         <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                                     </>
                                 ) : item.href ? (
                                     <Link href={item.href} prefetch>
-                                        <item.icon />
+                                        {item.icon && <item.icon />}
                                         <span>{item.label}</span>
                                     </Link>
                                 ) : (
                                     <div>
-                                        <item.icon />
+                                        {item.icon && <item.icon />}
                                         <span>{item.label}</span>
                                     </div>
                                 )}
@@ -103,13 +103,13 @@ export const NavMain = ({ groups }: NavMainProps = {}) => {
                 >
                     {item.href ? (
                         <Link href={item.href} prefetch>
-                            <item.icon />
+                            {item.icon && <item.icon />}
                             <span>{item.label}</span>
                             {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </Link>
                     ) : (
                         <>
-                            <item.icon />
+                            {item.icon && <item.icon />}
                             <span>{item.label}</span>
                             {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </>

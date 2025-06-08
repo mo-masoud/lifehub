@@ -12,7 +12,8 @@ export interface NavSubItem {
 
 export interface NavItem {
     label: string;
-    icon: LucideIcon;
+    title?: string;
+    icon?: LucideIcon;
     href?: string;
     onClick?: () => void;
     isActive?: () => boolean;
