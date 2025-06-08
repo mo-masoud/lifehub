@@ -13,10 +13,12 @@ class Folder extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'featured',
     ];
 
     protected $casts = [
         'user_id' => 'integer',
+        'featured' => 'boolean',
     ];
 
     public function user()
@@ -27,5 +29,19 @@ class Folder extends Model
     public function passwords()
     {
         return $this->hasMany(Password::class);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->withCount('passwords')
+            ->orderBy('featured', 'desc')
+            ->orderBy('passwords_count', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('name', 'asc');
+    }
+
+    public function scopeTopForSidebar($query, $limit = 5)
+    {
+        return $query->ordered()->limit($limit);
     }
 }

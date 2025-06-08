@@ -20,6 +20,7 @@ class FolderFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'name' => $this->faker->unique()->word(),
+            'featured' => $this->faker->boolean(),
         ];
     }
 }

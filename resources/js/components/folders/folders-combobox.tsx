@@ -38,7 +38,7 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
     const handleCreateFolder = () => {
         setProcessing(true);
         axios
-            .post(route('folders.store'), data)
+            .post(route('api.v1.folders.store'), data)
             .then((res) => {
                 setFolders([res.data.folder, ...folders]);
                 setValue(res.data.folder.id.toString());
@@ -58,10 +58,17 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
 
     const getFolders = () => {
         setLoading(true);
-        axios.get(route('folders.index')).then((res) => {
-            setFolders(res.data);
-            setLoading(false);
-        });
+        axios
+            .get(route('api.v1.folders.index'))
+            .then((res) => {
+                setFolders(res.data);
+            })
+            .catch((err) => {
+                toast.error(err.response.data.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     useEffect(() => {

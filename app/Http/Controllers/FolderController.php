@@ -7,22 +7,7 @@ use App\Models\Folder;
 
 class FolderController extends Controller
 {
-    public function index()
-    {
-        $folders = auth()->user()->folders()
-            ->latest()
-            ->get();
+    public function index() {}
 
-        return response()->json($folders);
-    }
-
-    public function store(StoreFolderRequest $request)
-    {
-        $folder = auth()->user()->folders()->create($request->validated());
-
-        return response()->json([
-            'success' => 'Folder created successfully',
-            'folder' => $folder,
-        ], 201);
-    }
+    public function store(StoreFolderRequest $request) {}
 }

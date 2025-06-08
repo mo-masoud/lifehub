@@ -1,4 +1,5 @@
 import '../css/app.css';
+import './bootstrap';
 
 import { Toaster } from '@/components/ui/sonner';
 import { DialogProviders } from '@/contexts/dialog-providers';
