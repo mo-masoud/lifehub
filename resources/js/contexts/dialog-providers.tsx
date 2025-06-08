@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { FolderProviders } from './folder-providers';
 import { PasswordProviders } from './password-providers';
 
 interface DialogProvidersProps {
@@ -6,5 +7,9 @@ interface DialogProvidersProps {
 }
 
 export const DialogProviders: FC<DialogProvidersProps> = ({ children }) => {
-    return <PasswordProviders>{children}</PasswordProviders>;
+    return (
+        <PasswordProviders>
+            <FolderProviders>{children}</FolderProviders>
+        </PasswordProviders>
+    );
 };

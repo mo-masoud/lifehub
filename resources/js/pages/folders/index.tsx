@@ -30,7 +30,9 @@ export default function FoldersPage() {
     const { folders, filters } = usePage<FoldersPageProps>().props;
 
     // Use custom hooks for state management
-    const { sortKey, sortDirection, search, perPage, setSearch, setPerPage, handleSortChange } = useFolderListState({ initialFilters: filters });
+    const { sortKey, sortDirection, search, perPage, featured, setSearch, setPerPage, setFeatured, handleSortChange } = useFolderListState({
+        initialFilters: filters,
+    });
 
     const { selectedFolderIds, handleSelectAll, handleSelectFolder, isAllSelected, isIndeterminate } = useFolderSelection({
         folders: folders.data,
@@ -54,7 +56,7 @@ export default function FoldersPage() {
 
                 <div className="relative flex flex-1 flex-col">
                     <div className="absolute inset-0 size-full p-1">
-                        <FoldersSearchAndFilters search={search} onSearchChange={handleSearchChange} />
+                        <FoldersSearchAndFilters search={search} onSearchChange={handleSearchChange} featured={featured} setFeatured={setFeatured} />
 
                         <FoldersTable
                             folders={folders.data}
@@ -76,6 +78,7 @@ export default function FoldersPage() {
                                 sort: sortKey,
                                 direction: sortDirection,
                                 search: search || undefined,
+                                featured: featured !== 'all' ? featured : undefined,
                             }}
                             routeName="folders.index"
                             perPage={perPage}

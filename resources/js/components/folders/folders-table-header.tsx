@@ -45,18 +45,7 @@ export const FoldersTableHeader: FC<FoldersTableHeaderProps> = ({
                         />
                     </span>
                 </TableHead>
-                <TableHead className="cursor-pointer" onClick={() => onSortChange('passwords_count')}>
-                    <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
-                        Passwords
-                        <ChevronDown
-                            className={cn(
-                                'size-4 transition-all duration-100 ease-in-out',
-                                sortKey === 'passwords_count' ? 'opacity-85' : 'opacity-0',
-                                sortDirection === 'asc' && 'rotate-180',
-                            )}
-                        />
-                    </span>
-                </TableHead>
+
                 <TableHead className="cursor-pointer" onClick={() => onSortChange('created_at')}>
                     <span className="text-muted-foreground flex items-center gap-1 text-xs font-bold uppercase">
                         Created

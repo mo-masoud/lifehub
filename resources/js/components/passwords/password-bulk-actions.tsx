@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useDeletePassword } from '@/contexts/delete-password-context';
-import { FolderInput, FolderOutput, TableOfContents, Trash2 } from 'lucide-react';
+import { ChevronDown, FolderInput, FolderOutput, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { MoveToFolderDialog } from './move-to-folder-dialog';
 import { RemoveFromFolderDialog } from './remove-from-folder-dialog';
@@ -33,7 +33,7 @@ export function PasswordBulkActions({ selectedPasswordIds }: { selectedPasswordI
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline">
                         <span className="hidden md:block">Selected ({selectedPasswordIds.size})</span>
-                        <TableOfContents />
+                        <ChevronDown className="ml-2 size-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

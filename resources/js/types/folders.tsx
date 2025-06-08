@@ -11,6 +11,7 @@ export interface FolderFilters {
     sort?: FolderSortKey;
     direction?: 'asc' | 'desc';
     per_page?: number;
+    featured?: 'all' | 'featured' | 'not_featured';
 }
 
-export type FolderSortKey = 'name' | 'passwords_count' | 'created_at' | 'updated_at';
+export type FolderSortKey = 'name' | 'created_at' | 'updated_at';

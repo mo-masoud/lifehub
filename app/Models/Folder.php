@@ -35,8 +35,8 @@ class Folder extends Model
     {
         return $query->withMax('passwords', 'updated_at')
             ->withCount('passwords')
-            ->orderBy('passwords_max_updated_at', 'desc')
             ->orderBy('featured', 'desc')
+            ->orderBy('passwords_max_updated_at', 'desc')
             ->orderBy('passwords_count', 'desc')
             ->orderBy('updated_at', 'desc')
             ->orderBy('name', 'asc');

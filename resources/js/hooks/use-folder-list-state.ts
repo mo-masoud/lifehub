@@ -11,6 +11,7 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | undefined>(initialFilters.direction);
     const [search, setSearch] = useState<string>(initialFilters.search || '');
     const [perPage, setPerPage] = useState<number>(initialFilters.per_page || 10);
+    const [featured, setFeatured] = useState<'all' | 'featured' | 'not_featured'>(initialFilters.featured || 'all');
 
     const updateFilters = () => {
         const params: Record<string, string | number | undefined> = {
@@ -18,6 +19,7 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
             sort: sortKey,
             direction: sortDirection,
             per_page: perPage !== 10 ? perPage : undefined,
+            featured: featured !== 'all' ? featured : undefined,
         };
 
         // Remove undefined values
@@ -51,15 +53,17 @@ export function useFolderListState({ initialFilters }: UseFolderListStateProps) 
         ); // Debounce search, immediate for other filters
 
         return () => clearTimeout(timer);
-    }, [search, sortKey, sortDirection, perPage]);
+    }, [search, sortKey, sortDirection, perPage, featured]);
 
     return {
         sortKey,
         sortDirection,
         search,
         perPage,
+        featured,
         setSearch,
         setPerPage,
+        setFeatured,
         handleSortChange,
     };
 }

@@ -5,49 +5,35 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Folders\StoreFolderRequest;
 use App\Http\Requests\Folders\UpdateFolderRequest;
 use App\Models\Folder;
+use App\Services\FolderService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class FolderController extends Controller
 {
+    public function __construct(
+        protected FolderService $folderService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $folders = auth()->user()->folders()
-            ->withCount('passwords')
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->when($request->sort && $request->direction, function ($query) use ($request) {
-                $sortField = $request->sort;
-                $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        $filters = [
+            'search' => $request->search,
+            'sort' => $request->sort,
+            'direction' => $request->direction,
+            'per_page' => $request->per_page ?? 10,
+            'featured' => $request->featured,
+        ];
 
-                if ($sortField === 'passwords_count') {
-                    $query->orderBy('passwords_count', $direction);
-                } elseif ($sortField === 'name') {
-                    $query->orderBy('name', $direction);
-                } elseif ($sortField === 'created_at') {
-                    $query->orderBy('created_at', $direction);
-                } elseif ($sortField === 'updated_at') {
-                    $query->orderBy('updated_at', $direction);
-                }
-            }, function ($query) {
-                // Default ordering
-                $query->ordered();
-            })
-            ->paginate($request->per_page ?? 10);
+        $folders = $this->folderService->getFolders(auth()->user(), $filters);
 
         return Inertia::render('folders/index', [
             'folders' => $folders,
-            'filters' => [
-                'search' => $request->search,
-                'sort' => $request->sort,
-                'direction' => $request->direction,
-                'per_page' => $request->per_page ?? 10,
-            ],
+            'filters' => $filters,
         ]);
     }
 
@@ -56,7 +42,7 @@ class FolderController extends Controller
      */
     public function store(StoreFolderRequest $request)
     {
-        $folder = auth()->user()->folders()->create($request->validated());
+        $this->folderService->createFolder(auth()->user(), $request->validated());
 
         return redirect()->back()->with('success', 'Folder created successfully.');
     }
@@ -68,7 +54,7 @@ class FolderController extends Controller
     {
         $this->authorize('update', $folder);
 
-        $folder->update($request->validated());
+        $this->folderService->updateFolder($folder, $request->validated());
 
         return redirect()->back()->with('success', 'Folder updated successfully.');
     }
@@ -80,7 +66,7 @@ class FolderController extends Controller
     {
         $this->authorize('delete', $folder);
 
-        $folder->delete();
+        $this->folderService->deleteFolder($folder);
 
         return redirect()->back()->with('success', 'Folder deleted successfully.');
     }
@@ -105,10 +91,11 @@ class FolderController extends Controller
             $this->authorize('update', $folder);
         }
 
-        // Update all folders
-        auth()->user()->folders()
-            ->whereIn('id', $validated['folder_ids'])
-            ->update(['featured' => $validated['featured']]);
+        $this->folderService->bulkUpdateFolders(
+            auth()->user(),
+            $validated['folder_ids'],
+            ['featured' => $validated['featured']]
+        );
 
         $count = count($validated['folder_ids']);
         $action = $validated['featured'] ? 'added to featured' : 'removed from featured';
@@ -135,10 +122,7 @@ class FolderController extends Controller
             $this->authorize('delete', $folder);
         }
 
-        // Delete all folders
-        auth()->user()->folders()
-            ->whereIn('id', $validated['folder_ids'])
-            ->delete();
+        $this->folderService->bulkDeleteFolders(auth()->user(), $validated['folder_ids']);
 
         $count = count($validated['folder_ids']);
 
