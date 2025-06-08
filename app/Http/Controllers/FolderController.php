@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Folders\BulkDestroyFoldersRequest;
+use App\Http\Requests\Folders\BulkUpdateFoldersRequest;
+use App\Http\Requests\Folders\IndexFoldersRequest;
 use App\Http\Requests\Folders\StoreFolderRequest;
 use App\Http\Requests\Folders\UpdateFolderRequest;
 use App\Models\Folder;
 use App\Services\FolderService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class FolderController extends Controller
@@ -19,16 +20,9 @@ class FolderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(IndexFoldersRequest $request)
     {
-        $filters = [
-            'search' => $request->search,
-            'sort' => $request->sort,
-            'direction' => $request->direction,
-            'per_page' => $request->per_page ?? 10,
-            'featured' => $request->featured,
-        ];
-
+        $filters = $request->getFilters();
         $folders = $this->folderService->getFolders(auth()->user(), $filters);
 
         return Inertia::render('folders/index', [
@@ -74,16 +68,10 @@ class FolderController extends Controller
     /**
      * Bulk update folders (featured status).
      */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(BulkUpdateFoldersRequest $request)
     {
-        $validated = $request->validate([
-            'folder_ids' => ['required', 'array', 'min:1'],
-            'folder_ids.*' => ['integer', 'exists:folders,id'],
-            'featured' => ['required', 'boolean'],
-        ]);
-
         $folders = auth()->user()->folders()
-            ->whereIn('id', $validated['folder_ids'])
+            ->whereIn('id', $request->getFolderIds())
             ->get();
 
         // Check authorization for each folder
@@ -93,28 +81,20 @@ class FolderController extends Controller
 
         $this->folderService->bulkUpdateFolders(
             auth()->user(),
-            $validated['folder_ids'],
-            ['featured' => $validated['featured']]
+            $request->getFolderIds(),
+            ['featured' => $request->getFeaturedStatus()]
         );
 
-        $count = count($validated['folder_ids']);
-        $action = $validated['featured'] ? 'added to featured' : 'removed from featured';
-
-        return redirect()->back()->with('success', "{$count} folder" . ($count === 1 ? '' : 's') . " {$action}.");
+        return redirect()->back()->with('success', $request->getSuccessMessage());
     }
 
     /**
      * Bulk delete folders.
      */
-    public function bulkDestroy(Request $request)
+    public function bulkDestroy(BulkDestroyFoldersRequest $request)
     {
-        $validated = $request->validate([
-            'folder_ids' => ['required', 'array', 'min:1'],
-            'folder_ids.*' => ['integer', 'exists:folders,id'],
-        ]);
-
         $folders = auth()->user()->folders()
-            ->whereIn('id', $validated['folder_ids'])
+            ->whereIn('id', $request->getFolderIds())
             ->get();
 
         // Check authorization for each folder
@@ -122,10 +102,8 @@ class FolderController extends Controller
             $this->authorize('delete', $folder);
         }
 
-        $this->folderService->bulkDeleteFolders(auth()->user(), $validated['folder_ids']);
+        $this->folderService->bulkDeleteFolders(auth()->user(), $request->getFolderIds());
 
-        $count = count($validated['folder_ids']);
-
-        return redirect()->back()->with('success', "{$count} folder" . ($count === 1 ? '' : 's') . " deleted successfully.");
+        return redirect()->back()->with('success', $request->getSuccessMessage());
     }
 }

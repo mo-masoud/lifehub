@@ -14,13 +14,3 @@ Route::prefix('v1')->as('api.v1.')->group(function () {
             ->only(['index', 'store']);
     });
 });
-
-// Legacy API routes for backward compatibility (used by tests)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('folders', FolderController::class)
-        ->names([
-            'index' => 'api.folders.index',
-            'store' => 'api.folders.store',
-        ])
-        ->only(['index', 'store']);
-});

@@ -11,7 +11,7 @@ beforeEach(function () {
 it('can get folders as json', function () {
     $folders = Folder::factory()->count(3)->create(['user_id' => $this->user->id]);
 
-    $response = $this->getJson(route('api.folders.index'));
+    $response = $this->getJson(route('api.v1.folders.index'));
 
     $response->assertOk()
         ->assertJsonCount(3)
@@ -30,7 +30,7 @@ it('returns folders in correct order', function () {
     $folderA = Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'A Folder']);
     $folderZ = Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Z Folder']);
 
-    $response = $this->getJson(route('api.folders.index'));
+    $response = $this->getJson(route('api.v1.folders.index'));
 
     $response->assertOk();
 
@@ -45,7 +45,7 @@ it('only returns folders belonging to authenticated user', function () {
     Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'My Folder']);
     Folder::factory()->create(['user_id' => $otherUser->id, 'name' => 'Other Folder']);
 
-    $response = $this->getJson(route('api.folders.index'));
+    $response = $this->getJson(route('api.v1.folders.index'));
 
     $response->assertOk()
         ->assertJsonCount(1)
@@ -58,7 +58,7 @@ it('can create folder via api', function () {
         'featured' => true,
     ];
 
-    $response = $this->postJson(route('api.folders.store'), $data);
+    $response = $this->postJson(route('api.v1.folders.store'), $data);
 
     $response->assertCreated()
         ->assertJsonStructure([
@@ -83,7 +83,7 @@ it('can create folder via api', function () {
 });
 
 it('validates folder creation data in api', function () {
-    $response = $this->postJson(route('api.folders.store'), [
+    $response = $this->postJson(route('api.v1.folders.store'), [
         'name' => '', // Empty name should fail
     ]);
 
@@ -94,7 +94,7 @@ it('validates folder creation data in api', function () {
 it('prevents creating duplicate folder names via api', function () {
     Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Existing Folder']);
 
-    $response = $this->postJson(route('api.folders.store'), [
+    $response = $this->postJson(route('api.v1.folders.store'), [
         'name' => 'Existing Folder',
     ]);
 
@@ -105,9 +105,9 @@ it('prevents creating duplicate folder names via api', function () {
 it('requires authentication for api endpoints', function () {
     auth()->logout();
 
-    $this->getJson(route('api.folders.index'))
+    $this->getJson(route('api.v1.folders.index'))
         ->assertUnauthorized();
 
-    $this->postJson(route('api.folders.store'), ['name' => 'Test'])
+    $this->postJson(route('api.v1.folders.store'), ['name' => 'Test'])
         ->assertUnauthorized();
 });

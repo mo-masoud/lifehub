@@ -193,7 +193,7 @@ it('only returns folders belonging to the user', function () {
 it('can get folders collection without pagination', function () {
     Folder::factory()->count(15)->create(['user_id' => $this->user->id]);
 
-    $result = $this->service->getFoldersCollection($this->user, []);
+    $result = $this->service->getFolders($this->user, []);
 
     expect($result)->toBeInstanceOf(Collection::class)
         ->and($result->count())->toBe(15);
@@ -205,7 +205,7 @@ it('can filter folders collection by search', function () {
     Folder::factory()->create(['user_id' => $this->user->id, 'name' => 'Other']);
 
     $filters = ['search' => 'Folder'];
-    $result = $this->service->getFoldersCollection($this->user, $filters);
+    $result = $this->service->getFolders($this->user, $filters);
 
     expect($result->count())->toBe(2);
 });
@@ -215,7 +215,7 @@ it('can filter folders collection by featured status', function () {
     Folder::factory()->create(['user_id' => $this->user->id, 'featured' => false]);
 
     $filters = ['featured' => 'featured'];
-    $result = $this->service->getFoldersCollection($this->user, $filters);
+    $result = $this->service->getFolders($this->user, $filters);
 
     expect($result->count())->toBe(1)
         ->and($result->first()->featured)->toBe(true);

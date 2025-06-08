@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Folder;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class FolderService
@@ -71,20 +70,20 @@ class FolderService
     }
 
     /**
-     * Get folders with filtering and pagination.
+     * Get folders with optional filtering and pagination.
+     * If per_page is provided, returns paginated results.
+     * If per_page is null or false, returns collection.
      */
     public function getFolders(User $user, array $filters = [])
     {
         $query = $this->buildFoldersQuery($user, $filters);
-        return $query->paginate($filters['per_page'] ?? 10);
-    }
 
-    /**
-     * Get folders collection (non-paginated) with filtering.
-     */
-    public function getFoldersCollection(User $user, array $filters = []): Collection
-    {
-        $query = $this->buildFoldersQuery($user, $filters);
+        // If per_page is specified and > 0, return paginated results
+        if (isset($filters['per_page']) && $filters['per_page'] > 0) {
+            return $query->paginate($filters['per_page']);
+        }
+
+        // Otherwise return collection
         return $query->get();
     }
 

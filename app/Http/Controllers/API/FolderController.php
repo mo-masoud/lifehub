@@ -17,7 +17,7 @@ class FolderController extends Controller
      */
     public function index()
     {
-        $folders = $this->folderService->getFoldersCollection(auth()->user());
+        $folders = $this->folderService->getFolders(auth()->user());
 
         return response()->json($folders);
     }
