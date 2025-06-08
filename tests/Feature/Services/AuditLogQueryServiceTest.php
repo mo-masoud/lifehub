@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Requests\AuditLog\IndexAuditLogRequest;
 use App\Models\Password;
 use App\Models\PasswordAuditLog;
 use App\Models\User;
@@ -12,7 +11,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->otherUser = User::factory()->create();
-    $this->service = new AuditLogQueryService();
+    $this->service = new AuditLogQueryService;
 });
 
 describe('AuditLogQueryService', function () {

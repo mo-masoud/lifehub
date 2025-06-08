@@ -23,7 +23,7 @@ class BulkDeletePasswordsRequest extends FormRequest
     {
         return [
             'ids' => ['required', 'array', 'min:1', 'max:100'],
-            'ids.*' => ['required', 'integer', 'exists:passwords,id,user_id,' . auth()->id()],
+            'ids.*' => ['required', 'integer', 'exists:passwords,id,user_id,'.auth()->id()],
         ];
     }
 }

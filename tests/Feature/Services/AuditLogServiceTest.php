@@ -11,14 +11,14 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->service = new AuditLogService();
+    $this->service = new AuditLogService;
 });
 
 describe('AuditLogService', function () {
     test('logPasswordAction creates audit log entry', function () {
         $password = Password::factory()->create(['user_id' => $this->user->id]);
         $request = Request::create('/test', 'POST');
-        $request->setUserResolver(fn() => $this->user);
+        $request->setUserResolver(fn () => $this->user);
 
         $auditLog = $this->service->logPasswordAction(
             $password,
@@ -165,7 +165,7 @@ describe('AuditLogService', function () {
             'viewed',
             'bulk_deleted',
             'moved_to_folder',
-            'removed_from_folder'
+            'removed_from_folder',
         ];
 
         foreach ($actions as $action) {
@@ -187,7 +187,7 @@ describe('AuditLogService', function () {
             'old_folder' => 'Personal',
             'new_folder' => 'Work',
             'timestamp' => now()->toISOString(),
-            'nested' => ['key' => 'value']
+            'nested' => ['key' => 'value'],
         ];
 
         $auditLog = $this->service->logPasswordAction(

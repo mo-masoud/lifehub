@@ -61,7 +61,7 @@ class IndexAuditLogRequest extends FormRequest
         // Ensure password_id belongs to the authenticated user
         if ($this->has('password_id') && $this->password_id) {
             $password = $this->user()->passwords()->find($this->password_id);
-            if (!$password) {
+            if (! $password) {
                 // Invalid password_id for this user, remove it
                 $this->merge(['password_id' => null]);
             }

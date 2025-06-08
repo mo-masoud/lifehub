@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Folder;
 use App\Models\Password;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -48,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => fn(): array => [
+            'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],

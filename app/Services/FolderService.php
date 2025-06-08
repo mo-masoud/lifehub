@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Folder;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class FolderService
 {
@@ -22,6 +21,7 @@ class FolderService
     public function updateFolder(Folder $folder, array $data): Folder
     {
         $folder->update($data);
+
         return $folder->fresh();
     }
 
@@ -95,7 +95,7 @@ class FolderService
         $query = $user->folders();
 
         // Apply search filter
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->where('name', 'like', "%{$filters['search']}%");
         }
 
@@ -109,7 +109,7 @@ class FolderService
         }
 
         // Apply sorting
-        if (!empty($filters['sort']) && !empty($filters['direction'])) {
+        if (! empty($filters['sort']) && ! empty($filters['direction'])) {
             $sortField = $filters['sort'];
             $direction = $filters['direction'] === 'desc' ? 'desc' : 'asc';
 

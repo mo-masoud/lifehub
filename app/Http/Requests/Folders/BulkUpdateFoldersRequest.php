@@ -50,6 +50,6 @@ class BulkUpdateFoldersRequest extends FormRequest
         $count = count($this->getFolderIds());
         $action = $this->getFeaturedStatus() ? 'added to featured' : 'removed from featured';
 
-        return "{$count} folder" . ($count === 1 ? '' : 's') . " {$action}.";
+        return "{$count} folder".($count === 1 ? '' : 's')." {$action}.";
     }
 }

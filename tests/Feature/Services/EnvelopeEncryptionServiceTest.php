@@ -108,8 +108,6 @@ class EnvelopeEncryptionServiceTest extends TestCase
         expect($decrypted)->toBe($plaintext);
     }
 
-
-
     public function test_throws_exception_for_invalid_key_version()
     {
         $this->expectException(\RuntimeException::class);

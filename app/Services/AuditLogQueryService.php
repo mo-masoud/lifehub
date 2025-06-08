@@ -40,23 +40,23 @@ class AuditLogQueryService
     private function applyFilters(Builder $query, array $filters): void
     {
         // Filter by specific password
-        if (!empty($filters['password_id'])) {
+        if (! empty($filters['password_id'])) {
             $query->forPassword($filters['password_id']);
         }
 
         // Filter by action
-        if (!empty($filters['action'])) {
+        if (! empty($filters['action'])) {
             $query->withAction($filters['action']);
         }
 
         // Filter by date range
-        if (!empty($filters['start_date']) || !empty($filters['end_date'])) {
+        if (! empty($filters['start_date']) || ! empty($filters['end_date'])) {
             $query->inDateRange($filters['start_date'] ?? null, $filters['end_date'] ?? null);
         }
 
         // Search functionality
-        if (!empty($filters['search'])) {
-            $searchTerm = '%' . $filters['search'] . '%';
+        if (! empty($filters['search'])) {
+            $searchTerm = '%'.$filters['search'].'%';
             $query->where(function (Builder $q) use ($searchTerm) {
                 $q->where('action', 'like', $searchTerm)
                     ->orWhere('ip_address', 'like', $searchTerm)

@@ -23,11 +23,11 @@ it('can get folders as json', function () {
                     'featured',
                     'created_at',
                     'updated_at',
-                ]
-            ]
+                ],
+            ],
         ])
         ->assertJson([
-            'status' => 'success'
+            'status' => 'success',
         ])
         ->assertJsonCount(3, 'data');
 });
@@ -40,7 +40,7 @@ it('returns folders in correct order', function () {
 
     $response->assertOk()
         ->assertJson([
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
     $folders = $response->json('data');
@@ -58,7 +58,7 @@ it('only returns folders belonging to authenticated user', function () {
 
     $response->assertOk()
         ->assertJson([
-            'status' => 'success'
+            'status' => 'success',
         ])
         ->assertJsonCount(1, 'data')
         ->assertJsonPath('data.0.name', 'My Folder');
@@ -83,12 +83,12 @@ it('can create folder via api', function () {
                     'featured',
                     'created_at',
                     'updated_at',
-                ]
-            ]
+                ],
+            ],
         ])
         ->assertJson([
             'status' => 'success',
-            'message' => 'Folder created successfully'
+            'message' => 'Folder created successfully',
         ])
         ->assertJsonPath('data.folder.name', 'API Created Folder')
         ->assertJsonPath('data.folder.featured', true);

@@ -5,11 +5,11 @@ use App\Models\Folder;
 use App\Models\Password;
 use App\Models\User;
 use App\Services\EnvelopeEncryptionService;
+use App\Services\PasswordService;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use App\Services\PasswordService;
 
 uses(RefreshDatabase::class);
 
@@ -45,7 +45,7 @@ describe('Password Model', function () {
     });
 
     test('has fillable attributes', function () {
-        $password = new Password();
+        $password = new Password;
 
         expect($password->getFillable())->toBe([
             'user_id',
@@ -65,7 +65,7 @@ describe('Password Model', function () {
     });
 
     test('has correct casts', function () {
-        $password = new Password();
+        $password = new Password;
         $casts = $password->getCasts();
 
         expect($casts)->toHaveKey('user_id', 'integer')
@@ -78,7 +78,7 @@ describe('Password Model', function () {
     });
 
     test('has appended attributes', function () {
-        $password = new Password();
+        $password = new Password;
 
         expect($password->getAppends())->toBe([
             'cli',

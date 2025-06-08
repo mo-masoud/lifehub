@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Services\EnvelopeEncryptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class RotatePasswordEncryptionKeysTest extends TestCase

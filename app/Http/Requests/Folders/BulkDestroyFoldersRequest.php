@@ -40,6 +40,6 @@ class BulkDestroyFoldersRequest extends FormRequest
     {
         $count = count($this->getFolderIds());
 
-        return "{$count} folder" . ($count === 1 ? '' : 's') . " deleted successfully.";
+        return "{$count} folder".($count === 1 ? '' : 's').' deleted successfully.';
     }
 }

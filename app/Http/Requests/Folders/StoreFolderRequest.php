@@ -27,7 +27,7 @@ class StoreFolderRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:folders,name,NULL,id,user_id,' . auth()->id(),
+                'unique:folders,name,NULL,id,user_id,'.auth()->id(),
             ],
             'featured' => ['sometimes', 'boolean'],
         ];

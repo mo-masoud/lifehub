@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\Config;
 use RuntimeException;
@@ -24,7 +23,7 @@ class EnvelopeEncryptionService
     {
         $keys = Config::get('encryption.master_keys', []);
 
-        if (!isset($keys[$version])) {
+        if (! isset($keys[$version])) {
             throw new RuntimeException("Master key version {$version} not found");
         }
 
@@ -50,8 +49,8 @@ class EnvelopeEncryptionService
     /**
      * Encrypt data using envelope encryption
      *
-     * @param string $plaintext The data to encrypt
-     * @param int|null $keyVersion Optional key version (uses current if null)
+     * @param  string  $plaintext  The data to encrypt
+     * @param  int|null  $keyVersion  Optional key version (uses current if null)
      * @return array ['encrypted_data' => string, 'encrypted_key' => string, 'key_version' => int]
      */
     public function encrypt(string $plaintext, ?int $keyVersion = null): array
@@ -80,9 +79,9 @@ class EnvelopeEncryptionService
     /**
      * Decrypt data using envelope encryption
      *
-     * @param string $encryptedData The encrypted data
-     * @param string $encryptedKey The encrypted DEK
-     * @param int $keyVersion The key version used for encryption
+     * @param  string  $encryptedData  The encrypted data
+     * @param  string  $encryptedKey  The encrypted DEK
+     * @param  int  $keyVersion  The key version used for encryption
      * @return string The decrypted plaintext
      */
     public function decrypt(string $encryptedData, string $encryptedKey, int $keyVersion): string
@@ -96,16 +95,17 @@ class EnvelopeEncryptionService
 
         // Decrypt the data with the DEK
         $dataEncrypter = new Encrypter($dataKey, 'AES-256-CBC');
+
         return $dataEncrypter->decryptString($encryptedData);
     }
 
     /**
      * Re-encrypt data with a new key version
      *
-     * @param string $encryptedData Current encrypted data
-     * @param string $encryptedKey Current encrypted DEK
-     * @param int $currentKeyVersion Current key version
-     * @param int|null $newKeyVersion New key version (uses current if null)
+     * @param  string  $encryptedData  Current encrypted data
+     * @param  string  $encryptedKey  Current encrypted DEK
+     * @param  int  $currentKeyVersion  Current key version
+     * @param  int|null  $newKeyVersion  New key version (uses current if null)
      * @return array New encryption result
      */
     public function reEncrypt(string $encryptedData, string $encryptedKey, int $currentKeyVersion, ?int $newKeyVersion = null): array
@@ -120,10 +120,10 @@ class EnvelopeEncryptionService
     /**
      * Generate a secure 32-byte key for testing purposes
      *
-     * @param string $seed Optional seed for deterministic testing
+     * @param  string  $seed  Optional seed for deterministic testing
      * @return string Base64 encoded key
      */
-    public static function generateTestKey(string $seed = null): string
+    public static function generateTestKey(?string $seed = null): string
     {
         if ($seed) {
             // Generate deterministic key from seed for testing

@@ -69,7 +69,7 @@ describe('Password Security', function () {
             'key_version' => 1,
         ]);
 
-        expect(fn() => $password->password)
+        expect(fn () => $password->password)
             ->toThrow(\RuntimeException::class, 'Password is missing envelope encryption fields');
     });
 
@@ -81,7 +81,7 @@ describe('Password Security', function () {
             'key_version' => null,
         ]);
 
-        expect(fn() => $password->password)
+        expect(fn () => $password->password)
             ->toThrow(\RuntimeException::class, 'Password is missing envelope encryption fields');
     });
 

@@ -9,7 +9,7 @@ uses(RefreshDatabase::class);
 
 test('password policy: authenticated user can view any passwords', function () {
     $user = User::factory()->create();
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->viewAny($user))->toBeTrue();
 });
@@ -17,7 +17,7 @@ test('password policy: authenticated user can view any passwords', function () {
 test('password policy: user can view their own password', function () {
     $user = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $user->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->view($user, $password))->toBeTrue();
 });
@@ -26,14 +26,14 @@ test('password policy: user cannot view another users password', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $otherUser->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->view($user, $password))->toBeFalse();
 });
 
 test('password policy: authenticated user can create passwords', function () {
     $user = User::factory()->create();
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->create($user))->toBeTrue();
 });
@@ -41,7 +41,7 @@ test('password policy: authenticated user can create passwords', function () {
 test('password policy: user can update their own password', function () {
     $user = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $user->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->update($user, $password))->toBeTrue();
 });
@@ -50,7 +50,7 @@ test('password policy: user cannot update another users password', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $otherUser->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->update($user, $password))->toBeFalse();
 });
@@ -58,7 +58,7 @@ test('password policy: user cannot update another users password', function () {
 test('password policy: user can delete their own password', function () {
     $user = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $user->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->delete($user, $password))->toBeTrue();
 });
@@ -67,7 +67,7 @@ test('password policy: user cannot delete another users password', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $otherUser->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->delete($user, $password))->toBeFalse();
 });
@@ -75,7 +75,7 @@ test('password policy: user cannot delete another users password', function () {
 test('password policy: user can restore their own password', function () {
     $user = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $user->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->restore($user, $password))->toBeTrue();
 });
@@ -84,7 +84,7 @@ test('password policy: user cannot restore another users password', function () 
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $otherUser->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->restore($user, $password))->toBeFalse();
 });
@@ -92,7 +92,7 @@ test('password policy: user cannot restore another users password', function () 
 test('password policy: user can force delete their own password', function () {
     $user = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $user->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->forceDelete($user, $password))->toBeTrue();
 });
@@ -101,7 +101,7 @@ test('password policy: user cannot force delete another users password', functio
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $password = Password::factory()->create(['user_id' => $otherUser->id]);
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->forceDelete($user, $password))->toBeFalse();
 });
@@ -135,7 +135,7 @@ test('password policy: user ownership takes precedence over folder', function ()
         'folder_id' => $userFolder->id,
     ]);
 
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     // Policy should still check password ownership, not folder ownership
     expect($policy->view($user, $password))->toBeFalse();
@@ -150,7 +150,7 @@ test('password policy: user can access password without folder', function () {
         'folder_id' => null,
     ]);
 
-    $policy = new PasswordPolicy();
+    $policy = new PasswordPolicy;
 
     expect($policy->view($user, $password))->toBeTrue();
     expect($policy->update($user, $password))->toBeTrue();

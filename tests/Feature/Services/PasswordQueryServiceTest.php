@@ -6,7 +6,7 @@ use App\Services\PasswordQueryService;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->service = new PasswordQueryService();
+    $this->service = new PasswordQueryService;
 });
 
 test('password query service applies expiry filters correctly', function () {
@@ -128,12 +128,18 @@ test('password query service handles expiry filters with other filters', functio
 });
 
 test('password query service get filter array includes expiry filters', function () {
-    $request = new class {
+    $request = new class
+    {
         public $expiry_filter = 'expired';
+
         public $type = 'normal';
+
         public $search = 'test';
+
         public $sort = 'name';
+
         public $direction = 'asc';
+
         public $folder_id = 'all';
     };
 

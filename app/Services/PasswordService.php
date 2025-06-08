@@ -4,11 +4,7 @@ namespace App\Services;
 
 use App\Models\Password;
 use App\Models\User;
-use App\Services\EnvelopeEncryptionService;
-use App\Services\AuditLogService;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class PasswordService
 {
@@ -70,11 +66,11 @@ class PasswordService
                 $data['url'] = $this->extractUrlFromCli($data['cli']);
             } else {
                 $errors = [];
-                if (!isset($data['username'])) {
+                if (! isset($data['username'])) {
                     $errors['username'] = 'Username is required for SSH passwords if you don\'t use the CLI command.';
                 }
 
-                if (!isset($data['url'])) {
+                if (! isset($data['url'])) {
                     $errors['url'] = 'URL is required for SSH passwords if you don\'t use the CLI command.';
                 }
 
@@ -85,6 +81,7 @@ class PasswordService
         }
 
         $data['last_used_at'] = now();
+
         return $data;
     }
 

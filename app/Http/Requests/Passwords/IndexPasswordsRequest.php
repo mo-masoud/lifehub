@@ -30,7 +30,7 @@ class IndexPasswordsRequest extends FormRequest
             'search' => ['nullable', 'string', 'max:255'],
             'per_page' => ['nullable', 'integer', 'min:1'],
             'page' => ['nullable', 'integer', 'min:1'],
-            'type' => ['nullable', 'string', 'in:' . implode(',', PasswordTypes::values())],
+            'type' => ['nullable', 'string', 'in:'.implode(',', PasswordTypes::values())],
             'expiry_filter' => ['nullable', 'string', 'in:all,expired,expires_soon'],
         ];
     }

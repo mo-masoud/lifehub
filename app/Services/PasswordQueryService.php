@@ -30,24 +30,24 @@ class PasswordQueryService
     protected function applyFilters(Builder $query, array $filters): void
     {
         // Folder filter
-        if (!empty($filters['folder_id']) && $filters['folder_id'] !== 'all') {
+        if (! empty($filters['folder_id']) && $filters['folder_id'] !== 'all') {
             $query->where('folder_id', $filters['folder_id'] === 'none' ? null : $filters['folder_id']);
         }
 
         // Type filter
-        if (!empty($filters['type'])) {
+        if (! empty($filters['type'])) {
             $query->where('type', $filters['type']);
         }
 
         // Expiry filter
-        if (!empty($filters['expiry_filter'])) {
+        if (! empty($filters['expiry_filter'])) {
             $query->filterByExpiry($filters['expiry_filter']);
         }
 
         // Search filter
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $searchTerm = '%' . $filters['search'] . '%';
+                $searchTerm = '%'.$filters['search'].'%';
                 $q->where('name', 'like', $searchTerm)
                     ->orWhere('username', 'like', $searchTerm)
                     ->orWhere('url', 'like', $searchTerm)

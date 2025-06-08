@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Folder;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class FolderPolicy
 {

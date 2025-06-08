@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Passwords;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Passwords\IndexPasswordsRequest;
-use App\Http\Requests\Passwords\StorePasswordRequest;
-use App\Http\Requests\Passwords\UpdatePasswordRequest;
 use App\Http\Requests\Passwords\BulkDeletePasswordsRequest;
 use App\Http\Requests\Passwords\BulkMoveToFolderRequest;
 use App\Http\Requests\Passwords\BulkRemoveFromFolderRequest;
+use App\Http\Requests\Passwords\IndexPasswordsRequest;
+use App\Http\Requests\Passwords\StorePasswordRequest;
+use App\Http\Requests\Passwords\UpdatePasswordRequest;
 use App\Models\Password;
 use App\Services\PasswordQueryService;
 use App\Services\PasswordService;

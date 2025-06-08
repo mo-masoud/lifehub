@@ -41,7 +41,7 @@ return [
     */
 
     'master_keys' => [
-        1 => env('ENCRYPTION_MASTER_KEY_V1', base64_encode(substr(hash('sha256', config('app.key') . '_envelope_v1', true), 0, 32))),
+        1 => env('ENCRYPTION_MASTER_KEY_V1', base64_encode(substr(hash('sha256', config('app.key').'_envelope_v1', true), 0, 32))),
         // Add new versions here during key rotation:
         // 2 => env('ENCRYPTION_MASTER_KEY_V2'),
         // 3 => env('ENCRYPTION_MASTER_KEY_V3'),

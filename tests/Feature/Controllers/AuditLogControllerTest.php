@@ -30,7 +30,7 @@ describe('AuditLogController', function () {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('audit-logs/index')
                     ->has('auditLogs.data', 5)
                     ->has('filters')

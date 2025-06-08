@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use App\Enums\PasswordTypes;
-use App\Services\PasswordStrengthCalculator;
 use App\Services\EnvelopeEncryptionService;
+use App\Services\PasswordStrengthCalculator;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
 
 class Password extends Model
 {
@@ -73,42 +72,42 @@ class Password extends Model
     public function cli(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->type === PasswordTypes::SSH ? 'ssh ' . $this->username . '@' . $this->url : null,
+            get: fn () => $this->type === PasswordTypes::SSH ? 'ssh '.$this->username.'@'.$this->url : null,
         );
     }
 
     public function isExpired(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->expires_at && $this->expires_at < now(),
+            get: fn () => $this->expires_at && $this->expires_at < now(),
         );
     }
 
     public function passwordPower(): Attribute
     {
         return Attribute::make(
-            get: fn() => (new PasswordStrengthCalculator())->calculateStrength($this->password),
+            get: fn () => (new PasswordStrengthCalculator)->calculateStrength($this->password),
         );
     }
 
     public function isExpiredSoon(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->expires_at && $this->expires_at <= now()->addDays(15) && $this->expires_at > now(),
+            get: fn () => $this->expires_at && $this->expires_at <= now()->addDays(15) && $this->expires_at > now(),
         );
     }
 
     public function lastUsedAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : '-',
+            get: fn () => $this->last_used_at ? $this->last_used_at->diffForHumans() : '-',
         );
     }
 
     public function expiresAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->expires_at ? $this->expires_at->diffForHumans() : '-',
+            get: fn () => $this->expires_at ? $this->expires_at->diffForHumans() : '-',
         );
     }
 
@@ -132,11 +131,12 @@ class Password extends Model
 
                 try {
                     $encryptionService = app(EnvelopeEncryptionService::class);
+
                     return $encryptionService->decrypt($value, $encryptedKey, $keyVersion);
                 } catch (\Exception $e) {
                     \Log::error('Failed to decrypt password with envelope encryption', [
                         'password_id' => $this->id,
-                        'error' => $e->getMessage()
+                        'error' => $e->getMessage(),
                     ]);
                     throw $e;
                 }
@@ -185,7 +185,7 @@ class Password extends Model
     public function scopeFilterByExpiry($query, ?string $expiryFilter = null)
     {
         // Default to showing all passwords if no filter is specified
-        if (!$expiryFilter || $expiryFilter === 'all') {
+        if (! $expiryFilter || $expiryFilter === 'all') {
             return $query; // No additional filtering
         }
 

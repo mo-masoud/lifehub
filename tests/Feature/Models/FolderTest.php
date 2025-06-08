@@ -23,7 +23,7 @@ describe('Folder Model', function () {
     });
 
     test('has fillable attributes', function () {
-        $folder = new Folder();
+        $folder = new Folder;
 
         expect($folder->getFillable())->toBe([
             'user_id',
@@ -33,7 +33,7 @@ describe('Folder Model', function () {
     });
 
     test('has correct casts', function () {
-        $folder = new Folder();
+        $folder = new Folder;
 
         expect($folder->getCasts())->toHaveKey('user_id', 'integer');
     });

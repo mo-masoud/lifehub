@@ -5,13 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Folders\StoreFolderRequest;
 use App\Services\FolderService;
-use Illuminate\Http\Request;
 
 class FolderController extends Controller
 {
     public function __construct(
         protected FolderService $folderService
     ) {}
+
     /**
      * Display a listing of the resource.
      */

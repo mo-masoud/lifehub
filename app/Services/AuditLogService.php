@@ -60,7 +60,7 @@ class AuditLogService
      */
     private function determineContext(?Request $request): string
     {
-        if (!$request) {
+        if (! $request) {
             return 'system';
         }
 

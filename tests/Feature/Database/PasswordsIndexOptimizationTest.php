@@ -1,10 +1,10 @@
 <?php
 
+use App\Enums\PasswordTypes;
+use App\Models\Folder;
 use App\Models\Password;
 use App\Models\PasswordAuditLog;
 use App\Models\User;
-use App\Models\Folder;
-use App\Enums\PasswordTypes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -169,8 +169,8 @@ describe('Passwords Database Optimization', function () {
             DB::table('passwords')->insert([
                 'user_id' => $user->id,
                 'type' => 'normal',
-                'name' => 'Test Password V1 ' . $i,
-                'username' => 'test' . $i,
+                'name' => 'Test Password V1 '.$i,
+                'username' => 'test'.$i,
                 'password' => 'encrypted_data',
                 'encrypted_key' => 'encrypted_key',
                 'key_version' => 1,
@@ -183,8 +183,8 @@ describe('Passwords Database Optimization', function () {
             DB::table('passwords')->insert([
                 'user_id' => $user->id,
                 'type' => 'normal',
-                'name' => 'Test Password V2 ' . $i,
-                'username' => 'test_v2_' . $i,
+                'name' => 'Test Password V2 '.$i,
+                'username' => 'test_v2_'.$i,
                 'password' => 'encrypted_data',
                 'encrypted_key' => 'encrypted_key',
                 'key_version' => 2,

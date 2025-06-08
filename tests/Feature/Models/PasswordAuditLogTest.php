@@ -33,7 +33,7 @@ describe('PasswordAuditLog Model', function () {
     });
 
     test('has correct fillable attributes', function () {
-        $auditLog = new PasswordAuditLog();
+        $auditLog = new PasswordAuditLog;
 
         expect($auditLog->getFillable())->toBe([
             'password_id',
@@ -47,7 +47,7 @@ describe('PasswordAuditLog Model', function () {
     });
 
     test('has correct casts', function () {
-        $auditLog = new PasswordAuditLog();
+        $auditLog = new PasswordAuditLog;
         $casts = $auditLog->getCasts();
 
         expect($casts)->toHaveKey('metadata', 'array')
@@ -55,7 +55,7 @@ describe('PasswordAuditLog Model', function () {
     });
 
     test('has correct appended attributes', function () {
-        $auditLog = new PasswordAuditLog();
+        $auditLog = new PasswordAuditLog;
 
         expect($auditLog->getAppends())->toBe([
             'action_display',
@@ -65,7 +65,7 @@ describe('PasswordAuditLog Model', function () {
     });
 
     test('has timestamps disabled', function () {
-        $auditLog = new PasswordAuditLog();
+        $auditLog = new PasswordAuditLog;
 
         expect($auditLog->timestamps)->toBeFalse();
     });

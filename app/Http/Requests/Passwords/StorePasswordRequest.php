@@ -24,13 +24,13 @@ class StorePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:passwords,name,NULL,id,user_id,' . $this->user()->id],
-            'type' => ['required', 'string', 'in:' . implode(',', PasswordTypes::values())],
+            'name' => ['required', 'string', 'max:255', 'unique:passwords,name,NULL,id,user_id,'.$this->user()->id],
+            'type' => ['required', 'string', 'in:'.implode(',', PasswordTypes::values())],
             'username' => ['nullable', 'required_if:type,normal', 'string', 'max:255'],
             'password' => ['required', 'string', 'max:255'],
             'url' => ['nullable', 'string', 'max:255'],
             'cli' => ['nullable', 'string', 'max:255'],
-            'folder_id' => ['nullable', 'integer', 'exists:folders,id,user_id,' . $this->user()->id],
+            'folder_id' => ['nullable', 'integer', 'exists:folders,id,user_id,'.$this->user()->id],
             'expires_at' => ['nullable', 'date', 'after:now'],
             'notes' => ['nullable', 'string', 'max:10000'],
         ];

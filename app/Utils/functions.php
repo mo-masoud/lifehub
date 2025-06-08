@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('api_response')) {
+if (! function_exists('api_response')) {
     function api_response($data = null, $status = 200, $message = null, $errors = null)
     {
         // Determine status based on HTTP status code following JSend specification

@@ -45,8 +45,8 @@ class RotatePasswordEncryptionKeys extends Command
         $batchSize = (int) $this->option('batch-size');
         $dryRun = $this->option('dry-run');
 
-        $this->info("Password Encryption Key Rotation");
-        $this->info("================================");
+        $this->info('Password Encryption Key Rotation');
+        $this->info('================================');
 
         // Build query
         $query = Password::query();
@@ -57,7 +57,7 @@ class RotatePasswordEncryptionKeys extends Command
         } else {
             // Find all passwords that need rotation (older versions)
             $query->where('key_version', '<', $toVersion);
-            $this->info("Rotating all passwords with older key versions");
+            $this->info('Rotating all passwords with older key versions');
         }
 
         $this->info("Target key version: {$toVersion}");
@@ -65,19 +65,22 @@ class RotatePasswordEncryptionKeys extends Command
         $totalCount = $query->count();
 
         if ($totalCount === 0) {
-            $this->info("No passwords need key rotation.");
+            $this->info('No passwords need key rotation.');
+
             return 0;
         }
 
         $this->info("Found {$totalCount} passwords to rotate.");
 
         if ($dryRun) {
-            $this->warn("DRY RUN MODE - No changes will be made");
+            $this->warn('DRY RUN MODE - No changes will be made');
+
             return 0;
         }
 
-        if (!$this->confirm("Proceed with key rotation?")) {
-            $this->info("Key rotation cancelled.");
+        if (! $this->confirm('Proceed with key rotation?')) {
+            $this->info('Key rotation cancelled.');
+
             return 0;
         }
 
@@ -108,11 +111,12 @@ class RotatePasswordEncryptionKeys extends Command
         $progressBar->finish();
         $this->newLine();
 
-        $this->info("Key rotation completed!");
+        $this->info('Key rotation completed!');
         $this->info("Processed: {$processed}");
 
         if ($errors > 0) {
             $this->warn("Errors: {$errors}");
+
             return 1;
         }
 

@@ -104,7 +104,7 @@ class PasswordAuditLog extends Model
         }
 
         if ($endDate) {
-            $query->where('created_at', '<=', $endDate . ' 23:59:59');
+            $query->where('created_at', '<=', $endDate.' 23:59:59');
         }
 
         return $query;
@@ -116,7 +116,7 @@ class PasswordAuditLog extends Model
     public function createdAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->created_at?->format('M j, Y g:i A')
+            get: fn () => $this->created_at?->format('M j, Y g:i A')
         );
     }
 
@@ -126,7 +126,7 @@ class PasswordAuditLog extends Model
     public function actionDisplay(): Attribute
     {
         return Attribute::make(
-            get: fn() => match ($this->action) {
+            get: fn () => match ($this->action) {
                 'created' => 'Created',
                 'updated' => 'Updated',
                 'deleted' => 'Deleted',
@@ -151,12 +151,12 @@ class PasswordAuditLog extends Model
 
                 // If the password name is longer than 20 characters, mask the middle
                 if (strlen($name) > 20) {
-                    return substr($name, 0, 8) . '****' . substr($name, -8);
+                    return substr($name, 0, 8).'****'.substr($name, -8);
                 }
 
                 // For shorter names, just mask some middle characters
                 if (strlen($name) > 6) {
-                    return substr($name, 0, 3) . '***' . substr($name, -3);
+                    return substr($name, 0, 3).'***'.substr($name, -3);
                 }
 
                 return $name;

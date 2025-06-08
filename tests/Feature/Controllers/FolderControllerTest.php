@@ -14,7 +14,7 @@ it('can view folders index page', function () {
     $response = $this->get(route('folders.index'));
 
     $response->assertOk()
-        ->assertInertia(function ($page) use ($folders) {
+        ->assertInertia(function ($page) {
             $page->component('folders/index')
                 ->has('folders.data', 3)
                 ->has('filters');
@@ -189,7 +189,7 @@ it('sorts folders correctly', function () {
     $response = $this->get(route('folders.index', ['sort' => 'name', 'direction' => 'asc']));
 
     $response->assertOk()
-        ->assertInertia(function ($page) use ($folderA, $folderZ) {
+        ->assertInertia(function ($page) {
             $page->component('folders/index')
                 ->where('folders.data.0.name', 'A Folder')
                 ->where('folders.data.1.name', 'Z Folder');

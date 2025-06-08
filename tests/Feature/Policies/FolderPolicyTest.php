@@ -10,7 +10,7 @@ uses(RefreshDatabase::class);
 describe('Folder Policy', function () {
     test('authenticated user can view any folders', function () {
         $user = User::factory()->create();
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->viewAny($user))->toBeTrue();
     });
@@ -18,7 +18,7 @@ describe('Folder Policy', function () {
     test('user can view their own folder', function () {
         $user = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $user->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->view($user, $folder))->toBeTrue();
     });
@@ -27,14 +27,14 @@ describe('Folder Policy', function () {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $otherUser->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->view($user, $folder))->toBeFalse();
     });
 
     test('authenticated user can create folders', function () {
         $user = User::factory()->create();
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->create($user))->toBeTrue();
     });
@@ -42,7 +42,7 @@ describe('Folder Policy', function () {
     test('user can update their own folder', function () {
         $user = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $user->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->update($user, $folder))->toBeTrue();
     });
@@ -51,7 +51,7 @@ describe('Folder Policy', function () {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $otherUser->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->update($user, $folder))->toBeFalse();
     });
@@ -59,7 +59,7 @@ describe('Folder Policy', function () {
     test('user can delete their own folder', function () {
         $user = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $user->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->delete($user, $folder))->toBeTrue();
     });
@@ -68,7 +68,7 @@ describe('Folder Policy', function () {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $otherUser->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->delete($user, $folder))->toBeFalse();
     });
@@ -76,7 +76,7 @@ describe('Folder Policy', function () {
     test('user can restore their own folder', function () {
         $user = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $user->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->restore($user, $folder))->toBeTrue();
     });
@@ -85,7 +85,7 @@ describe('Folder Policy', function () {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $otherUser->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->restore($user, $folder))->toBeFalse();
     });
@@ -93,7 +93,7 @@ describe('Folder Policy', function () {
     test('user can force delete their own folder', function () {
         $user = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $user->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->forceDelete($user, $folder))->toBeTrue();
     });
@@ -102,7 +102,7 @@ describe('Folder Policy', function () {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
         $folder = Folder::factory()->create(['user_id' => $otherUser->id]);
-        $policy = new FolderPolicy();
+        $policy = new FolderPolicy;
 
         expect($policy->forceDelete($user, $folder))->toBeFalse();
     });
