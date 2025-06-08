@@ -77,10 +77,10 @@ export const NavMain = ({ groups }: NavMainProps = {}) => {
                                         <span>{item.label}</span>
                                     </Link>
                                 ) : (
-                                    <>
+                                    <div>
                                         <item.icon />
                                         <span>{item.label}</span>
-                                    </>
+                                    </div>
                                 )}
                             </SidebarMenuButton>
                         </CollapsibleTrigger>

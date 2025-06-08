@@ -1,6 +1,8 @@
+import { FoldersCombobox } from '@/components/folders/folders-combobox';
 import { SmartRadioGroup } from '@/components/forms/smart-radio-group';
 import InputError from '@/components/input-error';
 import { MarkdownReader } from '@/components/markdown-reader';
+import { QuickTooltip } from '@/components/quick-tooltip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,8 +13,6 @@ import { useForm } from '@inertiajs/react';
 import { Dices, EyeIcon, EyeOffIcon, Info, KeyRound, Loader, ScanEye, Terminal } from 'lucide-react';
 import { FC, FormEventHandler, useState } from 'react';
 import { toast } from 'sonner';
-import { FoldersCombobox } from '../folders/folders-combobox';
-import { QuickTooltip } from '../quick-tooltip';
 
 interface PasswordFormProps {
     password?: Password;
