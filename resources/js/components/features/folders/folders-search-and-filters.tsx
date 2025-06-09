@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent } from 'react';
 import { FolderFilters } from './folder-filters';
 
 interface FoldersSearchAndFiltersProps {
@@ -10,7 +10,7 @@ interface FoldersSearchAndFiltersProps {
     setFeatured: (featured: 'all' | 'featured' | 'not_featured') => void;
 }
 
-export const FoldersSearchAndFilters: FC<FoldersSearchAndFiltersProps> = ({ search, onSearchChange, featured, setFeatured }) => {
+export function FoldersSearchAndFilters({ search, onSearchChange, featured, setFeatured }: FoldersSearchAndFiltersProps) {
     return (
         <div className="flex w-full items-center justify-between gap-4">
             <div className="relative max-w-full flex-1 md:max-w-sm">
@@ -21,4 +21,4 @@ export const FoldersSearchAndFilters: FC<FoldersSearchAndFiltersProps> = ({ sear
             <FolderFilters featured={featured} setFeatured={setFeatured} />
         </div>
     );
-};
+}

@@ -26,7 +26,7 @@ import {
     Trash2,
     User,
 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 
 interface ViewPasswordSheetProps {
     password: Password;
@@ -34,7 +34,7 @@ interface ViewPasswordSheetProps {
     setOpen: (open: boolean) => void;
 }
 
-export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, setOpen }) => {
+export function ViewPasswordSheet({ password, open, setOpen }: ViewPasswordSheetProps) {
     const [showPassword, setShowPassword] = useState(false);
     const { handleCopy } = usePasswords();
     const { openSheet: openEditSheet } = useEditPassword();
@@ -214,4 +214,4 @@ export const ViewPasswordSheet: FC<ViewPasswordSheetProps> = ({ password, open, 
             </SheetContent>
         </Sheet>
     );
-};
+}

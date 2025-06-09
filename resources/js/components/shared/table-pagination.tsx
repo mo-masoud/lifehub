@@ -5,7 +5,6 @@ import { Pagination } from '@/types';
 import { BaseModel } from '@/types/base';
 import { router } from '@inertiajs/react';
 import { ChevronDown, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { FC } from 'react';
 
 interface TablePaginationProps extends React.HTMLAttributes<HTMLDivElement> {
     pagination: Pagination<BaseModel>;
@@ -15,14 +14,14 @@ interface TablePaginationProps extends React.HTMLAttributes<HTMLDivElement> {
     onPerPageChange?: (perPage: number) => void;
 }
 
-export const TablePagination: FC<TablePaginationProps> = ({
+export function TablePagination({
     pagination,
     currentFilters = {},
     routeName = 'passwords.index',
     perPage = 10,
     onPerPageChange,
     className,
-}) => {
+}: TablePaginationProps) {
     const navigateToPage = (url: string | null) => {
         if (!url) return;
 
@@ -106,4 +105,4 @@ export const TablePagination: FC<TablePaginationProps> = ({
             </div>
         </div>
     );
-};
+}

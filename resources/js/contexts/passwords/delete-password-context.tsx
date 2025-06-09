@@ -1,5 +1,5 @@
 import { Password } from '@/types/passwords';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface DeletePasswordContextType {
     isOpen: boolean;
@@ -16,7 +16,7 @@ interface DeletePasswordProviderProps {
     children: ReactNode;
 }
 
-export const DeletePasswordProvider: FC<DeletePasswordProviderProps> = ({ children }) => {
+export function DeletePasswordProvider({ children }: DeletePasswordProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [password, setPassword] = useState<Password | null>(null);
     const [selectedPasswordIds, setSelectedPasswordIds] = useState<Set<number> | null>(null);
@@ -44,7 +44,7 @@ export const DeletePasswordProvider: FC<DeletePasswordProviderProps> = ({ childr
             {children}
         </DeletePasswordContext.Provider>
     );
-};
+}
 
 export const useDeletePassword = () => {
     const context = useContext(DeletePasswordContext);

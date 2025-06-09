@@ -11,7 +11,7 @@ import { generateRandomPassword } from '@/lib/passwords/passwords';
 import { Password } from '@/types/passwords';
 import { useForm } from '@inertiajs/react';
 import { Dices, EyeIcon, EyeOffIcon, Info, KeyRound, Loader, ScanEye, Terminal } from 'lucide-react';
-import { FC, FormEventHandler, useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { toast } from 'sonner';
 
 interface PasswordFormProps {
@@ -19,7 +19,7 @@ interface PasswordFormProps {
     onSubmit?: () => void;
 }
 
-export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
+export function PasswordForm({ password, onSubmit }: PasswordFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const [previewNotes, setPreviewNotes] = useState(false);
 
@@ -279,4 +279,4 @@ export const PasswordForm: FC<PasswordFormProps> = ({ password, onSubmit }) => {
             </div>
         </form>
     );
-};
+}

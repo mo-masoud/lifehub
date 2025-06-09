@@ -1,5 +1,4 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { FC } from 'react';
 
 interface QuickTooltipProps {
     children: React.ReactNode;
@@ -8,7 +7,7 @@ interface QuickTooltipProps {
     asChild?: boolean;
 }
 
-export const QuickTooltip: FC<QuickTooltipProps> = ({ children, content, className, asChild }) => {
+export function QuickTooltip({ children, content, className, asChild }: QuickTooltipProps) {
     return (
         <Tooltip>
             <TooltipTrigger asChild={asChild}>{children}</TooltipTrigger>
@@ -17,4 +16,4 @@ export const QuickTooltip: FC<QuickTooltipProps> = ({ children, content, classNa
             </TooltipContent>
         </Tooltip>
     );
-};
+}

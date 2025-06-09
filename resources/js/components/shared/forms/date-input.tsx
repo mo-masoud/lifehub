@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 
 interface DateInputProps {
     value?: Date;
@@ -14,7 +14,7 @@ interface DateInputProps {
     maxDate?: Date;
 }
 
-export const DateInput: FC<DateInputProps> = ({ value, onChange, placeholder, minDate, maxDate }) => {
+export function DateInput({ value, onChange, placeholder, minDate, maxDate }: DateInputProps) {
     const [open, setOpen] = useState(false);
     const handleChange = (date: Date | undefined) => {
         onChange(date);
@@ -45,4 +45,4 @@ export const DateInput: FC<DateInputProps> = ({ value, onChange, placeholder, mi
             </PopoverContent>
         </Popover>
     );
-};
+}

@@ -1,5 +1,5 @@
 import { Folder } from '@/types/folders';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface EditFolderContextType {
     isOpen: boolean;
@@ -14,7 +14,7 @@ interface EditFolderProviderProps {
     children: ReactNode;
 }
 
-export const EditFolderProvider: FC<EditFolderProviderProps> = ({ children }) => {
+export function EditFolderProvider({ children }: EditFolderProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [folder, setFolder] = useState<Folder | null>(null);
 
@@ -32,7 +32,7 @@ export const EditFolderProvider: FC<EditFolderProviderProps> = ({ children }) =>
     };
 
     return <EditFolderContext.Provider value={{ isOpen, folder, openDialog, closeDialog }}>{children}</EditFolderContext.Provider>;
-};
+}
 
 export const useEditFolder = () => {
     const context = useContext(EditFolderContext);

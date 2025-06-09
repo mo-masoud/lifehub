@@ -1,7 +1,6 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 import { Password } from '@/types/passwords';
-import { FC } from 'react';
 import { PasswordForm } from './password-form';
 
 interface EditPasswordSheetProps {
@@ -10,7 +9,7 @@ interface EditPasswordSheetProps {
     setOpen: (open: boolean) => void;
 }
 
-export const EditPasswordSheet: FC<EditPasswordSheetProps> = ({ password, open, setOpen }) => {
+export function EditPasswordSheet({ password, open, setOpen }: EditPasswordSheetProps) {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetContent className="w-full overflow-y-auto pb-8 sm:max-w-xl" onOpenAutoFocus={(e) => e.preventDefault()}>
@@ -25,4 +24,4 @@ export const EditPasswordSheet: FC<EditPasswordSheetProps> = ({ password, open, 
             </SheetContent>
         </Sheet>
     );
-};
+}

@@ -9,14 +9,13 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Star } from 'lucide-react';
-import { FC } from 'react';
 
 interface FolderFiltersProps {
     featured: 'all' | 'featured' | 'not_featured';
     setFeatured: (featured: 'all' | 'featured' | 'not_featured') => void;
 }
 
-export const FolderFilters: FC<FolderFiltersProps> = ({ featured, setFeatured }) => {
+export function FolderFilters({ featured, setFeatured }: FolderFiltersProps) {
     const handleFeaturedChange = (value: string) => {
         setFeatured(value as 'all' | 'featured' | 'not_featured');
     };
@@ -42,4 +41,4 @@ export const FolderFilters: FC<FolderFiltersProps> = ({ featured, setFeatured })
             </DropdownMenu>
         </div>
     );
-};
+}

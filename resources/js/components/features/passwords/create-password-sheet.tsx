@@ -1,5 +1,4 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { FC } from 'react';
 import { PasswordForm } from './password-form';
 
 interface CreatePasswordSheetProps {
@@ -7,7 +6,7 @@ interface CreatePasswordSheetProps {
     setOpen: (open: boolean) => void;
 }
 
-export const CreatePasswordSheet: FC<CreatePasswordSheetProps> = ({ open, setOpen }) => {
+export function CreatePasswordSheet({ open, setOpen }: CreatePasswordSheetProps) {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
@@ -21,4 +20,4 @@ export const CreatePasswordSheet: FC<CreatePasswordSheetProps> = ({ open, setOpe
             </SheetContent>
         </Sheet>
     );
-};
+}

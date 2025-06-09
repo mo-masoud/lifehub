@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-import { FC } from 'react';
 
 interface SmartRadioGroupProps {
     options: {
@@ -11,7 +10,7 @@ interface SmartRadioGroupProps {
     onChange: (value: string) => void;
 }
 
-export const SmartRadioGroup: FC<SmartRadioGroupProps> = ({ options, value, onChange }) => {
+export function SmartRadioGroup({ options, value, onChange }: SmartRadioGroupProps) {
     return (
         <div className="inline-flex w-fit items-center gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800">
             {options.map((option) => (
@@ -32,4 +31,4 @@ export const SmartRadioGroup: FC<SmartRadioGroupProps> = ({ options, value, onCh
             ))}
         </div>
     );
-};
+}

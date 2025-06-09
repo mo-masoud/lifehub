@@ -2,13 +2,12 @@ import { Badge } from '@/components/ui/badge';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { AuditLog } from '@/types/audit-logs';
 import { Folder, Globe, Monitor, Terminal } from 'lucide-react';
-import { FC } from 'react';
 
 interface AuditLogTableRowProps {
     auditLog: AuditLog;
 }
 
-export const AuditLogTableRow: FC<AuditLogTableRowProps> = ({ auditLog }) => {
+export function AuditLogTableRow({ auditLog }: AuditLogTableRowProps) {
     const getActionColor = (action: string) => {
         switch (action) {
             case 'created':
@@ -69,4 +68,4 @@ export const AuditLogTableRow: FC<AuditLogTableRowProps> = ({ auditLog }) => {
             </TableCell>
         </TableRow>
     );
-};
+}

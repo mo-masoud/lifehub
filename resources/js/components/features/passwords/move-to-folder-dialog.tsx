@@ -2,7 +2,7 @@ import { FoldersCombobox } from '@/components/features/folders/folders-combobox'
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface MoveToFolderDialogProps {
@@ -11,7 +11,7 @@ interface MoveToFolderDialogProps {
     selectedPasswordIds: Set<number>;
 }
 
-export const MoveToFolderDialog: FC<MoveToFolderDialogProps> = ({ open, setOpen, selectedPasswordIds }) => {
+export function MoveToFolderDialog({ open, setOpen, selectedPasswordIds }: MoveToFolderDialogProps) {
     const [selectedFolder, setSelectedFolder] = useState<string>('');
     const [processing, setProcessing] = useState(false);
 
@@ -75,4 +75,4 @@ export const MoveToFolderDialog: FC<MoveToFolderDialogProps> = ({ open, setOpen,
             </DialogContent>
         </Dialog>
     );
-};
+}

@@ -2,7 +2,6 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { SortDirection, SortKey } from '@/types/audit-logs';
 import { ChevronDown } from 'lucide-react';
-import { FC } from 'react';
 
 interface AuditLogsTableHeaderProps {
     sortKey: SortKey;
@@ -10,7 +9,7 @@ interface AuditLogsTableHeaderProps {
     onSortChange: (key: SortKey) => void;
 }
 
-export const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = ({ sortKey, sortDirection, onSortChange }) => {
+export function AuditLogsTableHeader({ sortKey, sortDirection, onSortChange }: AuditLogsTableHeaderProps) {
     return (
         <TableHeader className="bg-muted sticky top-0 z-15">
             <TableRow>
@@ -53,4 +52,4 @@ export const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = ({ sortKey, s
             </TableRow>
         </TableHeader>
     );
-};
+}

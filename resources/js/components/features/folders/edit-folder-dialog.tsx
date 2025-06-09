@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Folder } from '@/types/folders';
 import { useForm } from '@inertiajs/react';
-import { FC, FormEvent } from 'react';
+import { FormEvent } from 'react';
 
 interface EditFolderDialogProps {
     folder: Folder;
@@ -14,7 +14,7 @@ interface EditFolderDialogProps {
     setOpen: (open: boolean) => void;
 }
 
-export const EditFolderDialog: FC<EditFolderDialogProps> = ({ folder, open, setOpen }) => {
+export function EditFolderDialog({ folder, open, setOpen }: EditFolderDialogProps) {
     const { data, setData, put, processing, errors, reset } = useForm<{
         name: string;
         featured: boolean;
@@ -82,4 +82,4 @@ export const EditFolderDialog: FC<EditFolderDialogProps> = ({ folder, open, setO
             </DialogContent>
         </Dialog>
     );
-};
+}

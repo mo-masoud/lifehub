@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface CreatePasswordContextType {
     isOpen: boolean;
@@ -12,14 +12,14 @@ interface CreatePasswordProviderProps {
     children: ReactNode;
 }
 
-export const CreatePasswordProvider: FC<CreatePasswordProviderProps> = ({ children }) => {
+export function CreatePasswordProvider({ children }: CreatePasswordProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const openSheet = () => setIsOpen(true);
     const closeSheet = () => setIsOpen(false);
 
     return <CreatePasswordContext.Provider value={{ isOpen, openSheet, closeSheet }}>{children}</CreatePasswordContext.Provider>;
-};
+}
 
 export const useCreatePassword = () => {
     const context = useContext(CreatePasswordContext);

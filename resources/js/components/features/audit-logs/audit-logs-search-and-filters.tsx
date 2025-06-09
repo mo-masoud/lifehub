@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { ActionType } from '@/types/audit-logs';
 import { Search } from 'lucide-react';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent } from 'react';
 import { AuditLogFilters } from './audit-log-filters';
 
 interface AuditLogsSearchAndFiltersProps {
@@ -19,7 +19,7 @@ interface AuditLogsSearchAndFiltersProps {
     availableActions: Record<string, string>;
 }
 
-export const AuditLogsSearchAndFilters: FC<AuditLogsSearchAndFiltersProps> = ({
+export function AuditLogsSearchAndFilters({
     search,
     onSearchChange,
     passwordId,
@@ -32,7 +32,7 @@ export const AuditLogsSearchAndFilters: FC<AuditLogsSearchAndFiltersProps> = ({
     onEndDateChange,
     userPasswords,
     availableActions,
-}) => {
+}: AuditLogsSearchAndFiltersProps) {
     return (
         <div className="grid grid-cols-1 gap-4">
             <AuditLogFilters
@@ -53,4 +53,4 @@ export const AuditLogsSearchAndFilters: FC<AuditLogsSearchAndFiltersProps> = ({
             </div>
         </div>
     );
-};
+}

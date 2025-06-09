@@ -5,13 +5,13 @@ import { useEditPassword } from '@/contexts/passwords/edit-password-context';
 import { usePasswords } from '@/hooks/passwords/use-passwords';
 import { Password } from '@/types/passwords';
 import { Edit, KeyRound, MoreHorizontal, TerminalSquare, Trash2, User } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 
 interface PasswordRowActionsProps {
     password: Password;
 }
 
-export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) => {
+export function PasswordRowActions({ password }: PasswordRowActionsProps) {
     const { handleCopy } = usePasswords();
     const { openSheet: openEditSheet } = useEditPassword();
     const { openDialog: openDeleteDialog } = useDeletePassword();
@@ -108,4 +108,4 @@ export const PasswordRowActions: FC<PasswordRowActionsProps> = ({ password }) =>
             </DropdownMenu>
         </div>
     );
-};
+}

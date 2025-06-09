@@ -3,7 +3,6 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { SortDirection, SortKey } from '@/types/passwords';
 import { ChevronDown } from 'lucide-react';
-import { FC } from 'react';
 
 interface PasswordsTableHeaderProps {
     sortKey: SortKey;
@@ -14,14 +13,14 @@ interface PasswordsTableHeaderProps {
     onSelectAll: (checked: boolean) => void;
 }
 
-export const PasswordsTableHeader: FC<PasswordsTableHeaderProps> = ({
+export function PasswordsTableHeader({
     sortKey,
     sortDirection,
     onSortChange,
     isAllSelected,
     isIndeterminate,
     onSelectAll,
-}) => {
+}: PasswordsTableHeaderProps) {
     return (
         <TableHeader className="bg-muted sticky top-0 z-15">
             <TableRow>
@@ -78,4 +77,4 @@ export const PasswordsTableHeader: FC<PasswordsTableHeaderProps> = ({
             </TableRow>
         </TableHeader>
     );
-};
+}

@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';
-import { FC } from 'react';
 import { toast } from 'sonner';
 
 interface BulkDeleteFoldersDialogProps {
@@ -10,7 +9,7 @@ interface BulkDeleteFoldersDialogProps {
     setOpen: (open: boolean) => void;
 }
 
-export const BulkDeleteFoldersDialog: FC<BulkDeleteFoldersDialogProps> = ({ selectedFolderIds, open, setOpen }) => {
+export function BulkDeleteFoldersDialog({ selectedFolderIds, open, setOpen }: BulkDeleteFoldersDialogProps) {
     const selectedCount = selectedFolderIds.size;
 
     const handleBulkDelete = () => {
@@ -52,4 +51,4 @@ export const BulkDeleteFoldersDialog: FC<BulkDeleteFoldersDialogProps> = ({ sele
             </DialogContent>
         </Dialog>
     );
-};
+}

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Bell, CheckCheck, Shield, Trophy } from 'lucide-react';
 
-export const NotificationsNav = () => {
+export function NotificationsNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -51,4 +51,4 @@ export const NotificationsNav = () => {
             </DropdownMenuContent>
         </DropdownMenu>
     );
-};
+}

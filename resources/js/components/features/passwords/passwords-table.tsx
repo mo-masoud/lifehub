@@ -1,6 +1,5 @@
 import { TableBody, TableCaption } from '@/components/ui/table';
 import { Password, SortDirection, SortKey } from '@/types/passwords';
-import { FC } from 'react';
 import { PasswordTableRow } from './password-table-row';
 import { PasswordsTableHeader } from './passwords-table-header';
 
@@ -16,7 +15,7 @@ interface PasswordsTableProps {
     isIndeterminate: boolean;
 }
 
-export const PasswordsTable: FC<PasswordsTableProps> = ({
+export function PasswordsTable({
     passwords,
     sortKey,
     sortDirection,
@@ -26,7 +25,7 @@ export const PasswordsTable: FC<PasswordsTableProps> = ({
     onSelectPassword,
     isAllSelected,
     isIndeterminate,
-}) => {
+}: PasswordsTableProps) {
     return (
         <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-180px)] overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
             <div className="relative w-full">
@@ -56,4 +55,4 @@ export const PasswordsTable: FC<PasswordsTableProps> = ({
             </div>
         </div>
     );
-};
+}

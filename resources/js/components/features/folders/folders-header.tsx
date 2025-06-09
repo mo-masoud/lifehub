@@ -2,7 +2,7 @@ import Heading from '@/components/shared/heading';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { FolderOpen, RefreshCcw } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { CreateFolderDialog } from './create-folder-dialog';
 import { FolderBulkActions } from './folder-bulk-actions';
 
@@ -10,7 +10,7 @@ interface FoldersHeaderProps {
     selectedFolderIds: Set<number>;
 }
 
-export const FoldersHeader: FC<FoldersHeaderProps> = ({ selectedFolderIds }) => {
+export function FoldersHeader({ selectedFolderIds }: FoldersHeaderProps) {
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
     return (
@@ -33,4 +33,4 @@ export const FoldersHeader: FC<FoldersHeaderProps> = ({ selectedFolderIds }) => 
             <CreateFolderDialog open={createDialogOpen} setOpen={setCreateDialogOpen} />
         </>
     );
-};
+}

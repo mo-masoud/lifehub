@@ -5,14 +5,14 @@ import { useEditFolder } from '@/contexts/folders/edit-folder-context';
 import { Folder } from '@/types/folders';
 import { router } from '@inertiajs/react';
 import { Edit, MoreHorizontal, Star, StarOff, Trash2 } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface FolderRowActionsProps {
     folder: Folder;
 }
 
-export const FolderRowActions: FC<FolderRowActionsProps> = ({ folder }) => {
+export function FolderRowActions({ folder }: FolderRowActionsProps) {
     const { openDialog: openEditDialog } = useEditFolder();
     const { openDialog: openDeleteDialog } = useDeleteFolder();
 
@@ -85,4 +85,4 @@ export const FolderRowActions: FC<FolderRowActionsProps> = ({ folder }) => {
             </DropdownMenu>
         </>
     );
-};
+}

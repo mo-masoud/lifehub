@@ -3,14 +3,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useDeleteFolder } from '@/contexts/folders/delete-folder-context';
 import { router } from '@inertiajs/react';
 import { ChevronDown, Star, StarOff, Trash2 } from 'lucide-react';
-import { FC } from 'react';
 import { toast } from 'sonner';
 
 interface FolderBulkActionsProps {
     selectedFolderIds: Set<number>;
 }
 
-export const FolderBulkActions: FC<FolderBulkActionsProps> = ({ selectedFolderIds }) => {
+export function FolderBulkActions({ selectedFolderIds }: FolderBulkActionsProps) {
     const { openBulkDialog: openBulkDeleteDialog } = useDeleteFolder();
     const selectedCount = selectedFolderIds.size;
 
@@ -62,4 +61,4 @@ export const FolderBulkActions: FC<FolderBulkActionsProps> = ({ selectedFolderId
             </DropdownMenu>
         </>
     );
-};
+}

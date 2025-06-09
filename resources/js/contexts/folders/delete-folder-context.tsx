@@ -1,5 +1,5 @@
 import { Folder } from '@/types/folders';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface DeleteFolderContextType {
     isOpen: boolean;
@@ -16,7 +16,7 @@ interface DeleteFolderProviderProps {
     children: ReactNode;
 }
 
-export const DeleteFolderProvider: FC<DeleteFolderProviderProps> = ({ children }) => {
+export function DeleteFolderProvider({ children }: DeleteFolderProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [folder, setFolder] = useState<Folder | null>(null);
     const [selectedFolderIds, setSelectedFolderIds] = useState<Set<number> | null>(null);
@@ -44,7 +44,7 @@ export const DeleteFolderProvider: FC<DeleteFolderProviderProps> = ({ children }
             {children}
         </DeleteFolderContext.Provider>
     );
-};
+}
 
 export const useDeleteFolder = () => {
     const context = useContext(DeleteFolderContext);

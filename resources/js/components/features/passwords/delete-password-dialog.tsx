@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Password } from '@/types/passwords';
 import { router } from '@inertiajs/react';
-import { FC } from 'react';
 import { toast } from 'sonner';
 
 interface DeletePasswordDialogProps {
@@ -12,7 +11,7 @@ interface DeletePasswordDialogProps {
     selectedPasswordIds?: Set<number>;
 }
 
-export const DeletePasswordDialog: FC<DeletePasswordDialogProps> = ({ open, setOpen, password, selectedPasswordIds }) => {
+export function DeletePasswordDialog({ open, setOpen, password, selectedPasswordIds }: DeletePasswordDialogProps) {
     const handleDelete = () => {
         if (password) {
             router.delete(route('passwords.destroy', { password: password.id }), {
@@ -65,4 +64,4 @@ export const DeletePasswordDialog: FC<DeletePasswordDialogProps> = ({ open, setO
             </DialogContent>
         </Dialog>
     );
-};
+}

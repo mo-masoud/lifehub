@@ -2,7 +2,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ActionType } from '@/types/audit-logs';
-import { FC } from 'react';
 
 interface AuditLogFiltersProps {
     passwordId: number | undefined;
@@ -17,7 +16,7 @@ interface AuditLogFiltersProps {
     availableActions: Record<string, string>;
 }
 
-export const AuditLogFilters: FC<AuditLogFiltersProps> = ({
+export function AuditLogFilters({
     passwordId,
     onPasswordIdChange,
     action,
@@ -28,7 +27,7 @@ export const AuditLogFilters: FC<AuditLogFiltersProps> = ({
     onEndDateChange,
     userPasswords,
     availableActions,
-}) => {
+}: AuditLogFiltersProps) {
     const handlePasswordChange = (value: string) => {
         if (value === 'all') {
             onPasswordIdChange(undefined);
@@ -94,4 +93,4 @@ export const AuditLogFilters: FC<AuditLogFiltersProps> = ({
             </div>
         </div>
     );
-};
+}

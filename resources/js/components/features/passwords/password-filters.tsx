@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { PasswordType } from '@/types/passwords';
 import { KeyRound, List, Terminal, Timer } from 'lucide-react';
-import { FC } from 'react';
 
 interface PasswordFiltersProps {
     setType: (type: PasswordType | undefined) => void;
@@ -14,7 +13,7 @@ interface PasswordFiltersProps {
     setExpiryFilter: (filter: 'all' | 'expired' | 'expires_soon') => void;
 }
 
-export const PasswordFilters: FC<PasswordFiltersProps> = ({ setFolderId, folderId, setType, type, expiryFilter, setExpiryFilter }) => {
+export function PasswordFilters({ setFolderId, folderId, setType, type, expiryFilter, setExpiryFilter }: PasswordFiltersProps) {
     const renderPasswordTypeIcon = () => {
         switch (type) {
             case 'normal':
@@ -86,4 +85,4 @@ export const PasswordFilters: FC<PasswordFiltersProps> = ({ setFolderId, folderI
             </div>
         </div>
     );
-};
+}

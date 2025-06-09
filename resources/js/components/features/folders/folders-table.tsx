@@ -1,6 +1,5 @@
 import { TableBody, TableCaption } from '@/components/ui/table';
 import { Folder, FolderSortKey } from '@/types/folders';
-import { FC } from 'react';
 import { FolderTableRow } from './folder-table-row';
 import { FoldersTableHeader } from './folders-table-header';
 
@@ -16,7 +15,7 @@ interface FoldersTableProps {
     isIndeterminate: boolean;
 }
 
-export const FoldersTable: FC<FoldersTableProps> = ({
+export function FoldersTable({
     folders,
     sortKey,
     sortDirection,
@@ -26,7 +25,7 @@ export const FoldersTable: FC<FoldersTableProps> = ({
     onSelectFolder,
     isAllSelected,
     isIndeterminate,
-}) => {
+}: FoldersTableProps) {
     return (
         <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-180px)] overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
             <div className="relative w-full">
@@ -56,4 +55,4 @@ export const FoldersTable: FC<FoldersTableProps> = ({
             </div>
         </div>
     );
-};
+}

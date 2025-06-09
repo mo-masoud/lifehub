@@ -3,7 +3,6 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { FolderSortKey } from '@/types/folders';
 import { ChevronDown } from 'lucide-react';
-import { FC } from 'react';
 
 interface FoldersTableHeaderProps {
     sortKey?: FolderSortKey;
@@ -14,14 +13,7 @@ interface FoldersTableHeaderProps {
     onSelectAll: () => void;
 }
 
-export const FoldersTableHeader: FC<FoldersTableHeaderProps> = ({
-    sortKey,
-    sortDirection,
-    onSortChange,
-    isAllSelected,
-    isIndeterminate,
-    onSelectAll,
-}) => {
+export function FoldersTableHeader({ sortKey, sortDirection, onSortChange, isAllSelected, isIndeterminate, onSelectAll }: FoldersTableHeaderProps) {
     return (
         <TableHeader className="bg-muted sticky top-0 z-15">
             <TableRow>
@@ -76,4 +68,4 @@ export const FoldersTableHeader: FC<FoldersTableHeaderProps> = ({
             </TableRow>
         </TableHeader>
     );
-};
+}

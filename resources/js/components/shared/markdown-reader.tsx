@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface MarkdownReaderProps {
     children: string;
 }
 
-export const MarkdownReader: FC<MarkdownReaderProps> = ({ children }) => {
+export function MarkdownReader({ children }: MarkdownReaderProps) {
     return (
         <div className="prose prose-xs prose-neutral dark:prose-invert max-w-none text-xs [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
             <ReactMarkdown
@@ -27,4 +26,4 @@ export const MarkdownReader: FC<MarkdownReaderProps> = ({ children }) => {
             </ReactMarkdown>
         </div>
     );
-};
+}

@@ -3,14 +3,13 @@ import { Button } from '@/components/ui/button';
 import { useCreatePassword } from '@/contexts/passwords/create-password-context';
 import { Link } from '@inertiajs/react';
 import { LockKeyhole, RefreshCcw } from 'lucide-react';
-import { FC } from 'react';
 import { PasswordBulkActions } from './password-bulk-actions';
 
 interface PasswordsHeaderProps {
     selectedPasswordIds: Set<number>;
 }
 
-export const PasswordsHeader: FC<PasswordsHeaderProps> = ({ selectedPasswordIds }) => {
+export function PasswordsHeader({ selectedPasswordIds }: PasswordsHeaderProps) {
     const { openSheet } = useCreatePassword();
 
     return (
@@ -29,4 +28,4 @@ export const PasswordsHeader: FC<PasswordsHeaderProps> = ({ selectedPasswordIds 
             </div>
         </div>
     );
-};
+}

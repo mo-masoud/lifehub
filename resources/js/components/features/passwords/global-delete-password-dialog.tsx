@@ -1,7 +1,7 @@
 import { useDeletePassword } from '@/contexts/passwords/delete-password-context';
 import { DeletePasswordDialog } from './delete-password-dialog';
 
-export const GlobalDeletePasswordDialog = () => {
+export function GlobalDeletePasswordDialog() {
     const { isOpen, password, selectedPasswordIds, closeDialog } = useDeletePassword();
 
     const handleSetOpen = (open: boolean) => {
@@ -18,4 +18,4 @@ export const GlobalDeletePasswordDialog = () => {
             selectedPasswordIds={selectedPasswordIds || undefined}
         />
     );
-};
+}

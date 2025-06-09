@@ -1,5 +1,5 @@
 import { Password } from '@/types/passwords';
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface EditPasswordContextType {
     isOpen: boolean;
@@ -14,7 +14,7 @@ interface EditPasswordProviderProps {
     children: ReactNode;
 }
 
-export const EditPasswordProvider: FC<EditPasswordProviderProps> = ({ children }) => {
+export function EditPasswordProvider({ children }: EditPasswordProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [password, setPassword] = useState<Password | null>(null);
 
@@ -32,7 +32,7 @@ export const EditPasswordProvider: FC<EditPasswordProviderProps> = ({ children }
     };
 
     return <EditPasswordContext.Provider value={{ isOpen, password, openSheet, closeSheet }}>{children}</EditPasswordContext.Provider>;
-};
+}
 
 export const useEditPassword = () => {
     const context = useContext(EditPasswordContext);

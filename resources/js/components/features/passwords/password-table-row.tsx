@@ -3,7 +3,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Password } from '@/types/passwords';
 import { Folder, KeyRound, Terminal } from 'lucide-react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { PasswordRowActions } from './password-row-actions';
 import { ViewPasswordSheet } from './view-password-sheet';
 
@@ -13,7 +13,7 @@ interface PasswordTableRowProps {
     onSelectionChange?: (checked: boolean) => void;
 }
 
-export const PasswordTableRow: FC<PasswordTableRowProps> = ({ password, isSelected = false, onSelectionChange }) => {
+export function PasswordTableRow({ password, isSelected = false, onSelectionChange }: PasswordTableRowProps) {
     const [viewSheetOpen, setViewSheetOpen] = useState(false);
 
     const handleRowClick = () => {
@@ -54,4 +54,4 @@ export const PasswordTableRow: FC<PasswordTableRowProps> = ({ password, isSelect
             <ViewPasswordSheet password={password} open={viewSheetOpen} setOpen={setViewSheetOpen} />
         </>
     );
-};
+}

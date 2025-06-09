@@ -5,14 +5,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm } from '@inertiajs/react';
-import { FC, FormEvent } from 'react';
+import { FormEvent } from 'react';
 
 interface CreateFolderDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-export const CreateFolderDialog: FC<CreateFolderDialogProps> = ({ open, setOpen }) => {
+export function CreateFolderDialog({ open, setOpen }: CreateFolderDialogProps) {
     const { data, setData, post, processing, errors, reset } = useForm<{
         name: string;
         featured: boolean;
@@ -80,4 +80,4 @@ export const CreateFolderDialog: FC<CreateFolderDialogProps> = ({ open, setOpen 
             </DialogContent>
         </Dialog>
     );
-};
+}

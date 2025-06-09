@@ -8,7 +8,7 @@ import { useForm } from '@inertiajs/react';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import axios from 'axios';
 import { Check, ChevronsUpDown, FolderIcon, FolderOpen, Folders, Loader, Plus, Save } from 'lucide-react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 interface FoldersComboboxProps {
@@ -17,12 +17,7 @@ interface FoldersComboboxProps {
     hideAllFolderOption?: boolean;
     canCreateFolder?: boolean;
 }
-export const FoldersCombobox: FC<FoldersComboboxProps> = ({
-    selectedFolder,
-    onSelectFolder,
-    hideAllFolderOption = false,
-    canCreateFolder = false,
-}) => {
+export function FoldersCombobox({ selectedFolder, onSelectFolder, hideAllFolderOption = false, canCreateFolder = false }: FoldersComboboxProps) {
     const [open, setOpen] = useState(false);
     const [folders, setFolders] = useState<Folder[]>([]);
     const [value, setValue] = useState<string | undefined>(selectedFolder);
@@ -193,4 +188,4 @@ export const FoldersCombobox: FC<FoldersComboboxProps> = ({
             </PopoverContent>
         </Popover>
     );
-};
+}

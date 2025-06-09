@@ -2,9 +2,8 @@ import Heading from '@/components/shared/heading';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { FileText, RefreshCcw } from 'lucide-react';
-import { FC } from 'react';
 
-export const AuditLogsHeader: FC = () => {
+export function AuditLogsHeader() {
     return (
         <div className="flex items-center justify-between">
             <Heading title="Audit Logs" description="View password activity history and security events." icon={FileText} />
@@ -18,4 +17,4 @@ export const AuditLogsHeader: FC = () => {
             </div>
         </div>
     );
-};
+}

@@ -1,0 +1,9 @@
+---
+description:
+globs: resources/js/**/*.tsx
+alwaysApply: false
+---
+- Use `export function ComponentName(...) {}` instead of `export const ComponentName = () => {}` for React components.
+- Do **not** change files under `resources/js/components/ui/**`.
+- Do **not** apply to hooks (`use*` files) or utility modules.
+- Skip arrow components used as variables (e.g., `const helper = () => ...`).

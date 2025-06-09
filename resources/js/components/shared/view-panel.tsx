@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
-import { FC } from 'react';
 
 interface ViewPanelProps extends React.HTMLAttributes<HTMLDivElement> {
     label: string;
@@ -11,7 +10,7 @@ interface ViewPanelProps extends React.HTMLAttributes<HTMLDivElement> {
     actions?: React.ReactNode;
 }
 
-export const ViewPanel: FC<ViewPanelProps> = ({ label, value, valueContent, actions, icon, iconClassName, ...props }) => {
+export function ViewPanel({ label, value, valueContent, actions, icon, iconClassName, ...props }: ViewPanelProps) {
     const hasValue = value || valueContent;
 
     if (!hasValue) {
@@ -32,4 +31,4 @@ export const ViewPanel: FC<ViewPanelProps> = ({ label, value, valueContent, acti
             </div>
         </div>
     );
-};
+}

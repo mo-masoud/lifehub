@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Folder } from '@/types/folders';
 import { router } from '@inertiajs/react';
-import { FC } from 'react';
 import { toast } from 'sonner';
 
 interface DeleteFolderDialogProps {
@@ -11,7 +10,7 @@ interface DeleteFolderDialogProps {
     setOpen: (open: boolean) => void;
 }
 
-export const DeleteFolderDialog: FC<DeleteFolderDialogProps> = ({ folder, open, setOpen }) => {
+export function DeleteFolderDialog({ folder, open, setOpen }: DeleteFolderDialogProps) {
     const handleDelete = () => {
         router.delete(route('folders.destroy', folder.id), {
             onSuccess: () => {
@@ -51,4 +50,4 @@ export const DeleteFolderDialog: FC<DeleteFolderDialogProps> = ({ folder, open, 
             </DialogContent>
         </Dialog>
     );
-};
+}

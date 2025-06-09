@@ -1,6 +1,5 @@
 import { TableBody, TableCaption } from '@/components/ui/table';
 import { AuditLog, SortDirection, SortKey } from '@/types/audit-logs';
-import { FC } from 'react';
 import { AuditLogTableRow } from './audit-log-table-row';
 import { AuditLogsTableHeader } from './audit-logs-table-header';
 
@@ -11,7 +10,7 @@ interface AuditLogsTableProps {
     onSortChange: (key: SortKey) => void;
 }
 
-export const AuditLogsTable: FC<AuditLogsTableProps> = ({ auditLogs, sortKey, sortDirection, onSortChange }) => {
+export function AuditLogsTable({ auditLogs, sortKey, sortDirection, onSortChange }: AuditLogsTableProps) {
     return (
         <div className="border-sidebar-border/70 dark:border-sidebar-border mt-4 max-h-[calc(100%-180px)] overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
             <div className="relative w-full">
@@ -29,4 +28,4 @@ export const AuditLogsTable: FC<AuditLogsTableProps> = ({ auditLogs, sortKey, so
             </div>
         </div>
     );
-};
+}

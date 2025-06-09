@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface RemoveFromFolderDialogProps {
@@ -10,7 +10,7 @@ interface RemoveFromFolderDialogProps {
     selectedPasswordIds: Set<number>;
 }
 
-export const RemoveFromFolderDialog: FC<RemoveFromFolderDialogProps> = ({ open, setOpen, selectedPasswordIds }) => {
+export function RemoveFromFolderDialog({ open, setOpen, selectedPasswordIds }: RemoveFromFolderDialogProps) {
     const [processing, setProcessing] = useState(false);
 
     const handleRemove = () => {
@@ -56,4 +56,4 @@ export const RemoveFromFolderDialog: FC<RemoveFromFolderDialogProps> = ({ open, 
             </DialogContent>
         </Dialog>
     );
-};
+}

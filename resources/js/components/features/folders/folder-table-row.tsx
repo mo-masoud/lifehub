@@ -3,7 +3,6 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Folder } from '@/types/folders';
 import { FolderIcon, Star } from 'lucide-react';
-import { FC } from 'react';
 import { FolderRowActions } from './folder-row-actions';
 
 interface FolderTableRowProps {
@@ -12,7 +11,7 @@ interface FolderTableRowProps {
     onSelectionChange?: () => void;
 }
 
-export const FolderTableRow: FC<FolderTableRowProps> = ({ folder, isSelected = false, onSelectionChange }) => {
+export function FolderTableRow({ folder, isSelected = false, onSelectionChange }: FolderTableRowProps) {
     // Format dates
     const formatDate = (date: Date | string) => {
         return new Date(date).toLocaleDateString('en-US', {
@@ -46,4 +45,4 @@ export const FolderTableRow: FC<FolderTableRowProps> = ({ folder, isSelected = f
             </TableRow>
         </>
     );
-};
+}

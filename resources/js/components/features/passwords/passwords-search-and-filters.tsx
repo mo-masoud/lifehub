@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { PasswordType } from '@/types/passwords';
 import { Search } from 'lucide-react';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent } from 'react';
 import { PasswordFilters } from './password-filters';
 
 interface PasswordsSearchAndFiltersProps {
@@ -15,7 +15,7 @@ interface PasswordsSearchAndFiltersProps {
     onExpiryFilterChange: (filter: 'all' | 'expired' | 'expires_soon') => void;
 }
 
-export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
+export function PasswordsSearchAndFilters({
     search,
     onSearchChange,
     folderId,
@@ -24,7 +24,7 @@ export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
     onTypeChange,
     expiryFilter,
     onExpiryFilterChange,
-}) => {
+}: PasswordsSearchAndFiltersProps) {
     return (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
             <div className="relative w-full md:max-w-md">
@@ -41,4 +41,4 @@ export const PasswordsSearchAndFilters: FC<PasswordsSearchAndFiltersProps> = ({
             />
         </div>
     );
-};
+}

@@ -1,7 +1,7 @@
 import { useCreatePassword } from '@/contexts/passwords/create-password-context';
 import { CreatePasswordSheet } from './create-password-sheet';
 
-export const GlobalCreatePasswordSheet = () => {
+export function GlobalCreatePasswordSheet() {
     const { isOpen, closeSheet } = useCreatePassword();
 
     const handleSetOpen = (open: boolean) => {
@@ -11,4 +11,4 @@ export const GlobalCreatePasswordSheet = () => {
     };
 
     return <CreatePasswordSheet open={isOpen} setOpen={handleSetOpen} />;
-};
+}

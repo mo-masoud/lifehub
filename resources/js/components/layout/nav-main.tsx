@@ -18,7 +18,7 @@ import { NavGroup, NavItem, NavMainProps, NavSubItem } from '@/types/navigation'
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
 
-export const NavMain = ({ groups }: NavMainProps = {}) => {
+export function NavMain({ groups }: NavMainProps = {}) {
     const page = usePage<SharedData>();
     const { open } = useSidebar();
     const { openSheet } = useCreatePassword();
@@ -127,4 +127,4 @@ export const NavMain = ({ groups }: NavMainProps = {}) => {
     );
 
     return <>{navigationGroups.map(renderGroup)}</>;
-};
+}

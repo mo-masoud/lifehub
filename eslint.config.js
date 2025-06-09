@@ -11,7 +11,7 @@ export default [
     ...typescript.configs.recommended,
     {
         ...react.configs.flat.recommended,
-        ...react.configs.flat['jsx-runtime'], // Required for React 17+
+        ...react.configs.flat['jsx-runtime'],
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -38,7 +38,39 @@ export default [
         },
     },
     {
+        rules: {
+            // Prefer function declarations for React components
+            'react/function-component-definition': [
+                'error',
+                {
+                    namedComponents: 'function-declaration',
+                    unnamedComponents: 'function-expression',
+                },
+            ],
+            // Disallow FC type usage
+            '@typescript-eslint/ban-types': [
+                'error',
+                {
+                    types: {
+                        'React.FC': {
+                            message: 'Use function declarations instead of React.FC',
+                            fixWith: 'function declaration',
+                        },
+                        'React.FunctionComponent': {
+                            message: 'Use function declarations instead of React.FunctionComponent',
+                            fixWith: 'function declaration',
+                        },
+                        FC: {
+                            message: 'Use function declarations instead of FC',
+                            fixWith: 'function declaration',
+                        },
+                    },
+                },
+            ],
+        },
+    },
+    {
         ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
     },
-    prettier, // Turn off all rules that might conflict with Prettier
+    prettier,
 ];
