@@ -2,7 +2,6 @@
 
 use App\Models\Folder;
 use App\Models\Password;
-use App\Models\PasswordAuditLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -14,16 +13,11 @@ beforeEach(function () {
 });
 
 test('password index includes expiry filters in response', function () {
-    $response = $this->get(route('passwords.index', [
+    $this->get(route('passwords.index', [
         'expiry_filter' => 'expired',
-    ]));
-
-    $response->assertStatus(200);
-
-    $filters = $response->viewData('page')['props']['filters'];
-
-    expect($filters)->toHaveKey('expiryFilter')
-        ->and($filters['expiryFilter'])->toBe('expired');
+    ]))->assertInertia(fn($page) => $page
+        ->component('passwords/index')
+        ->where('filters.expiryFilter', 'expired'));
 });
 
 test('password index filters by expiry correctly', function () {
@@ -43,34 +37,28 @@ test('password index filters by expiry correctly', function () {
     ]);
 
     // Test showing only expired passwords
-    $response = $this->get(route('passwords.index', [
+    $this->get(route('passwords.index', [
         'expiry_filter' => 'expired',
-    ]));
-
-    $response->assertStatus(200);
-
-    $passwords = $response->viewData('page')['props']['passwords']['data'];
-    $passwordIds = collect($passwords)->pluck('id')->toArray();
-
-    expect($passwordIds)
-        ->toContain($expired->id)
-        ->not->toContain($expiresSoon->id)
-        ->not->toContain($notExpiring->id);
+    ]))->assertInertia(fn($page) => $page
+        ->component('passwords/index')
+        ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon, $notExpiring) {
+            $passwordIds = collect($passwords)->pluck('id')->toArray();
+            return in_array($expired->id, $passwordIds) &&
+                !in_array($expiresSoon->id, $passwordIds) &&
+                !in_array($notExpiring->id, $passwordIds);
+        }));
 
     // Test showing only expiring soon passwords
-    $response = $this->get(route('passwords.index', [
+    $this->get(route('passwords.index', [
         'expiry_filter' => 'expires_soon',
-    ]));
-
-    $response->assertStatus(200);
-
-    $passwords = $response->viewData('page')['props']['passwords']['data'];
-    $passwordIds = collect($passwords)->pluck('id')->toArray();
-
-    expect($passwordIds)
-        ->not->toContain($expired->id)
-        ->toContain($expiresSoon->id)
-        ->not->toContain($notExpiring->id);
+    ]))->assertInertia(fn($page) => $page
+        ->component('passwords/index')
+        ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon, $notExpiring) {
+            $passwordIds = collect($passwords)->pluck('id')->toArray();
+            return !in_array($expired->id, $passwordIds) &&
+                in_array($expiresSoon->id, $passwordIds) &&
+                !in_array($notExpiring->id, $passwordIds);
+        }));
 });
 
 test('password index defaults to showing all passwords when no expiry filters provided', function () {
@@ -84,41 +72,31 @@ test('password index defaults to showing all passwords when no expiry filters pr
         'expires_at' => now()->addDays(10),
     ]);
 
-    $response = $this->get(route('passwords.index'));
-
-    $response->assertStatus(200);
-
-    $filters = $response->viewData('page')['props']['filters'];
-    $passwords = $response->viewData('page')['props']['passwords']['data'];
-    $passwordIds = collect($passwords)->pluck('id')->toArray();
-
-    // Default should be 'all' for expiry filter
-    expect($filters['expiryFilter'])->toBe('all');
-
-    // Should show all passwords by default
-    expect($passwordIds)
-        ->toContain($expired->id)
-        ->toContain($expiresSoon->id);
+    $this->get(route('passwords.index'))
+        ->assertInertia(fn($page) => $page
+            ->component('passwords/index')
+            ->where('filters.expiryFilter', 'all')
+            ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon) {
+                $passwordIds = collect($passwords)->pluck('id')->toArray();
+                return in_array($expired->id, $passwordIds) &&
+                    in_array($expiresSoon->id, $passwordIds);
+            }));
 });
 
 test('PasswordController → index renders correct page', function () {
-    $response = $this->get(route('passwords.index'));
-
-    $response->assertStatus(200);
-    $response->assertInertia(fn($page) => $page->component('passwords/index'));
+    $this->get(route('passwords.index'))
+        ->assertInertia(fn($page) => $page->component('passwords/index'));
 });
 
 test('PasswordController → index applies pagination', function () {
     // Create more than 10 passwords
     Password::factory(15)->create(['user_id' => $this->user->id]);
 
-    $response = $this->get(route('passwords.index', ['per_page' => 10]));
-
-    $response->assertStatus(200);
-
-    $passwords = $response->viewData('page')['props']['passwords'];
-    expect($passwords['per_page'])->toBe(10);
-    expect($passwords['total'])->toBe(15);
+    $this->get(route('passwords.index', ['per_page' => 10]))
+        ->assertInertia(fn($page) => $page
+            ->component('passwords/index')
+            ->where('passwords.per_page', 10)
+            ->where('passwords.total', 15));
 });
 
 test('PasswordController → index applies search filter', function () {
@@ -132,16 +110,14 @@ test('PasswordController → index applies search filter', function () {
         'name' => 'Gmail Account',
     ]);
 
-    $response = $this->get(route('passwords.index', ['search' => 'Facebook']));
-
-    $response->assertStatus(200);
-
-    $passwords = $response->viewData('page')['props']['passwords']['data'];
-    $passwordIds = collect($passwords)->pluck('id')->toArray();
-
-    expect($passwordIds)
-        ->toContain($password1->id)
-        ->not->toContain($password2->id);
+    $this->get(route('passwords.index', ['search' => 'Facebook']))
+        ->assertInertia(fn($page) => $page
+            ->component('passwords/index')
+            ->where('passwords.data', function ($passwords) use ($password1, $password2) {
+                $passwordIds = collect($passwords)->pluck('id')->toArray();
+                return in_array($password1->id, $passwordIds) &&
+                    !in_array($password2->id, $passwordIds);
+            }));
 });
 
 test('PasswordController → store creates password successfully', function () {
@@ -481,7 +457,7 @@ test('PasswordController → index handles all filters together', function () {
         'folder_id' => $folder->id,
     ]);
 
-    $response = $this->get(route('passwords.index', [
+    $this->get(route('passwords.index', [
         'search' => 'SSH',
         'type' => 'ssh',
         'folder_id' => $folder->id,
@@ -489,18 +465,15 @@ test('PasswordController → index handles all filters together', function () {
         'sort' => 'name',
         'direction' => 'asc',
         'per_page' => 5,
-    ]));
-
-    $response->assertStatus(200);
-
-    $filters = $response->viewData('page')['props']['filters'];
-    expect($filters['search'])->toBe('SSH');
-    expect($filters['type'])->toBe('ssh');
-    expect($filters['folderId'])->toBe((string)$folder->id);
-    expect($filters['expiryFilter'])->toBe('expired');
-    expect($filters['sort'])->toBe('name');
-    expect($filters['direction'])->toBe('asc');
-    expect($filters['perPage'])->toBe('5');
+    ]))->assertInertia(fn($page) => $page
+        ->component('passwords/index')
+        ->where('filters.search', 'SSH')
+        ->where('filters.type', 'ssh')
+        ->where('filters.folderId', (string)$folder->id)
+        ->where('filters.expiryFilter', 'expired')
+        ->where('filters.sort', 'name')
+        ->where('filters.direction', 'asc')
+        ->where('filters.perPage', '5'));
 });
 
 test('PasswordController → requires authentication for all actions', function () {

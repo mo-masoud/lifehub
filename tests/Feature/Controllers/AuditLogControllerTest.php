@@ -30,7 +30,7 @@ describe('AuditLogController', function () {
 
         $response->assertOk()
             ->assertInertia(
-                fn ($page) => $page
+                fn($page) => $page
                     ->component('audit-logs/index')
                     ->has('auditLogs.data', 5)
                     ->has('filters')
@@ -53,14 +53,14 @@ describe('AuditLogController', function () {
             'user_id' => $this->otherUser->id,
         ]);
 
-        $response = $this->actingAs($this->user)->get(route('passwords.audit-logs.index'));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds)
-            ->toContain($userAuditLog->id)
-            ->not->toContain($otherUserAuditLog->id);
+        $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($userAuditLog, $otherUserAuditLog) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return in_array($userAuditLog->id, $auditLogIds) &&
+                        !in_array($otherUserAuditLog->id, $auditLogIds);
+                }));
     });
 
     test('index filters by password id', function () {
@@ -77,15 +77,15 @@ describe('AuditLogController', function () {
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->actingAs($this->user)
-            ->get(route('passwords.audit-logs.index', ['password_id' => $password1->id]));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds)
-            ->toContain($auditLog1->id)
-            ->not->toContain($auditLog2->id);
+        $this->actingAs($this->user)
+            ->get(route('passwords.audit-logs.index', ['password_id' => $password1->id]))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($auditLog1, $auditLog2) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return in_array($auditLog1->id, $auditLogIds) &&
+                        !in_array($auditLog2->id, $auditLogIds);
+                }));
     });
 
     test('index filters by action', function () {
@@ -103,15 +103,15 @@ describe('AuditLogController', function () {
             'action' => 'copied',
         ]);
 
-        $response = $this->actingAs($this->user)
-            ->get(route('passwords.audit-logs.index', ['action' => 'created']));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds)
-            ->toContain($createdLog->id)
-            ->not->toContain($copiedLog->id);
+        $this->actingAs($this->user)
+            ->get(route('passwords.audit-logs.index', ['action' => 'created']))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($createdLog, $copiedLog) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return in_array($createdLog->id, $auditLogIds) &&
+                        !in_array($copiedLog->id, $auditLogIds);
+                }));
     });
 
     test('index filters by date range', function () {
@@ -129,18 +129,18 @@ describe('AuditLogController', function () {
             'created_at' => now()->subDay(),
         ]);
 
-        $response = $this->actingAs($this->user)
+        $this->actingAs($this->user)
             ->get(route('passwords.audit-logs.index', [
                 'start_date' => now()->subDays(3)->format('Y-m-d'),
                 'end_date' => now()->format('Y-m-d'),
-            ]));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds)
-            ->not->toContain($oldLog->id)
-            ->toContain($recentLog->id);
+            ]))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($oldLog, $recentLog) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return !in_array($oldLog->id, $auditLogIds) &&
+                        in_array($recentLog->id, $auditLogIds);
+                }));
     });
 
     test('index filters by search term', function () {
@@ -164,15 +164,15 @@ describe('AuditLogController', function () {
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->actingAs($this->user)
-            ->get(route('passwords.audit-logs.index', ['search' => 'Gmail']));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds)
-            ->toContain($auditLog1->id)
-            ->not->toContain($auditLog2->id);
+        $this->actingAs($this->user)
+            ->get(route('passwords.audit-logs.index', ['search' => 'Gmail']))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($auditLog1, $auditLog2) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return in_array($auditLog1->id, $auditLogIds) &&
+                        !in_array($auditLog2->id, $auditLogIds);
+                }));
     });
 
     test('index respects per page parameter', function () {
@@ -182,13 +182,12 @@ describe('AuditLogController', function () {
             'user_id' => $this->user->id,
         ]);
 
-        $response = $this->actingAs($this->user)
-            ->get(route('passwords.audit-logs.index', ['per_page' => 20]));
-
-        $auditLogs = $response->viewData('page')['props']['auditLogs'];
-
-        expect($auditLogs['data'])->toHaveCount(20)
-            ->and($auditLogs['total'])->toBe(25);
+        $this->actingAs($this->user)
+            ->get(route('passwords.audit-logs.index', ['per_page' => 20]))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', fn($data) => count($data) === 20)
+                ->where('auditLogs.total', 25));
     });
 
     test('index sorts by created_at desc by default', function () {
@@ -206,13 +205,13 @@ describe('AuditLogController', function () {
             'created_at' => now(),
         ]);
 
-        $response = $this->actingAs($this->user)->get(route('passwords.audit-logs.index'));
-
-        $auditLogIds = collect($response->viewData('page')['props']['auditLogs']['data'])
-            ->pluck('id')->toArray();
-
-        expect($auditLogIds[0])->toBe($newLog->id)
-            ->and($auditLogIds[1])->toBe($oldLog->id);
+        $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('auditLogs.data', function ($auditLogs) use ($newLog, $oldLog) {
+                    $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+                    return $auditLogIds[0] === $newLog->id && $auditLogIds[1] === $oldLog->id;
+                }));
     });
 
     test('index validates invalid password_id for user', function () {
@@ -224,8 +223,9 @@ describe('AuditLogController', function () {
         // Should ignore invalid password_id and show all logs
         $response->assertOk();
 
-        $filters = $response->viewData('page')['props']['filters'];
-        expect($filters['passwordId'])->toBeNull();
+        $response->assertInertia(fn($page) => $page
+            ->component('audit-logs/index')
+            ->where('filters.passwordId', null));
     });
 
     test('index validates invalid action parameter', function () {
@@ -253,18 +253,17 @@ describe('AuditLogController', function () {
     });
 
     test('index includes available actions in response', function () {
-        $response = $this->actingAs($this->user)->get(route('passwords.audit-logs.index'));
-
-        $availableActions = $response->viewData('page')['props']['availableActions'];
-
-        expect($availableActions)->toHaveKey('created', 'Created')
-            ->and($availableActions)->toHaveKey('updated', 'Updated')
-            ->and($availableActions)->toHaveKey('deleted', 'Deleted')
-            ->and($availableActions)->toHaveKey('copied', 'Copied')
-            ->and($availableActions)->toHaveKey('viewed', 'Viewed')
-            ->and($availableActions)->toHaveKey('bulk_deleted', 'Bulk Deleted')
-            ->and($availableActions)->toHaveKey('moved_to_folder', 'Moved to Folder')
-            ->and($availableActions)->toHaveKey('removed_from_folder', 'Removed from Folder');
+        $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('availableActions.created', 'Created')
+                ->where('availableActions.updated', 'Updated')
+                ->where('availableActions.deleted', 'Deleted')
+                ->where('availableActions.copied', 'Copied')
+                ->where('availableActions.viewed', 'Viewed')
+                ->where('availableActions.bulk_deleted', 'Bulk Deleted')
+                ->where('availableActions.moved_to_folder', 'Moved to Folder')
+                ->where('availableActions.removed_from_folder', 'Removed from Folder'));
     });
 
     test('index includes user passwords for filtering', function () {
@@ -278,13 +277,14 @@ describe('AuditLogController', function () {
             'name' => 'Test Password 2',
         ]);
 
-        $response = $this->actingAs($this->user)->get(route('passwords.audit-logs.index'));
-
-        $userPasswords = $response->viewData('page')['props']['userPasswords'];
-
-        expect($userPasswords)->toHaveCount(2);
-
-        $passwordIds = collect($userPasswords)->pluck('id')->toArray();
-        expect($passwordIds)->toContain($password1->id, $password2->id);
+        $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
+            ->assertInertia(fn($page) => $page
+                ->component('audit-logs/index')
+                ->where('userPasswords', function ($userPasswords) use ($password1, $password2) {
+                    $passwordIds = collect($userPasswords)->pluck('id')->toArray();
+                    return count($userPasswords) === 2 &&
+                        in_array($password1->id, $passwordIds) &&
+                        in_array($password2->id, $passwordIds);
+                }));
     });
 });
