@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/shared/heading';
 import { Button } from '@/components/ui/button';
 import { useCreatePassword } from '@/contexts/create-password-context';
 import { Link } from '@inertiajs/react';

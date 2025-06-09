@@ -1,31 +1,29 @@
-import InputError from '@/components/input-error';
+import InputError from '@/components/shared/input-error';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Folder } from '@/types/folders';
 import { useForm } from '@inertiajs/react';
 import { FC, FormEvent } from 'react';
 
-interface EditFolderDialogProps {
-    folder: Folder;
+interface CreateFolderDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-export const EditFolderDialog: FC<EditFolderDialogProps> = ({ folder, open, setOpen }) => {
-    const { data, setData, put, processing, errors, reset } = useForm<{
+export const CreateFolderDialog: FC<CreateFolderDialogProps> = ({ open, setOpen }) => {
+    const { data, setData, post, processing, errors, reset } = useForm<{
         name: string;
         featured: boolean;
     }>({
-        name: folder.name || '',
-        featured: folder.featured || false,
+        name: '',
+        featured: false,
     });
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        put(route('folders.update', folder.id), {
+        post(route('folders.store'), {
             onSuccess: () => {
                 setOpen(false);
                 reset();
@@ -42,8 +40,8 @@ export const EditFolderDialog: FC<EditFolderDialogProps> = ({ folder, open, setO
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Edit Folder</DialogTitle>
-                    <DialogDescription>Update the folder details.</DialogDescription>
+                    <DialogTitle>Create Folder</DialogTitle>
+                    <DialogDescription>Create a new folder to organize your passwords.</DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,7 +73,7 @@ export const EditFolderDialog: FC<EditFolderDialogProps> = ({ folder, open, setO
                             Cancel
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            Update Folder
+                            Create Folder
                         </Button>
                     </div>
                 </form>

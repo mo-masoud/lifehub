@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import Heading from '@/components/shared/heading';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { FileText, RefreshCcw } from 'lucide-react';

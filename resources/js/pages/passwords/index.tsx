@@ -1,7 +1,7 @@
-import { PasswordsHeader } from '@/components/passwords/passwords-header';
-import { PasswordsSearchAndFilters } from '@/components/passwords/passwords-search-and-filters';
-import { PasswordsTable } from '@/components/passwords/passwords-table';
-import { TablePagination } from '@/components/table-pagination';
+import { PasswordsHeader } from '@/components/features/passwords/passwords-header';
+import { PasswordsSearchAndFilters } from '@/components/features/passwords/passwords-search-and-filters';
+import { PasswordsTable } from '@/components/features/passwords/passwords-table';
+import { TablePagination } from '@/components/shared/table-pagination';
 import { usePasswordListState } from '@/hooks/use-password-list-state';
 import { usePasswordSelection } from '@/hooks/use-password-selection';
 import AppLayout from '@/layouts/app-layout';

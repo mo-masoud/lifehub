@@ -1,4 +1,4 @@
-import { FoldersCombobox } from '@/components/folders/folders-combobox';
+import { FoldersCombobox } from '@/components/features/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';

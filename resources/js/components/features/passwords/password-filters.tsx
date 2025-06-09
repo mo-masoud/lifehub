@@ -1,4 +1,4 @@
-import { FoldersCombobox } from '@/components/folders/folders-combobox';
+import { FoldersCombobox } from '@/components/features/folders/folders-combobox';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { PasswordType } from '@/types/passwords';

@@ -1,7 +1,7 @@
-import { FoldersHeader } from '@/components/folders/folders-header';
-import { FoldersSearchAndFilters } from '@/components/folders/folders-search-and-filters';
-import { FoldersTable } from '@/components/folders/folders-table';
-import { TablePagination } from '@/components/table-pagination';
+import { FoldersHeader } from '@/components/features/folders/folders-header';
+import { FoldersSearchAndFilters } from '@/components/features/folders/folders-search-and-filters';
+import { FoldersTable } from '@/components/features/folders/folders-table';
+import { TablePagination } from '@/components/shared/table-pagination';
 import { useFolderListState } from '@/hooks/use-folder-list-state';
 import { useFolderSelection } from '@/hooks/use-folder-selection';
 import AppLayout from '@/layouts/app-layout';

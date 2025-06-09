@@ -34,6 +34,21 @@ lifehub/
 ├── resources/                   # Frontend assets and views
 │   ├── css/                     # Stylesheets
 │   └── js/                      # TypeScript/React code
+│       ├── components/          # React components
+│       │   ├── features/        # Feature-specific components
+│       │   │   ├── passwords/   # Password management components
+│       │   │   ├── folders/     # Folder management components
+│       │   │   └── audit-logs/  # Audit log components
+│       │   ├── layout/          # Layout and navigation components
+│       │   ├── shared/          # Reusable shared components
+│       │   │   └── forms/       # Shared form components
+│       │   └── ui/              # ShadCN UI components
+│       ├── contexts/            # React context providers
+│       ├── hooks/               # Custom React hooks
+│       ├── layouts/             # Page layout templates
+│       ├── pages/               # Inertia.js page components
+│       ├── types/               # TypeScript type definitions
+│       └── lib/                 # Utility functions
 ├── routes/                      # Route definitions
 └── tests/                       # Test suites
 ```
@@ -532,9 +547,11 @@ Rules:
 - **Custom Components**: Application-specific UI elements
 - **Design System**: Consistent styling and behavior with TailwindCSS
 
-#### Feature Components
+#### Feature Components (`features/`)
 
-##### Password Components (`passwords/`)
+Feature-specific components organized by functional domain. Each feature module is self-contained with all related components grouped together.
+
+##### Password Components (`features/passwords/`)
 
 ```typescript
 - PasswordForm: Comprehensive password creation/editing
@@ -544,10 +561,16 @@ Rules:
 - PasswordFilters: Granular filter controls
 - PasswordRowActions: Individual password actions
 - ViewPasswordSheet: Secure password viewing
-- BulkActions: Multi-selection operations
+- PasswordBulkActions: Multi-selection operations
+- CreatePasswordSheet: Password creation modal
+- EditPasswordSheet: Password editing modal
+- DeletePasswordDialog: Password deletion confirmation
+- MoveToFolderDialog: Folder reassignment
+- RemoveFromFolderDialog: Folder removal
+- Global dialog components for cross-page usage
 ```
 
-##### Password Form Features (`password-form.tsx`)
+##### Password Form Features (`features/passwords/password-form.tsx`)
 
 ```typescript
 Key Features:
@@ -561,20 +584,110 @@ Key Features:
 - Real-time validation feedback
 ```
 
-##### Folder Components (`folders/`)
+##### Folder Components (`features/folders/`)
 
 ```typescript
-- FolderForm: Folder creation/editing
-- FoldersCombobox: Folder selection with search
-- FoldersList: Folder management interface
+- FoldersHeader: Folder management header with actions
+- FoldersTable: Data table for folder listing
+- FoldersSearchAndFilters: Folder filtering interface
+- FoldersCombobox: Advanced folder selection with search
+- CreateFolderDialog: Folder creation modal
+- EditFolderDialog: Folder editing modal
+- DeleteFolderDialog: Folder deletion confirmation
+- BulkDeleteFoldersDialog: Multiple folder deletion
+- FolderBulkActions: Multi-selection operations
+- FolderFilters: Folder filtering controls
+- FolderRowActions: Individual folder actions
+- FolderTableRow: Individual folder display
 ```
 
-##### Audit Log Components (`audit-logs/`)
+##### Audit Log Components (`features/audit-logs/`)
 
 ```typescript
+- AuditLogsHeader: Audit log page header
 - AuditLogsTable: Paginated audit log display
-- AuditLogFilters: Date range and action filtering
+- AuditLogsSearchAndFilters: Log filtering interface
+- AuditLogFilters: Advanced filtering controls
+- AuditLogTableRow: Individual log entry display
+- AuditLogsTableHeader: Table header with sorting
 ```
+
+#### Layout Components (`layout/`)
+
+Application layout and navigation components that provide the overall structure and user interface shell.
+
+```typescript
+- AppHeader: Main application header with navigation and user menu
+- AppSidebar: Collapsible sidebar with navigation menu
+- AppSidebarHeader: Sidebar header with breadcrumbs and notifications
+- AppContent: Main content wrapper
+- AppShell: Overall application shell structure
+- NavMain: Primary navigation menu
+- NavUser: User profile navigation
+- NavFooter: Footer navigation
+- UserInfo: User profile information display
+- UserMenuContent: User dropdown menu content
+```
+
+#### Shared Components (`shared/`)
+
+Reusable components used across multiple features and pages. These components are designed to be generic and feature-agnostic.
+
+```typescript
+// Generic UI Components
+- Heading: Consistent page and section headings
+- HeadingSmall: Smaller section headings
+- Icon: Standardized icon component
+- Breadcrumbs: Navigation breadcrumb component
+- InputError: Form validation error display
+- TextLink: Styled link component
+- QuickTooltip: Simple tooltip component
+- ViewPanel: Content viewing panel
+
+// Application Branding
+- AppLogo: Application logo component
+- AppLogoIcon: Icon-only logo variant
+
+// Complex Shared Components
+- TablePagination: Reusable table pagination controls
+- MarkdownReader: Markdown content display with syntax highlighting
+- NotificationsNav: Notification center navigation
+- DeleteUser: Account deletion component
+- AppearanceDropdown: Theme selection dropdown
+- AppearanceTabs: Appearance settings tabs
+
+// Form Components (shared/forms/)
+- DateInput: Date picker with calendar
+- SmartRadioGroup: Enhanced radio button group
+```
+
+#### Component Organization Benefits
+
+1. **Clear Separation of Concerns**: Features, layout, and shared components are distinctly organized
+2. **Scalability**: New features can be added without cluttering existing code
+3. **Reusability**: Shared components prevent code duplication
+4. **Maintainability**: Related components are grouped together for easier maintenance
+5. **Developer Experience**: Intuitive folder structure makes finding components straightforward
+
+#### Recent Reorganization (December 2024)
+
+The component architecture was recently reorganized from a flat structure to the current hierarchical organization:
+
+**Previous Structure**: All components in `resources/js/components/` with some subdirectories
+**Current Structure**: Three-tier organization:
+
+- `features/`: Domain-specific components (passwords, folders, audit-logs)
+- `layout/`: Application shell and navigation components
+- `shared/`: Generic reusable components and forms
+
+**Benefits Achieved**:
+
+- ✅ Better code organization and maintainability
+- ✅ Clearer component purpose and scope
+- ✅ Easier navigation for developers
+- ✅ Improved scalability for future features
+- ✅ All import paths updated to use `@/components/...` aliases
+- ✅ TypeScript compilation verified and passing
 
 ### State Management Strategy
 

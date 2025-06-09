@@ -1,7 +1,7 @@
-import { GlobalCreatePasswordSheet } from '@/components/passwords/global-create-password-sheet';
-import { GlobalDeletePasswordDialog } from '@/components/passwords/global-delete-password-dialog';
-import { GlobalEditPasswordSheet } from '@/components/passwords/global-edit-password-sheet';
-import { GlobalViewPasswordSheet } from '@/components/passwords/global-view-password-sheet';
+import { GlobalCreatePasswordSheet } from '@/components/features/passwords/global-create-password-sheet';
+import { GlobalDeletePasswordDialog } from '@/components/features/passwords/global-delete-password-dialog';
+import { GlobalEditPasswordSheet } from '@/components/features/passwords/global-edit-password-sheet';
+import { GlobalViewPasswordSheet } from '@/components/features/passwords/global-view-password-sheet';
 import { CreatePasswordProvider } from '@/contexts/create-password-context';
 import { DeletePasswordProvider } from '@/contexts/delete-password-context';
 import { EditPasswordProvider } from '@/contexts/edit-password-context';

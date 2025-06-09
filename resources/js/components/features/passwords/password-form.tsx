@@ -1,8 +1,8 @@
-import { FoldersCombobox } from '@/components/folders/folders-combobox';
-import { SmartRadioGroup } from '@/components/forms/smart-radio-group';
-import InputError from '@/components/input-error';
-import { MarkdownReader } from '@/components/markdown-reader';
-import { QuickTooltip } from '@/components/quick-tooltip';
+import { FoldersCombobox } from '@/components/features/folders/folders-combobox';
+import { SmartRadioGroup } from '@/components/shared/forms/smart-radio-group';
+import InputError from '@/components/shared/input-error';
+import { MarkdownReader } from '@/components/shared/markdown-reader';
+import { QuickTooltip } from '@/components/shared/quick-tooltip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

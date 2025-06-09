@@ -1,6 +1,7 @@
+import { MarkdownReader } from '@/components/shared/markdown-reader';
+import { ViewPanel } from '@/components/shared/view-panel';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ViewPanel } from '@/components/view-panel';
 import { useDeletePassword } from '@/contexts/delete-password-context';
 import { useEditPassword } from '@/contexts/edit-password-context';
 import { usePasswords } from '@/hooks/use-passwords';
@@ -26,7 +27,6 @@ import {
     User,
 } from 'lucide-react';
 import { FC, useState } from 'react';
-import { MarkdownReader } from '../markdown-reader';
 
 interface ViewPasswordSheetProps {
     password: Password;

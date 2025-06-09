@@ -1,7 +1,7 @@
-import { AuditLogsHeader } from '@/components/audit-logs/audit-logs-header';
-import { AuditLogsSearchAndFilters } from '@/components/audit-logs/audit-logs-search-and-filters';
-import { AuditLogsTable } from '@/components/audit-logs/audit-logs-table';
-import { TablePagination } from '@/components/table-pagination';
+import { AuditLogsHeader } from '@/components/features/audit-logs/audit-logs-header';
+import { AuditLogsSearchAndFilters } from '@/components/features/audit-logs/audit-logs-search-and-filters';
+import { AuditLogsTable } from '@/components/features/audit-logs/audit-logs-table';
+import { TablePagination } from '@/components/shared/table-pagination';
 import { useAuditLogListState } from '@/hooks/use-audit-log-list-state';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
