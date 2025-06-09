@@ -740,7 +740,7 @@ The frontend follows a **feature-based modular architecture** with clear separat
 
 ```typescript
 // Shared Contexts (contexts/shared/)
-- DialogProviders: Global dialog state management
+- ModalProviders: Global dialog state management
 
 // Password Contexts (contexts/passwords/)
 - CreatePasswordProvider: Password creation context

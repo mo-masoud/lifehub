@@ -2,7 +2,7 @@ import '../css/app.css';
 import './bootstrap';
 
 import { Toaster } from '@/components/ui/sonner';
-import { DialogProviders } from '@/contexts/shared/dialog-providers';
+import { ModalProviders } from '@/contexts/shared/modal-providers';
 import { initializeTheme } from '@/hooks/shared/use-appearance';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -17,10 +17,10 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <DialogProviders>
+            <ModalProviders>
                 <App {...props} />
                 <Toaster richColors />
-            </DialogProviders>,
+            </ModalProviders>,
         );
     },
     progress: {

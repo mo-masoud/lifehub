@@ -9,5 +9,5 @@ export { DeleteFolderProvider, useDeleteFolder } from '@/contexts/folders/delete
 export { EditFolderProvider, useEditFolder } from '@/contexts/folders/edit-folder-context';
 export { FolderProviders } from '@/contexts/folders/folder-providers';
 
-// Dialog providers
-export { DialogProviders } from '@/contexts/shared/dialog-providers';
+// Modal providers
+export { ModalProviders } from '@/contexts/shared/modal-providers';
