@@ -78,8 +78,8 @@ export function PasswordForm({ password, onSubmit }: PasswordFormProps) {
                 </Label>
                 <SmartRadioGroup
                     options={[
-                        { label: 'Normal', value: 'normal', icon: <KeyRound className="-ml-1 size-4" /> },
-                        { label: 'SSH', value: 'ssh', icon: <Terminal className="-ml-1 size-4" /> },
+                        { label: 'Normal', value: 'normal', icon: KeyRound },
+                        { label: 'SSH', value: 'ssh', icon: Terminal },
                     ]}
                     value={data.type}
                     onChange={(value) => setData('type', value as 'normal' | 'ssh')}

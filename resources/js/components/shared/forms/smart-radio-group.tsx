@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils';
+import { LucideIcon } from 'lucide-react';
 
 interface SmartRadioGroupProps {
     options: {
         label: string;
         value: string;
-        icon: React.ReactNode;
+        icon: LucideIcon;
     }[];
     value: string;
     onChange: (value: string) => void;
@@ -12,7 +13,7 @@ interface SmartRadioGroupProps {
 
 export function SmartRadioGroup({ options, value, onChange }: SmartRadioGroupProps) {
     return (
-        <div className="inline-flex w-fit items-center gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800">
+        <div className="bg-accent inline-flex w-fit items-center gap-1 rounded-lg p-1">
             {options.map((option) => (
                 <button
                     key={option.value}
@@ -25,7 +26,7 @@ export function SmartRadioGroup({ options, value, onChange }: SmartRadioGroupPro
                             : 'text-neutral-500 hover:bg-neutral-200/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-700/60',
                     )}
                 >
-                    {option.icon}
+                    <option.icon className="size-4" />
                     <span className="ml-1.5 text-sm">{option.label}</span>
                 </button>
             ))}
