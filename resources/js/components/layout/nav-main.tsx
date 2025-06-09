@@ -24,7 +24,7 @@ export function NavMain({ groups }: NavMainProps = {}) {
     const { openSheet } = useCreatePassword();
 
     // Use provided groups or default navigation
-    const navigationGroups = groups || getDefaultNavigation(page.props.passwordsCount, openSheet);
+    const navigationGroups = groups || getDefaultNavigation(page.props, openSheet);
 
     const renderSubItem = (subItem: NavSubItem, index: number) => {
         const isActive = subItem.isActive?.() || false;
@@ -41,13 +41,13 @@ export function NavMain({ groups }: NavMainProps = {}) {
                         <Link href={subItem.href} prefetch>
                             {subItem.icon && <subItem.icon className="size-4" />}
                             <span>{subItem.label}</span>
-                            {subItem.badge && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
+                            {subItem.badge != null && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
                         </Link>
                     ) : (
                         <>
                             {subItem.icon && <subItem.icon className="size-4" />}
                             <span>{subItem.label}</span>
-                            {subItem.badge && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
+                            {subItem.badge != null && <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>}
                         </>
                     )}
                 </SidebarMenuSubButton>
@@ -105,13 +105,13 @@ export function NavMain({ groups }: NavMainProps = {}) {
                         <Link href={item.href} prefetch>
                             {item.icon && <item.icon />}
                             <span>{item.label}</span>
-                            {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                            {item.badge != null && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </Link>
                     ) : (
                         <>
                             {item.icon && <item.icon />}
                             <span>{item.label}</span>
-                            {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                            {item.badge != null && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </>
                     )}
                 </SidebarMenuButton>

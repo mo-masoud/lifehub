@@ -1,7 +1,8 @@
+import { SharedData } from '@/types';
 import { NavGroup } from '@/types/navigation';
 import { FileText, FolderOpen, LayoutDashboard, List, LockKeyhole, ShieldPlus } from 'lucide-react';
 
-export const getDefaultNavigation = (passwordsCount: number, openSheet: () => void): NavGroup[] => [
+export const getDefaultNavigation = (props: SharedData, openSheet: () => void): NavGroup[] => [
     {
         label: 'Platform',
         items: [
@@ -37,7 +38,7 @@ export const getDefaultNavigation = (passwordsCount: number, openSheet: () => vo
                         icon: List,
                         href: route('passwords.index'),
                         isActive: () => route().current('passwords.index'),
-                        badge: passwordsCount > 99 ? '99+' : passwordsCount,
+                        badge: props.passwordsCount > 99 ? '99+' : props.passwordsCount,
                     },
                     {
                         label: 'New Password',
