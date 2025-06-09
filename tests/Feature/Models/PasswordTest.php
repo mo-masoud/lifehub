@@ -3,6 +3,7 @@
 use App\Enums\PasswordTypes;
 use App\Models\Folder;
 use App\Models\Password;
+use App\Models\PasswordAuditLog;
 use App\Models\User;
 use App\Services\EnvelopeEncryptionService;
 use App\Services\PasswordService;
@@ -561,5 +562,192 @@ describe('Password Model', function () {
             ->toContain($expiresSoon->id)
             ->toContain($notExpiring->id)
             ->toContain($noExpiry->id);
+    });
+
+    test('password strength calculation handles various password types', function () {
+        $user = User::factory()->create();
+
+        $passwords = [
+            'weak' => '123',
+            'medium' => 'password123',
+            'strong' => 'MyStr0ng!P@ssw0rd',
+            'very_strong' => 'Th1s!s@V3ryStr0ng&C0mpl3xP@ssw0rd!',
+        ];
+
+        foreach ($passwords as $type => $passwordValue) {
+            $password = Password::factory()->withPlainPassword($passwordValue)->create([
+                'user_id' => $user->id,
+            ]);
+
+            expect($password->password_power)->toBeArray()
+                ->and($password->password_power)->toHaveKey('score')
+                ->and($password->password_power['score'])->toBeNumeric();
+        }
+    });
+
+    test('cli attribute returns null for non-SSH passwords', function () {
+        $password = Password::factory()->create([
+            'type' => PasswordTypes::Normal,
+            'username' => 'admin',
+            'url' => 'server.example.com',
+        ]);
+
+        expect($password->cli)->toBeNull();
+    });
+
+    test('formatters handle null values correctly', function () {
+        $password = Password::factory()->create([
+            'last_used_at' => null,
+            'expires_at' => null,
+        ]);
+
+        expect($password->last_used_at_formatted)->toBe('-')
+            ->and($password->expires_at_formatted)->toBe('-');
+    });
+
+    test('scopes work correctly', function () {
+        $user = User::factory()->create();
+
+        // Create test passwords with explicit folder_id null
+        $expiredPassword = Password::factory()->create([
+            'user_id' => $user->id,
+            'type' => PasswordTypes::Normal,
+            'folder_id' => null,
+            'expires_at' => now()->subDays(5),
+            'last_used_at' => now()->subDays(2),
+            'copied' => 10,
+        ]);
+
+        $expiringSoonPassword = Password::factory()->create([
+            'user_id' => $user->id,
+            'type' => PasswordTypes::Normal,
+            'folder_id' => null,
+            'expires_at' => now()->addDays(10),
+            'last_used_at' => now()->subDays(1),
+            'copied' => 5,
+        ]);
+
+        $normalPassword = Password::factory()->create([
+            'user_id' => $user->id,
+            'type' => PasswordTypes::Normal,
+            'folder_id' => null,
+            'expires_at' => now()->addDays(30),
+            'last_used_at' => now(),
+            'copied' => 15,
+        ]);
+
+        // Test expiry scopes
+        $expiredPasswords = Password::where('user_id', $user->id)->whereExpired()->get();
+        expect($expiredPasswords)->toHaveCount(1)
+            ->and($expiredPasswords->first()->id)->toBe($expiredPassword->id);
+
+        $expiringSoonPasswords = Password::where('user_id', $user->id)->expiresSoon()->get();
+        expect($expiringSoonPasswords)->toHaveCount(1)
+            ->and($expiringSoonPasswords->first()->id)->toBe($expiringSoonPassword->id);
+
+        // Test sorting scopes
+        $sortedByLastUsed = Password::where('user_id', $user->id)->sortByLastUsed()->get();
+        expect($sortedByLastUsed->first()->id)->toBe($normalPassword->id);
+
+        $sortedByCopied = Password::where('user_id', $user->id)->sortByCopied()->get();
+        expect($sortedByCopied->first()->id)->toBe($normalPassword->id);
+
+        // Test filter scopes
+        $normalTypePasswords = Password::where('user_id', $user->id)->filterByType(PasswordTypes::Normal)->get();
+        expect($normalTypePasswords)->toHaveCount(3);
+
+        // Test folder filter with null
+        $unfolderedPasswords = Password::where('user_id', $user->id)->filterByFolder(null)->get();
+        expect($unfolderedPasswords)->toHaveCount(3);
+
+        // Test expiry filter
+        $allPasswords = Password::where('user_id', $user->id)->filterByExpiry('all')->get();
+        expect($allPasswords)->toHaveCount(3);
+
+        $expiredOnly = Password::where('user_id', $user->id)->filterByExpiry('expired')->get();
+        expect($expiredOnly)->toHaveCount(1);
+
+        $expiringSoonOnly = Password::where('user_id', $user->id)->filterByExpiry('expires_soon')->get();
+        expect($expiringSoonOnly)->toHaveCount(1);
+
+        $defaultExpiry = Password::where('user_id', $user->id)->filterByExpiry(null)->get();
+        expect($defaultExpiry)->toHaveCount(3);
+    });
+
+    test('model boot method works correctly', function () {
+        // The boot method exists but currently just calls parent::boot()
+        // Test that the model can be instantiated and works normally
+        $password = new Password();
+        expect($password)->toBeInstanceOf(Password::class);
+
+        // Test that the boot method doesn't interfere with model creation
+        $password = Password::factory()->create();
+        expect($password)->toBeInstanceOf(Password::class)
+            ->and($password->exists)->toBeTrue();
+    });
+
+    test('password accessor handles decryption errors gracefully', function () {
+        // Create a password with properly encrypted data first
+        $password = Password::factory()->withPlainPassword('test')->create();
+
+        // Now directly update the database with invalid encryption data
+        DB::table('passwords')->where('id', $password->id)->update([
+            'password' => 'invalid_encrypted_data_format',
+            'encrypted_key' => 'invalid_key_data_format',
+            'key_version' => 1,
+        ]);
+
+        // Refresh the model to get the new data
+        $password->refresh();
+
+        // This should throw an exception due to invalid encryption data
+        expect(fn() => $password->password)
+            ->toThrow(\Exception::class);
+    });
+
+
+
+    test('audit logs relationship', function () {
+        $user = User::factory()->create();
+        $password = Password::factory()->create([
+            'user_id' => $user->id,
+            'type' => PasswordTypes::Normal,
+            'name' => 'Test Password',
+            'username' => 'testuser',
+            'password' => 'test123',
+        ]);
+
+        // Create an audit log for this password
+        PasswordAuditLog::create([
+            'password_id' => $password->id,
+            'user_id' => $user->id,
+            'action' => 'created',
+            'ip_address' => '127.0.0.1',
+            'context' => 'web',
+            'created_at' => now(),
+        ]);
+
+        // Test the relationship works
+        $auditLogs = $password->auditLogs;
+        $this->assertCount(1, $auditLogs);
+        $this->assertEquals('created', $auditLogs->first()->action);
+    });
+
+    test('scope filter by expiry handles unknown filter', function () {
+        $user = User::factory()->create();
+        $password = Password::factory()->create([
+            'user_id' => $user->id,
+            'type' => PasswordTypes::Normal,
+            'name' => 'Test Password',
+            'username' => 'testuser',
+            'password' => 'test123',
+        ]);
+
+        // Test with an unknown filter - should return all passwords (no filtering)
+        $query = Password::filterByExpiry('unknown_filter');
+        $passwords = $query->where('user_id', $user->id)->get();
+
+        $this->assertCount(1, $passwords);
+        $this->assertEquals($password->id, $passwords->first()->id);
     });
 });

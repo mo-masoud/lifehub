@@ -28,7 +28,7 @@ test('reset password screen can be rendered', function () {
     $this->post('/forgot-password', ['email' => $user->email]);
 
     Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-        $response = $this->get('/reset-password/'.$notification->token);
+        $response = $this->get('/reset-password/' . $notification->token);
 
         $response->assertStatus(200);
 
@@ -57,4 +57,47 @@ test('password can be reset with valid token', function () {
 
         return true;
     });
+});
+
+test('password reset fails with invalid token', function () {
+    $user = User::factory()->create();
+
+    $response = $this->post('/reset-password', [
+        'token' => 'invalid-token',
+        'email' => $user->email,
+        'password' => 'newpassword',
+        'password_confirmation' => 'newpassword',
+    ]);
+
+    $response->assertSessionHasErrors(['email']);
+});
+
+test('password reset fails with invalid email', function () {
+    $response = $this->post('/reset-password', [
+        'token' => 'some-token',
+        'email' => 'nonexistent@example.com',
+        'password' => 'newpassword',
+        'password_confirmation' => 'newpassword',
+    ]);
+
+    $response->assertSessionHasErrors(['email']);
+});
+
+test('password reset requires password confirmation', function () {
+    $user = User::factory()->create();
+
+    $response = $this->post('/reset-password', [
+        'token' => 'some-token',
+        'email' => $user->email,
+        'password' => 'newpassword',
+        'password_confirmation' => 'different-password',
+    ]);
+
+    $response->assertSessionHasErrors(['password']);
+});
+
+test('password reset form validates required fields', function () {
+    $response = $this->post('/reset-password', []);
+
+    $response->assertSessionHasErrors(['token', 'email', 'password']);
 });

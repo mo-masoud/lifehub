@@ -148,4 +148,51 @@ class EnvelopeEncryptionServiceTest extends TestCase
     {
         expect($this->encryptionService->getCurrentKeyVersion())->toBe(2);
     }
+
+    public function test_throws_exception_for_invalid_key_size()
+    {
+        // Set up a key that's not 32 bytes
+        Config::set('encryption.master_keys', [
+            999 => base64_encode('short_key'), // Not 32 bytes
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Master key version 999 must be exactly 32 bytes (256 bits)');
+
+        $this->encryptionService->encrypt('test', 999);
+    }
+
+    public function test_generate_test_key_without_seed()
+    {
+        $key1 = EnvelopeEncryptionService::generateTestKey();
+        $key2 = EnvelopeEncryptionService::generateTestKey();
+
+        // Should be different keys since no seed is provided
+        expect($key1)->not->toBe($key2);
+
+        // Both should be valid base64 and decode to 32 bytes
+        $decoded1 = base64_decode($key1);
+        $decoded2 = base64_decode($key2);
+
+        expect(strlen($decoded1))->toBe(32);
+        expect(strlen($decoded2))->toBe(32);
+    }
+
+    public function test_generate_test_key_with_seed()
+    {
+        $seed = 'test_seed_123';
+        $key1 = EnvelopeEncryptionService::generateTestKey($seed);
+        $key2 = EnvelopeEncryptionService::generateTestKey($seed);
+
+        // Should be identical keys with same seed
+        expect($key1)->toBe($key2);
+
+        // Should be valid base64 and decode to 32 bytes
+        $decoded = base64_decode($key1);
+        expect(strlen($decoded))->toBe(32);
+
+        // Different seed should produce different key
+        $key3 = EnvelopeEncryptionService::generateTestKey('different_seed');
+        expect($key1)->not->toBe($key3);
+    }
 }

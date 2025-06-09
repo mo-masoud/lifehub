@@ -72,42 +72,42 @@ class Password extends Model
     public function cli(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->type === PasswordTypes::SSH ? 'ssh '.$this->username.'@'.$this->url : null,
+            get: fn() => $this->type === PasswordTypes::SSH ? 'ssh ' . $this->username . '@' . $this->url : null,
         );
     }
 
     public function isExpired(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->expires_at && $this->expires_at < now(),
+            get: fn() => $this->expires_at && $this->expires_at < now(),
         );
     }
 
     public function passwordPower(): Attribute
     {
         return Attribute::make(
-            get: fn () => (new PasswordStrengthCalculator)->calculateStrength($this->password),
+            get: fn() => (new PasswordStrengthCalculator)->calculateStrength($this->password),
         );
     }
 
     public function isExpiredSoon(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->expires_at && $this->expires_at <= now()->addDays(15) && $this->expires_at > now(),
+            get: fn() => $this->expires_at && $this->expires_at <= now()->addDays(15) && $this->expires_at > now(),
         );
     }
 
     public function lastUsedAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->last_used_at ? $this->last_used_at->diffForHumans() : '-',
+            get: fn() => $this->last_used_at ? $this->last_used_at->diffForHumans() : '-',
         );
     }
 
     public function expiresAtFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->expires_at ? $this->expires_at->diffForHumans() : '-',
+            get: fn() => $this->expires_at ? $this->expires_at->diffForHumans() : '-',
         );
     }
 
@@ -115,9 +115,19 @@ class Password extends Model
     {
         return Attribute::make(
             get: function ($value) {
-                // Return null if no password value
-                if (empty($value)) {
+                // Return null for null or missing values
+                if ($value === null) {
                     return null;
+                }
+
+                // If empty string, check if we have encryption metadata
+                if ($value === '') {
+                    // If we have encryption metadata but empty password, this is inconsistent - return null
+                    if ($this->encrypted_key || $this->key_version) {
+                        return null;
+                    }
+                    // Otherwise, return empty string (no encryption was used)
+                    return '';
                 }
 
                 // Get encrypted key and version

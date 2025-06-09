@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('password_audit_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('password_id')->constrained('passwords')->onDelete('cascade');
+            $table->foreignId('password_id')->nullable()->constrained('passwords')->onDelete('set null');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('action', 50); // created, updated, deleted, copied, viewed, etc.
             $table->string('ip_address', 45)->nullable(); // IPv6 compatible
