@@ -23,6 +23,7 @@ export const getDefaultNavigation = (props: SharedData, openSheet: () => void): 
         ],
     },
     {
+        label: 'Passwords Management',
         items: [
             {
                 label: 'Passwords',

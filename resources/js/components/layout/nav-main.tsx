@@ -23,7 +23,6 @@ export function NavMain({ groups }: NavMainProps = {}) {
     const { open } = useSidebar();
     const { openSheet } = useCreatePassword();
 
-    // Use provided groups or default navigation
     const navigationGroups = groups || getDefaultNavigation(page.props, openSheet);
 
     const renderSubItem = (subItem: NavSubItem, index: number) => {
@@ -64,22 +63,22 @@ export function NavMain({ groups }: NavMainProps = {}) {
                 <Collapsible key={index} defaultOpen={item.defaultOpen} className="group/collapsible">
                     <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                            <SidebarMenuButton tooltip={tooltip} isActive={isActive} asChild={!open} onClick={item.onClick}>
+                            <SidebarMenuButton tooltip={tooltip} isActive={!open && isActive} asChild={!open} onClick={item.onClick}>
                                 {open ? (
                                     <>
                                         {item.icon && <item.icon />}
-                                        <span>{item.label}</span>
+                                        <span className="font-semibold">{item.label}</span>
                                         <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                                     </>
                                 ) : item.href ? (
                                     <Link href={item.href} prefetch>
                                         {item.icon && <item.icon />}
-                                        <span>{item.label}</span>
+                                        <span className="font-semibold">{item.label}</span>
                                     </Link>
                                 ) : (
                                     <div>
                                         {item.icon && <item.icon />}
-                                        <span>{item.label}</span>
+                                        <span className="font-semibold">{item.label}</span>
                                     </div>
                                 )}
                             </SidebarMenuButton>
@@ -104,13 +103,13 @@ export function NavMain({ groups }: NavMainProps = {}) {
                     {item.href ? (
                         <Link href={item.href} prefetch>
                             {item.icon && <item.icon />}
-                            <span>{item.label}</span>
+                            <span className="font-semibold">{item.label}</span>
                             {item.badge != null && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </Link>
                     ) : (
                         <>
                             {item.icon && <item.icon />}
-                            <span>{item.label}</span>
+                            <span className="font-semibold">{item.label}</span>
                             {item.badge != null && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                         </>
                     )}
