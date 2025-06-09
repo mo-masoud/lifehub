@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useDeleteFolder } from '@/contexts/delete-folder-context';
-import { useEditFolder } from '@/contexts/edit-folder-context';
+import { useDeleteFolder } from '@/contexts/folders/delete-folder-context';
+import { useEditFolder } from '@/contexts/folders/edit-folder-context';
 import { Folder } from '@/types/folders';
 import { router } from '@inertiajs/react';
 import { Edit, MoreHorizontal, Star, StarOff, Trash2 } from 'lucide-react';

@@ -1,4 +1,4 @@
-import { useEditFolder } from '@/contexts/edit-folder-context';
+import { useEditFolder } from '@/contexts/folders/edit-folder-context';
 import { EditFolderDialog } from './edit-folder-dialog';
 
 export function GlobalEditFolderDialog() {

@@ -2,8 +2,8 @@ import { PasswordsHeader } from '@/components/features/passwords/passwords-heade
 import { PasswordsSearchAndFilters } from '@/components/features/passwords/passwords-search-and-filters';
 import { PasswordsTable } from '@/components/features/passwords/passwords-table';
 import { TablePagination } from '@/components/shared/table-pagination';
-import { usePasswordListState } from '@/hooks/use-password-list-state';
-import { usePasswordSelection } from '@/hooks/use-password-selection';
+import { usePasswordListState } from '@/hooks/passwords/use-password-list-state';
+import { usePasswordSelection } from '@/hooks/passwords/use-password-selection';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { Password, PasswordFilters } from '@/types/passwords';

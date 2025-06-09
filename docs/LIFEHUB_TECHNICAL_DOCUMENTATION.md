@@ -44,11 +44,20 @@ lifehub/
 │       │   │   └── forms/       # Shared form components
 │       │   └── ui/              # ShadCN UI components
 │       ├── contexts/            # React context providers
+│       │   ├── folders/         # Folder-related contexts
+│       │   ├── passwords/       # Password-related contexts
+│       │   └── shared/          # Shared context providers
 │       ├── hooks/               # Custom React hooks
+│       │   ├── audit-logs/      # Audit log hooks
+│       │   ├── folders/         # Folder management hooks
+│       │   ├── passwords/       # Password management hooks
+│       │   └── shared/          # Shared utility hooks
 │       ├── layouts/             # Page layout templates
 │       ├── pages/               # Inertia.js page components
 │       ├── types/               # TypeScript type definitions
 │       └── lib/                 # Utility functions
+│           ├── passwords/       # Password utilities
+│           └── shared/          # Shared utilities
 ├── routes/                      # Route definitions
 └── tests/                       # Test suites
 ```
@@ -691,19 +700,59 @@ The component architecture was recently reorganized from a flat structure to the
 
 ### State Management Strategy
 
+#### Architectural Principles
+
+The frontend follows a **feature-based modular architecture** with clear separation of concerns:
+
+- **Feature Isolation**: Each domain (passwords, folders, audit-logs) has its own hooks, contexts, and utilities
+- **Shared Foundation**: Common functionality is centralized in `shared/` directories
+- **Consistent Patterns**: All features follow the same organizational structure
+- **Absolute Imports**: Using `@/` prefix for clean, maintainable import paths
+- **Type Safety**: Full TypeScript integration with proper type definitions
+
 #### Custom Hooks (`resources/js/hooks/`)
 
+**Organized by Feature Domain:**
+
 ```typescript
+// Shared Hooks (hooks/shared/)
+- useAppearance: Theme management (light/dark mode)
+- useInitials: User initials generation
+- useIsMobile: Mobile viewport detection
+- useMobileNavigation: Mobile navigation state
+
+// Password Hooks (hooks/passwords/)
 - usePasswordListState: Password filtering and sorting state
 - usePasswordSelection: Multi-selection state management
-- useAppearance: Theme management (light/dark mode)
+- usePasswords: Core password data management
+
+// Folder Hooks (hooks/folders/)
+- useFolderListState: Folder filtering and management
+- useFolderSelection: Folder selection state
+
+// Audit Log Hooks (hooks/audit-logs/)
+- useAuditLogListState: Audit log data management
 ```
 
 #### Context Providers (`resources/js/contexts/`)
 
+**Feature-Based Organization:**
+
 ```typescript
+// Shared Contexts (contexts/shared/)
 - DialogProviders: Global dialog state management
-- Theme context integration
+
+// Password Contexts (contexts/passwords/)
+- CreatePasswordProvider: Password creation context
+- DeletePasswordProvider: Password deletion context
+- EditPasswordProvider: Password editing context
+- ViewPasswordProvider: Password viewing context
+- PasswordProviders: Combined password providers
+
+// Folder Contexts (contexts/folders/)
+- DeleteFolderProvider: Folder deletion context
+- EditFolderProvider: Folder editing context
+- FolderProviders: Combined folder providers
 ```
 
 ### Type System (`resources/js/types/`)

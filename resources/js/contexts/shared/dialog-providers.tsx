@@ -1,6 +1,6 @@
+import { FolderProviders } from '@/contexts/folders/folder-providers';
+import { PasswordProviders } from '@/contexts/passwords/password-providers';
 import { FC, ReactNode } from 'react';
-import { FolderProviders } from './folder-providers';
-import { PasswordProviders } from './password-providers';
 
 interface DialogProvidersProps {
     children: ReactNode;

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useDeletePassword } from '@/contexts/delete-password-context';
+import { useDeletePassword } from '@/contexts/passwords/delete-password-context';
 import { ChevronDown, FolderInput, FolderOutput, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { MoveToFolderDialog } from './move-to-folder-dialog';

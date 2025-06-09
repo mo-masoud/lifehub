@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useDeleteFolder } from '@/contexts/delete-folder-context';
+import { useDeleteFolder } from '@/contexts/folders/delete-folder-context';
 import { router } from '@inertiajs/react';
 import { ChevronDown, Star, StarOff, Trash2 } from 'lucide-react';
 import { FC } from 'react';

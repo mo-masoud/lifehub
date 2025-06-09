@@ -1,4 +1,4 @@
-import { useCreatePassword } from '@/contexts/create-password-context';
+import { useCreatePassword } from '@/contexts/passwords/create-password-context';
 import { CreatePasswordSheet } from './create-password-sheet';
 
 export const GlobalCreatePasswordSheet = () => {

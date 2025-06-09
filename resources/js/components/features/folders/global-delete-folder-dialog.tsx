@@ -1,4 +1,4 @@
-import { useDeleteFolder } from '@/contexts/delete-folder-context';
+import { useDeleteFolder } from '@/contexts/folders/delete-folder-context';
 import { BulkDeleteFoldersDialog } from './bulk-delete-folders-dialog';
 import { DeleteFolderDialog } from './delete-folder-dialog';
 

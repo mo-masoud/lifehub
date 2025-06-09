@@ -1,4 +1,4 @@
-import { useViewPassword } from '@/contexts/view-password-context';
+import { useViewPassword } from '@/contexts/passwords/view-password-context';
 import { ViewPasswordSheet } from './view-password-sheet';
 
 export function GlobalViewPasswordSheet() {

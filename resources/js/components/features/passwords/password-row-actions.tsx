@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useDeletePassword } from '@/contexts/delete-password-context';
-import { useEditPassword } from '@/contexts/edit-password-context';
-import { usePasswords } from '@/hooks/use-passwords';
+import { useDeletePassword } from '@/contexts/passwords/delete-password-context';
+import { useEditPassword } from '@/contexts/passwords/edit-password-context';
+import { usePasswords } from '@/hooks/passwords/use-passwords';
 import { Password } from '@/types/passwords';
 import { Edit, KeyRound, MoreHorizontal, TerminalSquare, Trash2, User } from 'lucide-react';
 import { FC, useState } from 'react';

@@ -2,7 +2,7 @@ import { AuditLogsHeader } from '@/components/features/audit-logs/audit-logs-hea
 import { AuditLogsSearchAndFilters } from '@/components/features/audit-logs/audit-logs-search-and-filters';
 import { AuditLogsTable } from '@/components/features/audit-logs/audit-logs-table';
 import { TablePagination } from '@/components/shared/table-pagination';
-import { useAuditLogListState } from '@/hooks/use-audit-log-list-state';
+import { useAuditLogListState } from '@/hooks/audit-logs/use-audit-log-list-state';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
 import { AuditLog, AuditLogFilters } from '@/types/audit-logs';

@@ -1,7 +1,7 @@
 import { GlobalDeleteFolderDialog } from '@/components/features/folders/global-delete-folder-dialog';
 import { GlobalEditFolderDialog } from '@/components/features/folders/global-edit-folder-dialog';
-import { DeleteFolderProvider } from '@/contexts/delete-folder-context';
-import { EditFolderProvider } from '@/contexts/edit-folder-context';
+import { DeleteFolderProvider } from '@/contexts/folders/delete-folder-context';
+import { EditFolderProvider } from '@/contexts/folders/edit-folder-context';
 import { ReactNode } from 'react';
 
 interface FolderProvidersProps {

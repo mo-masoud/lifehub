@@ -1,4 +1,4 @@
-import { useEditPassword } from '@/contexts/edit-password-context';
+import { useEditPassword } from '@/contexts/passwords/edit-password-context';
 import { EditPasswordSheet } from './edit-password-sheet';
 
 export const GlobalEditPasswordSheet = () => {

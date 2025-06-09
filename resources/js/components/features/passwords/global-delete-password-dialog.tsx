@@ -1,4 +1,4 @@
-import { useDeletePassword } from '@/contexts/delete-password-context';
+import { useDeletePassword } from '@/contexts/passwords/delete-password-context';
 import { DeletePasswordDialog } from './delete-password-dialog';
 
 export const GlobalDeletePasswordDialog = () => {

@@ -1,6 +1,6 @@
-# Component Structure Guidelines
+# Frontend Architecture Guidelines
 
-This project follows a structured component layout:
+This project follows a **feature-based modular architecture** for both components and application logic:
 
 ## 🔹 /ui
 
@@ -29,9 +29,30 @@ This project follows a structured component layout:
 
 Each subfolder contains its own logic: dialogs, headers, rows, sheets, etc.
 
+## 🔹 /hooks
+
+- **Feature-based organization**: Each domain has its own subfolder
+- **Examples**: `hooks/passwords/`, `hooks/folders/`, `hooks/audit-logs/`
+- **Shared hooks**: Common utilities in `hooks/shared/`
+- **Purpose**: State management, data fetching, UI interactions
+
+## 🔹 /contexts
+
+- **Feature-based providers**: Domain-specific React contexts
+- **Examples**: `contexts/passwords/`, `contexts/folders/`
+- **Shared contexts**: Global providers in `contexts/shared/`
+- **Pattern**: Each feature has create, edit, delete, and view contexts
+
+## 🔹 /lib
+
+- **Feature utilities**: Domain-specific helper functions
+- **Examples**: `lib/passwords/`, `lib/shared/`
+- **Purpose**: Business logic, data processing, API utilities
+
 ## ❗ Rules
 
-- Avoid circular dependencies.
-- Do not import from `features/*` inside other `features/*`.
-- Prefer `shared/` for cross-cutting components.
-- Use relative imports inside feature folders, and `@/components` elsewhere.
+- **No Circular Dependencies**: Avoid importing between same-level features
+- **Feature Isolation**: Don't import from `features/passwords/` inside `features/folders/`
+- **Use Shared**: Prefer `shared/` for cross-cutting functionality
+- **Absolute Imports**: Use `@/components`, `@/hooks`, `@/contexts` for cleaner imports
+- **Consistent Structure**: All features follow the same organizational pattern

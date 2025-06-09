@@ -11,8 +11,8 @@ import {
     SidebarMenuSubItem,
     useSidebar,
 } from '@/components/ui/sidebar';
-import { useCreatePassword } from '@/contexts/create-password-context';
-import { getDefaultNavigation } from '@/lib/navigation-config';
+import { useCreatePassword } from '@/contexts/passwords/create-password-context';
+import { getDefaultNavigation } from '@/lib/shared/navigation-config';
 import { SharedData } from '@/types';
 import { NavGroup, NavItem, NavMainProps, NavSubItem } from '@/types/navigation';
 import { Link, usePage } from '@inertiajs/react';
