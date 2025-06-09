@@ -26,7 +26,7 @@ export function PasswordFilters({ setFolderId, folderId, setType, type, expiryFi
     };
 
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
@@ -80,7 +80,7 @@ export function PasswordFilters({ setFolderId, folderId, setType, type, expiryFi
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="w-full md:w-[200px]">
+            <div className="flex-1 md:w-[200px]">
                 <FoldersCombobox onSelectFolder={setFolderId} selectedFolder={folderId} />
             </div>
         </div>

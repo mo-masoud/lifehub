@@ -27,7 +27,7 @@ export function PasswordsTable({
     isIndeterminate,
 }: PasswordsTableProps) {
     return (
-        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-180px)] overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
+        <div className="border-sidebar-border/70 dark:border-sidebar-border mt-8 max-h-[calc(100%-180px)] flex-1 overflow-auto rounded-md border md:max-h-[calc(100%-120px)]">
             <div className="relative w-full">
                 <table className="w-full caption-bottom text-sm select-none">
                     {!passwords.length && <TableCaption className="text-muted-foreground my-4 text-sm">No passwords found.</TableCaption>}
