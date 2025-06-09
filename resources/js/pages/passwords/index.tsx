@@ -1,7 +1,6 @@
 import { PasswordsHeader } from '@/components/features/passwords/passwords-header';
 import { PasswordsSearchAndFilters } from '@/components/features/passwords/passwords-search-and-filters';
 import { PasswordsTable } from '@/components/features/passwords/passwords-table';
-import { PasswordsStats } from '@/components/features/passwords/stats/passwords-stats';
 import { TablePagination } from '@/components/shared/table-pagination';
 import { usePasswordListState } from '@/hooks/passwords/use-password-list-state';
 import { usePasswordSelection } from '@/hooks/passwords/use-password-selection';
@@ -66,8 +65,6 @@ export default function PasswordsPage() {
 
             <div className="flex flex-col gap-4 rounded-md p-4">
                 <PasswordsHeader selectedPasswordIds={selectedPasswordIds} />
-
-                <PasswordsStats />
 
                 <div className="flex flex-1 flex-col">
                     <PasswordsSearchAndFilters
