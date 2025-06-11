@@ -49,6 +49,7 @@ class PasswordExpiringSoon extends Notification
             'password_id' => $this->password->id,
             'title' => 'Password Expiring Soon',
             'message' => 'The password for `' . $this->password->name . '` is expiring soon. It will expire in ' . $this->password->expires_at->diffForHumans() . '.',
+            'icon_type' => 'password_expiring',
         ];
     }
 

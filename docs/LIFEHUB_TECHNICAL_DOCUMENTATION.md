@@ -441,13 +441,32 @@ getSecurityHealthOverview(User $user): array
 
 ## Notification System
 
-### 1. Password Expiration Notifications
+LifeHub implements a comprehensive notification system with backend automation, API integration, and a modern frontend interface.
 
-**Purpose**: Automated notification system for password expiration management with intelligent duplicate prevention.
+### 1. Architecture Overview
 
-#### Notification Classes
+The notification system is built on multiple layers:
 
-##### PasswordExpiringSoon (`app/Notifications/PasswordExpiringSoon.php`)
+- **Backend**: Laravel notifications with custom service layer
+- **API**: RESTful endpoints for frontend integration
+- **Frontend**: React component with Inertia.js shared data
+- **Automation**: Scheduled commands for password expiration management
+
+### 2. Notification Classes
+
+#### WelcomeNotification (`app/Notifications/WelcomeNotification.php`)
+
+**Purpose**: Welcome new users to LifeHub.
+
+```php
+Features:
+- Database channel delivery
+- Welcome message and branding
+- Icon type: 'welcome' (blue user icon in UI)
+- Always sends (no conditional logic)
+```
+
+#### PasswordExpiringSoon (`app/Notifications/PasswordExpiringSoon.php`)
 
 **Purpose**: Notifies users when passwords are expiring within 15 days.
 
@@ -457,9 +476,10 @@ Features:
 - Dynamic message with time until expiration
 - shouldSend() validation using password's is_expired_soon attribute
 - Database type: 'password-expiring-soon'
+- Icon type: 'password_expiring' (amber shield icon in UI)
 ```
 
-##### PasswordExpired (`app/Notifications/PasswordExpired.php`)
+#### PasswordExpired (`app/Notifications/PasswordExpired.php`)
 
 **Purpose**: Notifies users when passwords have already expired.
 
@@ -469,38 +489,59 @@ Features:
 - Dynamic message with time since expiration
 - shouldSend() validation using password's is_expired attribute
 - Database type: 'password-expired'
+- Icon type: 'password_expired' (red shield alert icon in UI)
 ```
 
 #### Notification Data Structure
 
 ```php
 [
-    'password_id' => int,           // Password identifier
+    'password_id' => int,           // Password identifier (for expiration notifications)
     'title' => string,              // Notification title
     'message' => string,            // Formatted message with password name and timing
+    'icon_type' => string,          // UI icon type (welcome, password_expiring, password_expired)
 ]
 ```
 
-### 2. Password Notification Service (`app/Services/PasswordNotificationService.php`)
+### 3. Service Layer
+
+#### NotificationService (`app/Services/NotificationService.php`)
+
+**Purpose**: Frontend API integration and data formatting for notifications.
+
+```php
+Core Methods:
+getLatestNotifications(User $user, int $limit = 5): Collection
+getUnreadCount(User $user): int
+markAsRead(User $user, string $notificationId): bool
+markAllAsRead(User $user): int
+getPaginatedNotifications(User $user, int $perPage = 15): LengthAwarePaginator
+```
+
+**Special Features**:
+
+- **Password Object Inclusion**: For expiration notifications, includes full password model with folder relationship
+- **Data Formatting**: Consistent API response structure with metadata
+- **Type Detection**: Handles both class names and database types for notifications
+- **User Isolation**: All operations strictly scoped to authenticated user
+
+#### PasswordNotificationService (`app/Services/PasswordNotificationService.php`)
 
 **Purpose**: Centralized service for managing password expiration notifications with duplicate prevention.
 
-#### Core Methods
-
 ```php
+Core Methods:
 sendExpiringSoonNotifications(): array    // Send notifications for passwords expiring within 15 days
 sendExpiredNotifications(): array         // Send notifications for already expired passwords
 sendAllPasswordNotifications(): array    // Send both expiring soon and expired notifications
 ```
 
-#### Duplicate Prevention Logic
+**Duplicate Prevention Logic**:
 
-The service implements two-layer duplicate prevention:
+1. **Unread Notification Check**: Uses `$user->notifications()` relationship to check for unread notifications for the same password
+2. **Recent Notification Check**: Prevents same notification type within 10 days for the same password using efficient database queries
 
-1. **Unread Notification Check**: No notification sent if user has unread notifications for the same password
-2. **Recent Notification Check**: No notification of same type sent within 10 days for the same password
-
-#### Return Structure
+**Return Structure**:
 
 ```php
 [
@@ -513,7 +554,80 @@ The service implements two-layer duplicate prevention:
 ]
 ```
 
-### 3. Automated Scheduling
+### 4. API Layer
+
+#### NotificationController (`app/Http/Controllers/API/NotificationController.php`)
+
+**Purpose**: RESTful API endpoints for notification management with no business logic (delegated to services).
+
+**Endpoints**:
+
+```bash
+GET    /api/v1/notifications                    # Latest notifications (limit parameter)
+GET    /api/v1/notifications/unread-count       # Unread count
+GET    /api/v1/notifications/paginated          # Paginated notifications
+POST   /api/v1/notifications/{id}/mark-read     # Mark single notification as read
+POST   /api/v1/notifications/mark-all-read      # Mark all notifications as read
+```
+
+**Security**: All endpoints require Sanctum authentication and are user-scoped.
+
+**Response Format**:
+
+```json
+{
+    "status": "success",
+    "data": {
+        "id": "uuid",
+        "type": "password-expired",
+        "title": "Password Expired",
+        "message": "Your password for 'Gmail' expired 2 days ago.",
+        "icon_type": "password_expired",
+        "read_at": null,
+        "created_at": "2024-01-01T00:00:00Z",
+        "password": {
+            "id": 123,
+            "name": "Gmail",
+            "folder": {...}
+        }
+    }
+}
+```
+
+### 5. Frontend Integration
+
+#### Inertia.js Shared Data (`app/Http/Middleware/HandleInertiaRequests.php`)
+
+**Shared Structure**:
+
+```typescript
+notifications: {
+    latest: Notification[],      // Latest 5 notifications
+    unread_count: number         // Total unread count
+}
+```
+
+#### NotificationsNav Component (`resources/js/components/shared/notifications-nav.tsx`)
+
+**Features**:
+
+- **Dynamic Badge**: Shows unread count with red destructive styling
+- **Hover-to-Read**: 1000ms delay before marking notifications as read via API
+- **Mark All Read**: Bulk action with loading states and disabled state management
+- **Icon System**: Contextual icons based on notification type
+- **Responsive Design**: 320px width dropdown with proper spacing
+- **Timestamp Display**: Relative time formatting using date-fns
+- **Coming Soon Button**: Placeholder for full notification management view
+
+**UI Elements**:
+
+- Welcome notifications: Blue user icon with blue background
+- Password expiring: Amber shield icon with amber background
+- Password expired: Red shield alert icon with red background
+- Read indicators: Blue dot for unread notifications
+- Loading states: Spinner animation for async operations
+
+### 6. Automated Scheduling
 
 #### Console Command (`app/Console/Commands/CheckPasswordExpirations.php`)
 
@@ -523,11 +637,11 @@ The service implements two-layer duplicate prevention:
 # Command signature
 php artisan passwords:check-expirations [--dry-run]
 
-# Scheduling (configured in bootstrap/app.php)
+# Scheduling (configured in routes/console.php)
 Schedule: Daily at midnight (00:00)
 ```
 
-#### Command Features
+**Command Features**:
 
 - **Dry Run Mode**: Preview notifications without sending using `--dry-run` flag
 - **Detailed Reporting**: Comprehensive tables showing sent/skipped notifications with reasons
@@ -535,39 +649,17 @@ Schedule: Daily at midnight (00:00)
 - **Service Integration**: Uses PasswordNotificationService for business logic
 - **Reflection-based Dry Run**: Accesses protected methods for preview functionality
 
-#### Command Output
-
-```bash
-📊 Results Summary:
-+-----------------------------+-------+
-| Metric                      | Count |
-+-----------------------------+-------+
-| Total Notifications Sent    | 2     |
-| Total Notifications Skipped | 1     |
-| Expiring Soon Sent          | 1     |
-| Expiring Soon Skipped       | 0     |
-| Expired Sent                | 1     |
-| Expired Skipped             | 1     |
-+-----------------------------+-------+
-
-🔔 Expiring Soon Notifications Sent:
-⚠️  Expired Notifications Sent:
-⏭️  Notifications Skipped (recent or unread exists):
-```
-
-#### Scheduling Configuration
+**Scheduling Configuration**:
 
 ```php
-// bootstrap/app.php
-->withSchedule(function (Schedule $schedule) {
-    $schedule->command(CheckPasswordExpirations::class)
-        ->daily()
-        ->at('00:00')
-        ->description('Check for password expirations and send notifications');
-})
+// routes/console.php
+Schedule::command(CheckPasswordExpirations::class)
+    ->daily()
+    ->at('00:00')
+    ->description('Check for password expirations and send notifications');
 ```
 
-### 4. Database Integration
+### 7. Database Integration
 
 #### Notifications Table
 
@@ -576,10 +668,10 @@ Laravel's default notifications table stores all notification data:
 ```sql
 notifications:
 - id (UUID)
-- type (String) - Full notification class name
+- type (String) - Database type from databaseType() method
 - notifiable_type (String) - 'App\Models\User'
 - notifiable_id (BigInt) - User ID
-- data (JSON) - Notification payload
+- data (JSON) - Notification payload with title, message, icon_type
 - read_at (Timestamp, nullable)
 - created_at, updated_at (Timestamps)
 ```
@@ -590,6 +682,37 @@ notifications:
 // User model automatically includes Notifiable trait
 // Provides: notifications(), unreadNotifications(), readNotifications()
 ```
+
+### 8. Seeding and Development
+
+#### NotificationSeeder (`database/seeders/NotificationSeeder.php`)
+
+**Purpose**: Generate sample notifications for development and testing.
+
+**Features**:
+
+- Creates welcome notifications for user ID 1
+- Generates password expiration notifications based on existing data
+- Marks some notifications as read for UI variety
+- Provides detailed console output with statistics
+
+**Usage**:
+
+```bash
+php artisan db:seed NotificationSeeder
+```
+
+### 9. Testing Coverage
+
+#### Test Structure
+
+- **WelcomeNotificationTest** (5 tests): Notification structure and delivery
+- **NotificationServiceTest** (15 tests): API service functionality and security
+- **NotificationControllerTest** (18 tests): API endpoint authentication and responses
+- **PasswordNotificationServiceTest** (10 tests): Business logic and duplicate prevention
+- **CheckPasswordExpirationsTest** (12 tests): Command execution and scheduling
+
+**Total**: 60 tests with 191+ assertions covering all layers of the notification system.
 
 ## Controller Layer
 

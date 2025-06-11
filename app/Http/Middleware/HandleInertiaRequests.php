@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Password;
+use App\Services\NotificationService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -47,12 +48,27 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => fn (): array => [
+            'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'passwordsCount' => Password::where('user_id', $request->user()?->id)->count() ?? 0,
+            'notifications' => $request->user() ? $this->getNotificationsData($request) : null,
+        ];
+    }
+
+    /**
+     * Get notifications data for the authenticated user
+     */
+    private function getNotificationsData(Request $request): array
+    {
+        $notificationService = app(NotificationService::class);
+        $user = $request->user();
+
+        return [
+            'latest' => $notificationService->getLatestNotifications($user, 5),
+            'unread_count' => $notificationService->getUnreadCount($user),
         ];
     }
 }

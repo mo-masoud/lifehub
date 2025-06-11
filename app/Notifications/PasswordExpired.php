@@ -49,6 +49,7 @@ class PasswordExpired extends Notification
             'password_id' => $this->password->id,
             'title' => 'Password Expired',
             'message' => 'The password for `' . $this->password->name . '` has expired. It expired ' . $this->password->expires_at->diffForHumans() . '. Please update it to maintain security.',
+            'icon_type' => 'password_expired',
         ];
     }
 
