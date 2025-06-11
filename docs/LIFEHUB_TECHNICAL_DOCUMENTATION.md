@@ -439,6 +439,158 @@ getSecurityHealthOverview(User $user): array
 - **Dashboard Ready**: Data formatted for frontend chart components
 - **Real-time**: Statistics reflect current state without caching
 
+## Notification System
+
+### 1. Password Expiration Notifications
+
+**Purpose**: Automated notification system for password expiration management with intelligent duplicate prevention.
+
+#### Notification Classes
+
+##### PasswordExpiringSoon (`app/Notifications/PasswordExpiringSoon.php`)
+
+**Purpose**: Notifies users when passwords are expiring within 15 days.
+
+```php
+Features:
+- Database channel delivery
+- Dynamic message with time until expiration
+- shouldSend() validation using password's is_expired_soon attribute
+- Database type: 'password-expiring-soon'
+```
+
+##### PasswordExpired (`app/Notifications/PasswordExpired.php`)
+
+**Purpose**: Notifies users when passwords have already expired.
+
+```php
+Features:
+- Database channel delivery
+- Dynamic message with time since expiration
+- shouldSend() validation using password's is_expired attribute
+- Database type: 'password-expired'
+```
+
+#### Notification Data Structure
+
+```php
+[
+    'password_id' => int,           // Password identifier
+    'title' => string,              // Notification title
+    'message' => string,            // Formatted message with password name and timing
+]
+```
+
+### 2. Password Notification Service (`app/Services/PasswordNotificationService.php`)
+
+**Purpose**: Centralized service for managing password expiration notifications with duplicate prevention.
+
+#### Core Methods
+
+```php
+sendExpiringSoonNotifications(): array    // Send notifications for passwords expiring within 15 days
+sendExpiredNotifications(): array         // Send notifications for already expired passwords
+sendAllPasswordNotifications(): array    // Send both expiring soon and expired notifications
+```
+
+#### Duplicate Prevention Logic
+
+The service implements two-layer duplicate prevention:
+
+1. **Unread Notification Check**: No notification sent if user has unread notifications for the same password
+2. **Recent Notification Check**: No notification of same type sent within 10 days for the same password
+
+#### Return Structure
+
+```php
+[
+    'expiring_soon' => [
+        'sent' => [['password_id' => 1, 'password_name' => 'Gmail', 'user_id' => 1, 'type' => 'expiring-soon']],
+        'skipped' => [['password_id' => 2, 'reason' => 'Recent or unread notification exists']]
+    ],
+    'expired' => [...],
+    'summary' => ['total_sent' => 2, 'total_skipped' => 1]
+]
+```
+
+### 3. Automated Scheduling
+
+#### Console Command (`app/Console/Commands/CheckPasswordExpirations.php`)
+
+**Purpose**: Artisan command for checking and sending password expiration notifications.
+
+```bash
+# Command signature
+php artisan passwords:check-expirations [--dry-run]
+
+# Scheduling (configured in bootstrap/app.php)
+Schedule: Daily at midnight (00:00)
+```
+
+#### Command Features
+
+- **Dry Run Mode**: Preview notifications without sending using `--dry-run` flag
+- **Detailed Reporting**: Comprehensive tables showing sent/skipped notifications with reasons
+- **Performance Tracking**: Execution time reporting
+- **Service Integration**: Uses PasswordNotificationService for business logic
+- **Reflection-based Dry Run**: Accesses protected methods for preview functionality
+
+#### Command Output
+
+```bash
+📊 Results Summary:
++-----------------------------+-------+
+| Metric                      | Count |
++-----------------------------+-------+
+| Total Notifications Sent    | 2     |
+| Total Notifications Skipped | 1     |
+| Expiring Soon Sent          | 1     |
+| Expiring Soon Skipped       | 0     |
+| Expired Sent                | 1     |
+| Expired Skipped             | 1     |
++-----------------------------+-------+
+
+🔔 Expiring Soon Notifications Sent:
+⚠️  Expired Notifications Sent:
+⏭️  Notifications Skipped (recent or unread exists):
+```
+
+#### Scheduling Configuration
+
+```php
+// bootstrap/app.php
+->withSchedule(function (Schedule $schedule) {
+    $schedule->command(CheckPasswordExpirations::class)
+        ->daily()
+        ->at('00:00')
+        ->description('Check for password expirations and send notifications');
+})
+```
+
+### 4. Database Integration
+
+#### Notifications Table
+
+Laravel's default notifications table stores all notification data:
+
+```sql
+notifications:
+- id (UUID)
+- type (String) - Full notification class name
+- notifiable_type (String) - 'App\Models\User'
+- notifiable_id (BigInt) - User ID
+- data (JSON) - Notification payload
+- read_at (Timestamp, nullable)
+- created_at, updated_at (Timestamps)
+```
+
+#### User Model Integration
+
+```php
+// User model automatically includes Notifiable trait
+// Provides: notifications(), unreadNotifications(), readNotifications()
+```
+
 ## Controller Layer
 
 ### 1. Password Controller (`app/Http/Controllers/Passwords/PasswordController.php`)

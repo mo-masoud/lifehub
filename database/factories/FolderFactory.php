@@ -19,7 +19,7 @@ class FolderFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create()->id,
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->words(2, true) . ' ' . $this->faker->randomNumber(3),
             'featured' => $this->faker->boolean(),
         ];
     }

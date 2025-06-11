@@ -23,7 +23,7 @@ class PasswordFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'type' => $this->faker->randomElement(PasswordTypes::cases()),
-            'name' => $this->faker->word().'_'.$this->faker->randomNumber(4),
+            'name' => $this->faker->unique()->words(3, true) . ' ' . $this->faker->randomNumber(4),
             'username' => $this->faker->userName(),
             'password' => 'temp_password', // Temporary value, will be replaced
             'url' => $this->faker->url(),
@@ -112,6 +112,30 @@ class PasswordFactory extends Factory
                 'encrypted_key' => $encrypted['encrypted_key'],
                 'key_version' => $encrypted['key_version'],
             ]));
+        });
+    }
+
+    /**
+     * Create a password that is expired
+     */
+    public function expired(): static
+    {
+        return $this->state(function () {
+            return [
+                'expires_at' => $this->faker->dateTimeBetween('-6 months', '-1 day'),
+            ];
+        });
+    }
+
+    /**
+     * Create a password that is expiring soon (within 15 days)
+     */
+    public function expiringSoon(): static
+    {
+        return $this->state(function () {
+            return [
+                'expires_at' => $this->faker->dateTimeBetween('now', '+15 days'),
+            ];
         });
     }
 }
