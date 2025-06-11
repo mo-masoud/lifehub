@@ -9,7 +9,7 @@ export const getDefaultNavigation = (props: SharedData, openSheet: () => void): 
             {
                 label: 'Dashboard',
                 icon: LayoutDashboard,
-                href: '/dashboard',
+                href: route('dashboard'),
                 isActive: () => route().current('dashboard'),
                 tooltip: 'Dashboard',
             },

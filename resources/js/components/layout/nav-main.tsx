@@ -120,7 +120,7 @@ export function NavMain({ groups }: NavMainProps = {}) {
 
     const renderGroup = (group: NavGroup, index: number) => (
         <SidebarGroup key={index} className="px-2 py-0">
-            {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+            {group.label && open && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
             <SidebarMenu>{group.items.map(renderItem)}</SidebarMenu>
         </SidebarGroup>
     );
