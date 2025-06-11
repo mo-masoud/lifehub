@@ -4,7 +4,7 @@ use App\Services\PasswordStrengthCalculator;
 
 describe('PasswordStrengthCalculator', function () {
     beforeEach(function () {
-        $this->calculator = new PasswordStrengthCalculator();
+        $this->calculator = new PasswordStrengthCalculator;
     });
 
     test('calculateStrength returns proper structure', function () {

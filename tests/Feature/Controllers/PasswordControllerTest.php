@@ -15,7 +15,7 @@ beforeEach(function () {
 test('password index includes expiry filters in response', function () {
     $this->get(route('passwords.index', [
         'expiry_filter' => 'expired',
-    ]))->assertInertia(fn($page) => $page
+    ]))->assertInertia(fn ($page) => $page
         ->component('passwords/index')
         ->where('filters.expiryFilter', 'expired'));
 });
@@ -39,25 +39,27 @@ test('password index filters by expiry correctly', function () {
     // Test showing only expired passwords
     $this->get(route('passwords.index', [
         'expiry_filter' => 'expired',
-    ]))->assertInertia(fn($page) => $page
+    ]))->assertInertia(fn ($page) => $page
         ->component('passwords/index')
         ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon, $notExpiring) {
             $passwordIds = collect($passwords)->pluck('id')->toArray();
+
             return in_array($expired->id, $passwordIds) &&
-                !in_array($expiresSoon->id, $passwordIds) &&
-                !in_array($notExpiring->id, $passwordIds);
+                ! in_array($expiresSoon->id, $passwordIds) &&
+                ! in_array($notExpiring->id, $passwordIds);
         }));
 
     // Test showing only expiring soon passwords
     $this->get(route('passwords.index', [
         'expiry_filter' => 'expires_soon',
-    ]))->assertInertia(fn($page) => $page
+    ]))->assertInertia(fn ($page) => $page
         ->component('passwords/index')
         ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon, $notExpiring) {
             $passwordIds = collect($passwords)->pluck('id')->toArray();
-            return !in_array($expired->id, $passwordIds) &&
+
+            return ! in_array($expired->id, $passwordIds) &&
                 in_array($expiresSoon->id, $passwordIds) &&
-                !in_array($notExpiring->id, $passwordIds);
+                ! in_array($notExpiring->id, $passwordIds);
         }));
 });
 
@@ -73,11 +75,12 @@ test('password index defaults to showing all passwords when no expiry filters pr
     ]);
 
     $this->get(route('passwords.index'))
-        ->assertInertia(fn($page) => $page
+        ->assertInertia(fn ($page) => $page
             ->component('passwords/index')
             ->where('filters.expiryFilter', 'all')
             ->where('passwords.data', function ($passwords) use ($expired, $expiresSoon) {
                 $passwordIds = collect($passwords)->pluck('id')->toArray();
+
                 return in_array($expired->id, $passwordIds) &&
                     in_array($expiresSoon->id, $passwordIds);
             }));
@@ -85,7 +88,7 @@ test('password index defaults to showing all passwords when no expiry filters pr
 
 test('PasswordController → index renders correct page', function () {
     $this->get(route('passwords.index'))
-        ->assertInertia(fn($page) => $page->component('passwords/index'));
+        ->assertInertia(fn ($page) => $page->component('passwords/index'));
 });
 
 test('PasswordController → index includes stats data', function () {
@@ -103,7 +106,7 @@ test('PasswordController → index includes stats data', function () {
     ]);
 
     $this->get(route('passwords.index'))
-        ->assertInertia(fn($page) => $page
+        ->assertInertia(fn ($page) => $page
             ->component('passwords/index')
             ->has('stats')
             ->has('stats.type_distribution')
@@ -129,7 +132,7 @@ test('PasswordController → index stats exclude other users data', function () 
     ]);
 
     $this->get(route('passwords.index'))
-        ->assertInertia(fn($page) => $page
+        ->assertInertia(fn ($page) => $page
             ->component('passwords/index')
             ->where('stats.type_distribution.normal', 2)
             ->where('stats.type_distribution.ssh', 0));
@@ -140,7 +143,7 @@ test('PasswordController → index applies pagination', function () {
     Password::factory(15)->create(['user_id' => $this->user->id]);
 
     $this->get(route('passwords.index', ['per_page' => 10]))
-        ->assertInertia(fn($page) => $page
+        ->assertInertia(fn ($page) => $page
             ->component('passwords/index')
             ->where('passwords.per_page', 10)
             ->where('passwords.total', 15));
@@ -158,12 +161,13 @@ test('PasswordController → index applies search filter', function () {
     ]);
 
     $this->get(route('passwords.index', ['search' => 'Facebook']))
-        ->assertInertia(fn($page) => $page
+        ->assertInertia(fn ($page) => $page
             ->component('passwords/index')
             ->where('passwords.data', function ($passwords) use ($password1, $password2) {
                 $passwordIds = collect($passwords)->pluck('id')->toArray();
+
                 return in_array($password1->id, $passwordIds) &&
-                    !in_array($password2->id, $passwordIds);
+                    ! in_array($password2->id, $passwordIds);
             }));
 });
 
@@ -378,7 +382,7 @@ test('PasswordController → destroyBulk validates password ownership', function
     $otherPassword = Password::factory()->create(['user_id' => $otherUser->id]);
 
     $response = $this->post(route('passwords.destroy-bulk'), [
-        'ids' => [$myPassword->id, $otherPassword->id]
+        'ids' => [$myPassword->id, $otherPassword->id],
     ]);
 
     // Should redirect back with validation errors, not 403
@@ -512,11 +516,11 @@ test('PasswordController → index handles all filters together', function () {
         'sort' => 'name',
         'direction' => 'asc',
         'per_page' => 5,
-    ]))->assertInertia(fn($page) => $page
+    ]))->assertInertia(fn ($page) => $page
         ->component('passwords/index')
         ->where('filters.search', 'SSH')
         ->where('filters.type', 'ssh')
-        ->where('filters.folderId', (string)$folder->id)
+        ->where('filters.folderId', (string) $folder->id)
         ->where('filters.expiryFilter', 'expired')
         ->where('filters.sort', 'name')
         ->where('filters.direction', 'asc')

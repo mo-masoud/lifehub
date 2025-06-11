@@ -21,7 +21,7 @@ beforeEach(function () {
 });
 
 test('LoginRequest → authorize returns true', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
 
     expect($request->authorize())->toBeTrue();
 });
@@ -29,7 +29,7 @@ test('LoginRequest → authorize returns true', function () {
 test('LoginRequest → rules requires email field', function () {
     $data = [];
 
-    $validator = Validator::make($data, (new LoginRequest())->rules());
+    $validator = Validator::make($data, (new LoginRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('email'))->toBeTrue();
@@ -38,7 +38,7 @@ test('LoginRequest → rules requires email field', function () {
 test('LoginRequest → rules requires password field', function () {
     $data = ['email' => 'test@example.com'];
 
-    $validator = Validator::make($data, (new LoginRequest())->rules());
+    $validator = Validator::make($data, (new LoginRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('password'))->toBeTrue();
@@ -50,7 +50,7 @@ test('LoginRequest → rules validates email format', function () {
         'password' => 'password123',
     ];
 
-    $validator = Validator::make($data, (new LoginRequest())->rules());
+    $validator = Validator::make($data, (new LoginRequest)->rules());
 
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('email'))->toBeTrue();
@@ -62,13 +62,13 @@ test('LoginRequest → rules accepts valid email and password', function () {
         'password' => 'password123',
     ];
 
-    $validator = Validator::make($data, (new LoginRequest())->rules());
+    $validator = Validator::make($data, (new LoginRequest)->rules());
 
     expect($validator->passes())->toBeTrue();
 });
 
 test('LoginRequest → authenticate succeeds with valid credentials', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'password123',
@@ -81,18 +81,18 @@ test('LoginRequest → authenticate succeeds with valid credentials', function (
 });
 
 test('LoginRequest → authenticate fails with invalid credentials', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'wrong-password',
     ]);
 
-    expect(fn() => $request->authenticate())->toThrow(ValidationException::class);
+    expect(fn () => $request->authenticate())->toThrow(ValidationException::class);
     expect(Auth::check())->toBeFalse();
 });
 
 test('LoginRequest → authenticate handles remember me option', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'password123',
@@ -106,7 +106,7 @@ test('LoginRequest → authenticate handles remember me option', function () {
 });
 
 test('LoginRequest → throttleKey generates correct format', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge(['email' => 'Test@Example.com']);
     $request->server->set('REMOTE_ADDR', '192.168.1.1');
 
@@ -116,7 +116,7 @@ test('LoginRequest → throttleKey generates correct format', function () {
 });
 
 test('LoginRequest → throttleKey handles special characters in email', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge(['email' => 'tëst@éxample.com']);
     $request->server->set('REMOTE_ADDR', '192.168.1.1');
 
@@ -126,7 +126,7 @@ test('LoginRequest → throttleKey handles special characters in email', functio
 });
 
 test('LoginRequest → ensureIsNotRateLimited allows under limit', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge(['email' => 'test@example.com']);
     $request->server->set('REMOTE_ADDR', '192.168.1.1');
 
@@ -139,7 +139,7 @@ test('LoginRequest → ensureIsNotRateLimited allows under limit', function () {
 test('LoginRequest → ensureIsNotRateLimited blocks after exceeding limit', function () {
     Event::fake();
 
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge(['email' => 'test@example.com']);
     $request->server->set('REMOTE_ADDR', '192.168.1.1');
 
@@ -150,13 +150,13 @@ test('LoginRequest → ensureIsNotRateLimited blocks after exceeding limit', fun
         RateLimiter::hit($throttleKey);
     }
 
-    expect(fn() => $request->ensureIsNotRateLimited())->toThrow(ValidationException::class);
+    expect(fn () => $request->ensureIsNotRateLimited())->toThrow(ValidationException::class);
 
     Event::assertDispatched(Lockout::class);
 });
 
 test('LoginRequest → authenticate increments rate limiter on failure', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'wrong-password',
@@ -178,7 +178,7 @@ test('LoginRequest → authenticate increments rate limiter on failure', functio
 });
 
 test('LoginRequest → authenticate clears rate limiter on success', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'password123',
@@ -199,7 +199,7 @@ test('LoginRequest → authenticate clears rate limiter on success', function ()
 });
 
 test('LoginRequest → authenticate validates email field in exception', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'wrong-password',
@@ -217,7 +217,7 @@ test('LoginRequest → authenticate validates email field in exception', functio
 test('LoginRequest → ensureIsNotRateLimited provides throttle message with time', function () {
     Event::fake();
 
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge(['email' => 'test@example.com']);
     $request->server->set('REMOTE_ADDR', '192.168.1.1');
 
@@ -238,7 +238,7 @@ test('LoginRequest → ensureIsNotRateLimited provides throttle message with tim
 });
 
 test('LoginRequest → handles empty string email gracefully', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => '',
         'password' => 'password123',
@@ -252,7 +252,7 @@ test('LoginRequest → handles empty string email gracefully', function () {
 });
 
 test('LoginRequest → handles null password gracefully', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => null,
@@ -266,7 +266,7 @@ test('LoginRequest → handles null password gracefully', function () {
 });
 
 test('LoginRequest → boolean remember parameter works correctly', function () {
-    $request = new LoginRequest();
+    $request = new LoginRequest;
     $request->merge([
         'email' => 'test@example.com',
         'password' => 'password123',

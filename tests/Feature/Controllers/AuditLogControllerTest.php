@@ -30,7 +30,7 @@ describe('AuditLogController', function () {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('audit-logs/index')
                     ->has('auditLogs.data', 5)
                     ->has('filters')
@@ -54,12 +54,13 @@ describe('AuditLogController', function () {
         ]);
 
         $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($userAuditLog, $otherUserAuditLog) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+
                     return in_array($userAuditLog->id, $auditLogIds) &&
-                        !in_array($otherUserAuditLog->id, $auditLogIds);
+                        ! in_array($otherUserAuditLog->id, $auditLogIds);
                 }));
     });
 
@@ -79,12 +80,13 @@ describe('AuditLogController', function () {
 
         $this->actingAs($this->user)
             ->get(route('passwords.audit-logs.index', ['password_id' => $password1->id]))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($auditLog1, $auditLog2) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+
                     return in_array($auditLog1->id, $auditLogIds) &&
-                        !in_array($auditLog2->id, $auditLogIds);
+                        ! in_array($auditLog2->id, $auditLogIds);
                 }));
     });
 
@@ -105,12 +107,13 @@ describe('AuditLogController', function () {
 
         $this->actingAs($this->user)
             ->get(route('passwords.audit-logs.index', ['action' => 'created']))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($createdLog, $copiedLog) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+
                     return in_array($createdLog->id, $auditLogIds) &&
-                        !in_array($copiedLog->id, $auditLogIds);
+                        ! in_array($copiedLog->id, $auditLogIds);
                 }));
     });
 
@@ -134,11 +137,12 @@ describe('AuditLogController', function () {
                 'start_date' => now()->subDays(3)->format('Y-m-d'),
                 'end_date' => now()->format('Y-m-d'),
             ]))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($oldLog, $recentLog) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
-                    return !in_array($oldLog->id, $auditLogIds) &&
+
+                    return ! in_array($oldLog->id, $auditLogIds) &&
                         in_array($recentLog->id, $auditLogIds);
                 }));
     });
@@ -166,12 +170,13 @@ describe('AuditLogController', function () {
 
         $this->actingAs($this->user)
             ->get(route('passwords.audit-logs.index', ['search' => 'Gmail']))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($auditLog1, $auditLog2) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+
                     return in_array($auditLog1->id, $auditLogIds) &&
-                        !in_array($auditLog2->id, $auditLogIds);
+                        ! in_array($auditLog2->id, $auditLogIds);
                 }));
     });
 
@@ -184,9 +189,9 @@ describe('AuditLogController', function () {
 
         $this->actingAs($this->user)
             ->get(route('passwords.audit-logs.index', ['per_page' => 20]))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
-                ->where('auditLogs.data', fn($data) => count($data) === 20)
+                ->where('auditLogs.data', fn ($data) => count($data) === 20)
                 ->where('auditLogs.total', 25));
     });
 
@@ -206,10 +211,11 @@ describe('AuditLogController', function () {
         ]);
 
         $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('auditLogs.data', function ($auditLogs) use ($newLog, $oldLog) {
                     $auditLogIds = collect($auditLogs)->pluck('id')->toArray();
+
                     return $auditLogIds[0] === $newLog->id && $auditLogIds[1] === $oldLog->id;
                 }));
     });
@@ -223,7 +229,7 @@ describe('AuditLogController', function () {
         // Should ignore invalid password_id and show all logs
         $response->assertOk();
 
-        $response->assertInertia(fn($page) => $page
+        $response->assertInertia(fn ($page) => $page
             ->component('audit-logs/index')
             ->where('filters.passwordId', null));
     });
@@ -254,7 +260,7 @@ describe('AuditLogController', function () {
 
     test('index includes available actions in response', function () {
         $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('availableActions.created', 'Created')
                 ->where('availableActions.updated', 'Updated')
@@ -278,10 +284,11 @@ describe('AuditLogController', function () {
         ]);
 
         $this->actingAs($this->user)->get(route('passwords.audit-logs.index'))
-            ->assertInertia(fn($page) => $page
+            ->assertInertia(fn ($page) => $page
                 ->component('audit-logs/index')
                 ->where('userPasswords', function ($userPasswords) use ($password1, $password2) {
                     $passwordIds = collect($userPasswords)->pluck('id')->toArray();
+
                     return count($userPasswords) === 2 &&
                         in_array($password1->id, $passwordIds) &&
                         in_array($password2->id, $passwordIds);

@@ -2,13 +2,11 @@
 
 use App\Models\Folder;
 use App\Models\Password;
-use App\Models\PasswordAuditLog;
 use App\Models\User;
 use App\Services\AuditLogService;
 use App\Services\EnvelopeEncryptionService;
 use App\Services\PasswordService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 uses(RefreshDatabase::class);
@@ -97,7 +95,7 @@ test('PasswordService → createPassword requires username for SSH without CLI',
         // No CLI command provided
     ];
 
-    expect(fn() => $this->passwordService->createPassword($this->user, $data))
+    expect(fn () => $this->passwordService->createPassword($this->user, $data))
         ->toThrow(ValidationException::class);
 });
 
@@ -110,7 +108,7 @@ test('PasswordService → createPassword requires username and url for SSH witho
         // No URL provided
     ];
 
-    expect(fn() => $this->passwordService->createPassword($this->user, $data))
+    expect(fn () => $this->passwordService->createPassword($this->user, $data))
         ->toThrow(ValidationException::class);
 });
 
@@ -317,14 +315,14 @@ test('PasswordService → destroyBulk validates ownership', function () {
 
     $this->actingAs($this->user);
 
-    expect(fn() => $this->passwordService->destroyBulk([$otherPassword->id]))
+    expect(fn () => $this->passwordService->destroyBulk([$otherPassword->id]))
         ->toThrow(\Symfony\Component\HttpKernel\Exception\HttpException::class);
 });
 
 test('PasswordService → destroyBulk handles empty results gracefully', function () {
     $this->actingAs($this->user);
 
-    expect(fn() => $this->passwordService->destroyBulk([999, 998]))
+    expect(fn () => $this->passwordService->destroyBulk([999, 998]))
         ->toThrow(\Symfony\Component\HttpKernel\Exception\HttpException::class);
 });
 
@@ -375,7 +373,7 @@ test('PasswordService → moveToFolder validates ownership', function () {
 
     $this->actingAs($this->user);
 
-    expect(fn() => $this->passwordService->moveToFolder([$otherPassword->id], null))
+    expect(fn () => $this->passwordService->moveToFolder([$otherPassword->id], null))
         ->toThrow(\Symfony\Component\HttpKernel\Exception\HttpException::class);
 });
 
@@ -419,7 +417,7 @@ test('PasswordService → removeFromFolder validates ownership', function () {
 
     $this->actingAs($this->user);
 
-    expect(fn() => $this->passwordService->removeFromFolder([$otherPassword->id]))
+    expect(fn () => $this->passwordService->removeFromFolder([$otherPassword->id]))
         ->toThrow(\Symfony\Component\HttpKernel\Exception\HttpException::class);
 });
 

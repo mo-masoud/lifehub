@@ -677,7 +677,7 @@ describe('Password Model', function () {
     test('model boot method works correctly', function () {
         // The boot method exists but currently just calls parent::boot()
         // Test that the model can be instantiated and works normally
-        $password = new Password();
+        $password = new Password;
         expect($password)->toBeInstanceOf(Password::class);
 
         // Test that the boot method doesn't interfere with model creation
@@ -701,11 +701,9 @@ describe('Password Model', function () {
         $password->refresh();
 
         // This should throw an exception due to invalid encryption data
-        expect(fn() => $password->password)
+        expect(fn () => $password->password)
             ->toThrow(\Exception::class);
     });
-
-
 
     test('audit logs relationship', function () {
         $user = User::factory()->create();

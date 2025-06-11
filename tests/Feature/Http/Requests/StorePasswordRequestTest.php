@@ -5,7 +5,6 @@ use App\Models\Folder;
 use App\Models\Password;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 uses(RefreshDatabase::class);
@@ -17,8 +16,8 @@ beforeEach(function () {
 
 test('StorePasswordRequest → authorize returns true when user can create passwords', function () {
     $this->actingAs($this->user);
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
 
     expect($request->authorize())->toBeTrue();
 });
@@ -28,8 +27,8 @@ test('StorePasswordRequest → rules requires name field', function () {
 
     $data = [];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -41,8 +40,8 @@ test('StorePasswordRequest → rules requires type field', function () {
 
     $data = ['name' => 'Test Password'];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -54,8 +53,8 @@ test('StorePasswordRequest → rules requires password field', function () {
 
     $data = ['name' => 'Test Password', 'type' => 'normal'];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -71,8 +70,8 @@ test('StorePasswordRequest → rules requires username for normal type', functio
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -88,8 +87,8 @@ test('StorePasswordRequest → rules does not require username for ssh type', fu
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->passes())->toBeTrue();
@@ -110,8 +109,8 @@ test('StorePasswordRequest → rules validates name uniqueness per user', functi
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
 
     $validator = Validator::make($data, $request->rules());
 
@@ -135,8 +134,8 @@ test('StorePasswordRequest → rules allows same name for different users', func
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
 
     $validator = Validator::make($data, $request->rules());
 
@@ -152,8 +151,8 @@ test('StorePasswordRequest → rules validates type is valid enum', function () 
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -170,8 +169,8 @@ test('StorePasswordRequest → rules validates name max length', function () {
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -188,8 +187,8 @@ test('StorePasswordRequest → rules validates username max length', function ()
         'password' => 'secret123',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -206,8 +205,8 @@ test('StorePasswordRequest → rules validates password max length', function ()
         'password' => str_repeat('a', 256),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -225,8 +224,8 @@ test('StorePasswordRequest → rules validates url max length', function () {
         'url' => str_repeat('a', 256),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -243,8 +242,8 @@ test('StorePasswordRequest → rules validates cli max length', function () {
         'cli' => str_repeat('a', 256),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -262,8 +261,8 @@ test('StorePasswordRequest → rules validates notes max length', function () {
         'notes' => str_repeat('a', 10001),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -284,8 +283,8 @@ test('StorePasswordRequest → rules validates folder belongs to user', function
         'folder_id' => $folder->id,
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
 
     $validator = Validator::make($data, $request->rules());
 
@@ -304,8 +303,8 @@ test('StorePasswordRequest → rules validates expires_at is in future', functio
         'expires_at' => now()->subDay()->format('Y-m-d'),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -323,8 +322,8 @@ test('StorePasswordRequest → rules allows valid future expires_at', function (
         'expires_at' => now()->addWeek()->format('Y-m-d'),
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->passes())->toBeTrue();
@@ -343,8 +342,8 @@ test('StorePasswordRequest → rules allows valid folder for user', function () 
         'folder_id' => $folder->id,
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
 
     $validator = Validator::make($data, $request->rules());
 
@@ -366,8 +365,8 @@ test('StorePasswordRequest → rules accepts all optional fields as null', funct
         'notes' => null,
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->passes())->toBeTrue();
@@ -384,8 +383,8 @@ test('StorePasswordRequest → rules validates folder_id is integer', function (
         'folder_id' => 'invalid',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();
@@ -403,8 +402,8 @@ test('StorePasswordRequest → rules validates expires_at is valid date', functi
         'expires_at' => 'invalid-date',
     ];
 
-    $request = new StorePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
+    $request = new StorePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
     $validator = Validator::make($data, $request->rules());
 
     expect($validator->fails())->toBeTrue();

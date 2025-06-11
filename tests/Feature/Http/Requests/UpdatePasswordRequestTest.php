@@ -16,14 +16,17 @@ beforeEach(function () {
 });
 
 test('UpdatePasswordRequest → authorize returns true when user can update password', function () {
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -37,14 +40,17 @@ test('UpdatePasswordRequest → authorize returns false when user cannot update 
     $otherUser = User::factory()->create();
     $otherPassword = Password::factory()->create(['user_id' => $otherUser->id]);
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($otherPassword) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($otherPassword)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -57,14 +63,17 @@ test('UpdatePasswordRequest → authorize returns false when user cannot update 
 test('UpdatePasswordRequest → rules requires name field', function () {
     $data = [];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -80,14 +89,17 @@ test('UpdatePasswordRequest → rules requires name field', function () {
 test('UpdatePasswordRequest → rules requires type field', function () {
     $data = ['name' => 'Test Password'];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -103,14 +115,17 @@ test('UpdatePasswordRequest → rules requires type field', function () {
 test('UpdatePasswordRequest → rules requires password field', function () {
     $data = ['name' => 'Test Password', 'type' => 'normal'];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -130,14 +145,17 @@ test('UpdatePasswordRequest → rules requires username for normal type', functi
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -157,14 +175,17 @@ test('UpdatePasswordRequest → rules does not require username for ssh type', f
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -190,14 +211,17 @@ test('UpdatePasswordRequest → rules validates name uniqueness per user excludi
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -218,14 +242,17 @@ test('UpdatePasswordRequest → rules allows keeping same name for current passw
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -251,14 +278,17 @@ test('UpdatePasswordRequest → rules allows same name from different users', fu
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -277,14 +307,17 @@ test('UpdatePasswordRequest → rules validates type is valid enum', function ()
         'password' => 'secret123',
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -309,14 +342,17 @@ test('UpdatePasswordRequest → rules validates folder belongs to user', functio
         'folder_id' => $folder->id,
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -338,14 +374,17 @@ test('UpdatePasswordRequest → rules validates expires_at is in future', functi
         'expires_at' => now()->subDay()->format('Y-m-d'),
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -369,14 +408,17 @@ test('UpdatePasswordRequest → rules allows valid folder for user', function ()
         'folder_id' => $folder->id,
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -399,14 +441,17 @@ test('UpdatePasswordRequest → rules validates all field length limits', functi
         'notes' => str_repeat('a', 10001),
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;
@@ -437,14 +482,17 @@ test('UpdatePasswordRequest → rules accepts all optional fields as null', func
         'notes' => null,
     ];
 
-    $request = new UpdatePasswordRequest();
-    $request->setUserResolver(fn() => $this->user);
-    $request->setRouteResolver(fn() => new class($this->password) {
+    $request = new UpdatePasswordRequest;
+    $request->setUserResolver(fn () => $this->user);
+    $request->setRouteResolver(fn () => new class($this->password)
+    {
         private Password $password;
+
         public function __construct(Password $password)
         {
             $this->password = $password;
         }
+
         public function parameter(string $key)
         {
             return $this->password;

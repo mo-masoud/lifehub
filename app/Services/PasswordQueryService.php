@@ -75,7 +75,7 @@ class PasswordQueryService
         // Search filter
         if (! empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $searchTerm = '%' . $filters['search'] . '%';
+                $searchTerm = '%'.$filters['search'].'%';
                 $q->where('name', 'like', $searchTerm)
                     ->orWhere('username', 'like', $searchTerm)
                     ->orWhere('url', 'like', $searchTerm)

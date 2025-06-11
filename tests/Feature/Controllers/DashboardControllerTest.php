@@ -137,7 +137,7 @@ describe('DashboardController', function () {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('dashboard')
                     ->has('recentPasswords', 1)
                     ->where('recentPasswords.0.id', $userPassword->id)
@@ -214,7 +214,7 @@ describe('DashboardController', function () {
 
         $response->assertOk()
             ->assertInertia(
-                fn($page) => $page
+                fn ($page) => $page
                     ->component('dashboard')
                     ->has('recentPasswords', 3)
                     ->where('recentPasswords.0.id', $lastUsed->id)

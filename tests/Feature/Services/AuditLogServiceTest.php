@@ -18,7 +18,7 @@ describe('AuditLogService', function () {
     test('logPasswordAction creates audit log entry', function () {
         $password = Password::factory()->create(['user_id' => $this->user->id]);
         $request = Request::create('/test', 'POST');
-        $request->setUserResolver(fn() => $this->user);
+        $request->setUserResolver(fn () => $this->user);
 
         $auditLog = $this->service->logPasswordAction(
             $password,

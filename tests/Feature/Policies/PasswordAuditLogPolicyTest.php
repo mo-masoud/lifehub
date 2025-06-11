@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->otherUser = User::factory()->create();
-    $this->policy = new PasswordAuditLogPolicy();
+    $this->policy = new PasswordAuditLogPolicy;
 });
 
 test('PasswordAuditLogPolicy → viewAny returns true for authenticated user', function () {
