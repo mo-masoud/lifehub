@@ -9,11 +9,12 @@ import { ViewPasswordSheet } from './view-password-sheet';
 
 interface PasswordTableRowProps {
     password: Password;
+    canSelect?: boolean;
     isSelected?: boolean;
     onSelectionChange?: (checked: boolean) => void;
 }
 
-export function PasswordTableRow({ password, isSelected = false, onSelectionChange }: PasswordTableRowProps) {
+export function PasswordTableRow({ password, canSelect, isSelected = false, onSelectionChange }: PasswordTableRowProps) {
     const [viewSheetOpen, setViewSheetOpen] = useState(false);
 
     const handleRowClick = () => {
@@ -23,11 +24,13 @@ export function PasswordTableRow({ password, isSelected = false, onSelectionChan
     return (
         <>
             <TableRow className={cn('min-h-20 cursor-pointer', isSelected && 'bg-accent/50')} onClick={handleRowClick}>
-                <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
-                    {onSelectionChange && (
-                        <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
-                    )}
-                </TableCell>
+                {canSelect && (
+                    <TableCell className="w-12" onClick={(e) => e.stopPropagation()}>
+                        {onSelectionChange && (
+                            <Checkbox checked={isSelected} onCheckedChange={onSelectionChange} aria-label={`Select password ${password.name}`} />
+                        )}
+                    </TableCell>
+                )}
                 <TableCell>
                     <span className="flex items-center gap-2">
                         {password.type === 'ssh' ? <Terminal className="size-3.5" /> : <KeyRound className="size-3.5" />}

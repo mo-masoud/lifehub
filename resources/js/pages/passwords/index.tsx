@@ -109,6 +109,7 @@ export default function PasswordsPage() {
 
                     <PasswordsTable
                         passwords={passwords.data}
+                        hasFullFunctionality={true}
                         sortKey={sortKey}
                         sortDirection={sortDirection}
                         onSortChange={handleSortChange}
