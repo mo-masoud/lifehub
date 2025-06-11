@@ -12,12 +12,14 @@ use App\Http\Requests\Passwords\UpdatePasswordRequest;
 use App\Models\Password;
 use App\Services\PasswordQueryService;
 use App\Services\PasswordService;
+use App\Services\Stats\PasswordStatsService;
 
 class PasswordController extends Controller
 {
     public function __construct(
         protected PasswordQueryService $passwordQueryService,
-        protected PasswordService $passwordService
+        protected PasswordService $passwordService,
+        protected PasswordStatsService $passwordStatsService
     ) {}
 
     public function index(IndexPasswordsRequest $request)
@@ -42,9 +44,12 @@ class PasswordController extends Controller
             'expiryFilter' => $filters['expiry_filter'] ?? 'all',
         ];
 
+        $stats = $this->passwordStatsService->getAllStats(auth()->user());
+
         return inertia('passwords/index', [
             'passwords' => $passwords,
             'filters' => $webFilters,
+            'stats' => $stats,
         ]);
     }
 

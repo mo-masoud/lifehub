@@ -44,3 +44,22 @@ export interface Password extends BaseModel {
     is_expired_soon?: boolean;
     folder?: Folder;
 }
+
+export interface PasswordStatsData {
+    type_distribution: {
+        normal: number;
+        ssh: number;
+    };
+    top_copied_passwords: Array<{
+        id: number;
+        name: string;
+        copied: number;
+        type: string;
+    }>;
+    total_copied_count: number;
+    security_health: {
+        strong: number;
+        medium: number;
+        weak: number;
+    };
+}

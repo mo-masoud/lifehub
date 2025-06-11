@@ -1,14 +1,17 @@
 import { PasswordsHeader } from '@/components/features/passwords/passwords-header';
 import { PasswordsSearchAndFilters } from '@/components/features/passwords/passwords-search-and-filters';
 import { PasswordsTable } from '@/components/features/passwords/passwords-table';
+import { PasswordStatsDashboard } from '@/components/features/passwords/stats';
 import { TablePagination } from '@/components/shared/table-pagination';
+import { useIsMobile } from '@/hooks';
 import { usePasswordListState } from '@/hooks/passwords/use-password-list-state';
 import { usePasswordSelection } from '@/hooks/passwords/use-password-selection';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, Pagination, SharedData } from '@/types';
-import { Password, PasswordFilters } from '@/types/passwords';
+import { Password, PasswordFilters, PasswordStatsData } from '@/types/passwords';
+import { Transition } from '@headlessui/react';
 import { Head, usePage } from '@inertiajs/react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,10 +27,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface PasswordsPageProps extends SharedData {
     passwords: Pagination<Password>;
     filters: PasswordFilters;
+    stats: PasswordStatsData;
 }
 
 export default function PasswordsPage() {
-    const { passwords, filters } = usePage<PasswordsPageProps>().props;
+    const isMobile = useIsMobile();
+
+    const { passwords, filters, stats } = usePage<PasswordsPageProps>().props;
+    const [showStats, setShowStats] = useState(false);
+
+    useEffect(() => {
+        setShowStats(!isMobile);
+    }, [isMobile]);
 
     // Use custom hooks for state management
     const {
@@ -59,12 +70,30 @@ export default function PasswordsPage() {
         setPerPage(newPerPage);
     };
 
+    const handleToggleStats = () => {
+        setShowStats(!showStats);
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Passwords" />
 
             <div className="flex flex-col gap-4 rounded-md p-4">
-                <PasswordsHeader selectedPasswordIds={selectedPasswordIds} />
+                <PasswordsHeader selectedPasswordIds={selectedPasswordIds} showStats={showStats} onToggleStats={handleToggleStats} />
+
+                {/* Password Statistics Dashboard */}
+                <Transition
+                    show={showStats}
+                    as={'div'}
+                    enter="transition-all duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-all duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <PasswordStatsDashboard stats={stats} />
+                </Transition>
 
                 <div className="flex flex-1 flex-col">
                     <PasswordsSearchAndFilters

@@ -88,6 +88,53 @@ test('PasswordController → index renders correct page', function () {
         ->assertInertia(fn($page) => $page->component('passwords/index'));
 });
 
+test('PasswordController → index includes stats data', function () {
+    // Create test data for stats
+    Password::factory()->count(3)->create([
+        'user_id' => $this->user->id,
+        'type' => 'normal',
+        'copied' => 5,
+    ]);
+
+    Password::factory()->count(2)->create([
+        'user_id' => $this->user->id,
+        'type' => 'ssh',
+        'copied' => 3,
+    ]);
+
+    $this->get(route('passwords.index'))
+        ->assertInertia(fn($page) => $page
+            ->component('passwords/index')
+            ->has('stats')
+            ->has('stats.type_distribution')
+            ->has('stats.top_copied_passwords')
+            ->has('stats.security_health')
+            ->where('stats.type_distribution.normal', 3)
+            ->where('stats.type_distribution.ssh', 2));
+});
+
+test('PasswordController → index stats exclude other users data', function () {
+    $otherUser = User::factory()->create();
+
+    // Create passwords for current user
+    Password::factory()->count(2)->create([
+        'user_id' => $this->user->id,
+        'type' => 'normal',
+    ]);
+
+    // Create passwords for other user (should not be included)
+    Password::factory()->count(5)->create([
+        'user_id' => $otherUser->id,
+        'type' => 'normal',
+    ]);
+
+    $this->get(route('passwords.index'))
+        ->assertInertia(fn($page) => $page
+            ->component('passwords/index')
+            ->where('stats.type_distribution.normal', 2)
+            ->where('stats.type_distribution.ssh', 0));
+});
+
 test('PasswordController → index applies pagination', function () {
     // Create more than 10 passwords
     Password::factory(15)->create(['user_id' => $this->user->id]);

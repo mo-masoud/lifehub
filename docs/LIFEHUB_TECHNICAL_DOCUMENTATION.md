@@ -411,6 +411,34 @@ getFolders(User $user, array $filters): Collection
 - **Safe Deletion**: Orphaned passwords automatically uncategorized
 - **Bulk Operations**: Efficient multi-folder management
 
+### 5. Password Stats Service (`app/Services/Stats/PasswordStatsService.php`)
+
+**Purpose**: Comprehensive statistics and analytics for password data visualization.
+
+#### Key Methods
+
+```php
+getAllStats(User $user): array
+getTypeDistribution(User $user): array
+getTopCopiedPasswords(User $user, int $limit = 5): Collection
+getTotalCopiedCount(User $user): int
+getSecurityHealthOverview(User $user): array
+```
+
+#### Statistics Provided
+
+- **Type Distribution**: Count of normal vs SSH passwords
+- **Top Copied Passwords**: Most frequently copied passwords with usage counts
+- **Security Health**: Distribution of password strength levels (strong, medium, weak)
+- **Usage Analytics**: Total copy counts and activity metrics
+
+#### Features
+
+- **User Scoped**: All statistics are isolated per user
+- **Performance Optimized**: Efficient aggregation queries
+- **Dashboard Ready**: Data formatted for frontend chart components
+- **Real-time**: Statistics reflect current state without caching
+
 ## Controller Layer
 
 ### 1. Password Controller (`app/Http/Controllers/Passwords/PasswordController.php`)
@@ -437,6 +465,7 @@ POST   /passwords/remove-from-folder  # removeFromFolder() - Bulk folder removal
 - **Service Delegation**: Clean separation of concerns
 - **Request Validation**: Comprehensive input validation
 - **Bulk Operations**: Efficient multi-item operations
+- **Statistics Integration**: Password analytics dashboard included in index response
 
 ### 2. Folder Controller (`app/Http/Controllers/FolderController.php`)
 
@@ -539,13 +568,22 @@ Rules:
 
 #### Main Pages
 
-- `passwords/index.tsx`: Password management interface
+- `passwords/index.tsx`: Password management interface with integrated statistics dashboard
 - `folders/index.tsx`: Folder organization
 - `audit-logs/index.tsx`: Audit log viewing
 - `settings/`: Application settings
 - `auth/`: Authentication pages
 - `dashboard.tsx`: Main dashboard
 - `welcome.tsx`: Landing page
+
+#### Password Index Page Enhancements
+
+The passwords index page now includes:
+
+- **Toggleable Statistics Dashboard**: Real-time password analytics with smooth transitions
+- **Statistics Toggle Button**: Easy access to show/hide statistics panel
+- **Responsive Design**: Statistics properly adapt to mobile and desktop layouts
+- **State Management**: Statistics visibility state persisted during session
 
 ### Component Architecture (`resources/js/components/`)
 
@@ -565,7 +603,7 @@ Feature-specific components organized by functional domain. Each feature module 
 ```typescript
 - PasswordForm: Comprehensive password creation/editing
 - PasswordsTable: Data table with sorting and selection
-- PasswordsHeader: Bulk actions and creation buttons
+- PasswordsHeader: Bulk actions, stats toggle, and creation buttons
 - PasswordsSearchAndFilters: Advanced filtering interface
 - PasswordFilters: Granular filter controls
 - PasswordRowActions: Individual password actions
@@ -577,6 +615,28 @@ Feature-specific components organized by functional domain. Each feature module 
 - MoveToFolderDialog: Folder reassignment
 - RemoveFromFolderDialog: Folder removal
 - Global dialog components for cross-page usage
+```
+
+##### Password Statistics Components (`features/passwords/stats/`)
+
+```typescript
+- PasswordStatsDashboard: Main statistics dashboard container
+- TopCopiedPasswords: Bar chart showing most copied passwords
+- SecurityHealthOverview: Pie chart of password strength distribution
+- PasswordTypeDistribution: Pie chart of normal vs SSH password types
+```
+
+##### Password Statistics Features
+
+```typescript
+Key Features:
+- Real-time statistics display with toggle functionality
+- Interactive charts using Recharts with ShadCN theming
+- Responsive design with proper mobile handling
+- Smooth transitions and animations
+- Color-coded charts with consistent theming
+- Truncated text handling for long password names
+- Tooltip integration for detailed information
 ```
 
 ##### Password Form Features (`features/passwords/password-form.tsx`)
@@ -790,6 +850,25 @@ interface PasswordFilters {
     expiryFilter?: 'all' | 'expired' | 'expires_soon';
 }
 
+interface PasswordStatsData {
+    type_distribution: {
+        normal: number;
+        ssh: number;
+    };
+    top_copied_passwords: Array<{
+        id: number;
+        name: string;
+        copied: number;
+        type: string;
+    }>;
+    total_copied_count: number;
+    security_health: {
+        strong: number;
+        medium: number;
+        weak: number;
+    };
+}
+
 // folders.tsx
 interface Folder {
     id: number;
@@ -865,6 +944,7 @@ idx_audit_ip_user_created
 - `vite.config.ts`: Build configuration with Laravel integration
 - `tailwind.config.js`: Styling configuration
 - `eslint.config.js`: Code quality rules
+- `resources/css/app.css`: Chart color variables using consistent blue palette
 
 #### Package Management
 
@@ -1038,6 +1118,7 @@ The following components have complete test coverage:
 - PasswordService (100%)
 - PasswordQueryService (100%)
 - AuditLogQueryService (100%)
+- PasswordStatsService (100%)
 
 **HTTP Requests & Validation**
 
@@ -1091,6 +1172,7 @@ tests/
 **Functional Testing**
 
 - All CRUD operations for passwords, folders, audit logs
+- Password statistics generation and data isolation
 - Complex business logic scenarios
 - Edge cases and error conditions
 - Bulk operations and batch processing
