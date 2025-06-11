@@ -1252,3 +1252,198 @@ This exceptional test coverage level places LifeHub among the highest quality co
 3. Implement appropriate error handling
 
 This documentation provides a complete technical understanding of the LifeHub password management system, enabling AI agents to reason about the codebase, understand architectural patterns, and assist with development tasks effectively.
+
+## Dashboard Features
+
+### Overview
+
+The dashboard provides actionable, focused views rather than heavy analytics, designed to be module-agnostic and scalable.
+
+### Current Features
+
+#### 1. Recently Used Passwords
+
+- **Purpose**: Shows last 5 passwords that have been actually used
+- **Business Logic**: Only includes passwords with `last_used_at` not null
+- **Sorting**: Most recently used first
+- **Service Method**: `PasswordQueryService::getRecentlyUsedPasswords()`
+
+#### 2. Expiring Soon Passwords
+
+- **Purpose**: Shows passwords expiring within 15 days
+- **Business Logic**: Uses existing `expires_soon` filter logic
+- **Sorting**: Earliest expiring first (most urgent)
+- **Limit**: 5 items
+- **Service Method**: `PasswordQueryService::getFilteredPasswords()` with `expiry_filter`
+
+#### 3. Recently Expired Passwords
+
+- **Purpose**: Shows passwords expired in the last 30 days
+- **Business Logic**: Excludes very old expired passwords
+- **Sorting**: Most recently expired first
+- **Limit**: 5 items
+- **Service Method**: `PasswordQueryService::getRecentlyExpiredPasswords()`
+
+### Dashboard Layout
+
+#### Responsive Grid System
+
+```
+Desktop/Tablet:
+┌─────────────────────────────────────┐
+│           Recently Used             │
+│            (Full Width)             │
+└─────────────────────────────────────┘
+┌─────────────────┬───────────────────┐
+│  Expiring Soon  │ Recently Expired  │
+│   (If Present)  │   (If Present)    │
+└─────────────────┴───────────────────┘
+
+Mobile:
+┌─────────────────────────────────────┐
+│           Recently Used             │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│          Expiring Soon              │
+│          (If Present)               │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│        Recently Expired             │
+│         (If Present)                │
+└─────────────────────────────────────┘
+```
+
+#### Conditional Rendering
+
+- **Empty Section Hiding**: Expiring and expired sections are completely hidden when empty
+- **Dynamic Grid**: Second row adapts to show 1 or 2 columns based on content availability
+- **Always Visible**: Recently used section always shows (with empty state if needed)
+
+### Component Architecture
+
+#### Reusable PasswordsTable
+
+- **Full Functionality Mode**: Sorting, selection, complex styling (passwords index page)
+- **Dashboard Mode**: Simplified view without sorting/selection
+- **Props**: `hasFullFunctionality`, `canSelect` for fine-grained control
+
+#### Consistent Design System
+
+- **Border Standard**: `border-sidebar-border/70 dark:border-sidebar-border`
+- **Button Patterns**: Outline buttons with `asChild` for navigation
+- **Empty States**: Create button using `useCreatePassword` context
+- **Responsive Tables**: Max height with scroll for long lists
+
+## Service Layer Architecture
+
+### PasswordQueryService
+
+Centralizes all password querying logic with clean separation of concerns.
+
+#### Key Methods
+
+```php
+// Dashboard-specific methods
+getRecentlyUsedPasswords($user, int $limit = 5): Collection
+getRecentlyExpiredPasswords($user, int $limit = 5): Collection
+
+// General querying
+getFilteredPasswords($user, array $filters, bool $paginate, int $perPage): LengthAwarePaginator|Collection
+```
+
+#### Design Benefits
+
+- **No Business Logic in Controllers**: Controllers only orchestrate service calls
+- **Testable**: Service methods can be unit tested independently
+- **Reusable**: Methods can be used across different features
+- **Maintainable**: Business logic centralized and easier to modify
+
+## Testing Strategy
+
+### Test Coverage
+
+- **Service Layer Tests**: Unit tests for all business logic methods
+- **Controller Tests**: Integration tests for HTTP responses and Inertia data
+- **Component Architecture**: Flexible components allow for easy testing
+
+### Test Organization
+
+```
+tests/
+├── Feature/
+│   ├── Controllers/
+│   │   └── DashboardControllerTest.php (13 tests, 170 assertions)
+│   └── Services/
+│       └── PasswordQueryServiceTest.php (12 tests, 39 assertions)
+└── Unit/ (Future unit tests)
+```
+
+## Future Scalability
+
+### Module-Agnostic Design
+
+The dashboard is designed to easily accommodate future modules:
+
+#### Pattern for New Modules
+
+1. **Service Layer**: Create dedicated service classes (e.g., `DocumentQueryService`)
+2. **Dashboard Components**: Follow established patterns (`RecentDocumentsList`)
+3. **Controller Integration**: Add service calls to `DashboardController`
+4. **Conditional Rendering**: Add logic for hiding empty sections
+
+#### Examples of Future Modules
+
+- **Documents**: Recent documents, expiring certificates
+- **Tasks**: Overdue tasks, upcoming deadlines
+- **Files**: Recently accessed files, storage warnings
+- **Notes**: Recent notes, shared items
+
+### Design System Consistency
+
+All future dashboard components should follow established patterns:
+
+- Use `border-sidebar-border/70 dark:border-sidebar-border` borders
+- Implement "View all" buttons with pre-applied filters
+- Use `useCreate[Module]` contexts for empty state actions
+- Follow responsive grid patterns
+
+## Performance Considerations
+
+### Database Optimization
+
+- **Indexed Queries**: All dashboard queries use proper database indexes
+- **Eager Loading**: Relationships loaded efficiently with `with()`
+- **Query Limits**: All queries properly limited to prevent performance issues
+
+### Frontend Optimization
+
+- **Component Lazy Loading**: Dashboard components loaded efficiently
+- **Conditional Rendering**: Hidden sections don't render unnecessary DOM
+- **TypeScript**: Full type safety prevents runtime errors
+
+## Development Guidelines
+
+### Code Organization
+
+```
+app/
+├── Http/Controllers/          # Thin controllers, orchestration only
+├── Services/                  # Business logic layer
+└── Models/                    # Eloquent models with scopes
+
+resources/js/
+├── components/
+│   └── features/
+│       └── dashboard/         # Dashboard-specific components
+├── types/                     # TypeScript definitions
+└── pages/                     # Inertia page components
+```
+
+### Adding New Dashboard Features
+
+1. **Create Service Method**: Add business logic to appropriate service
+2. **Update Controller**: Add service call to `DashboardController`
+3. **Create Component**: Follow established patterns
+4. **Update Types**: Add TypeScript definitions
+5. **Write Tests**: Cover service and controller logic
+6. **Update Layout**: Integrate into responsive grid system

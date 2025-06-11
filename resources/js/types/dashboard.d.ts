@@ -3,4 +3,6 @@ import { Password } from './passwords';
 
 export interface DashboardPageProps extends SharedData {
     recentPasswords: Password[];
+    expiringPasswords: Password[];
+    expiredPasswords: Password[];
 }

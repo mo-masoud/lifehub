@@ -9,6 +9,152 @@ beforeEach(function () {
     $this->service = new PasswordQueryService;
 });
 
+test('getRecentlyUsedPasswords returns only passwords with last_used_at', function () {
+    $usedPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'last_used_at' => now()->subHour(),
+    ]);
+
+    $neverUsedPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'last_used_at' => null,
+    ]);
+
+    $results = $this->service->getRecentlyUsedPasswords($this->user, 5);
+
+    expect($results->pluck('id')->toArray())
+        ->toContain($usedPassword->id)
+        ->not->toContain($neverUsedPassword->id);
+});
+
+test('getRecentlyUsedPasswords orders by last_used_at descending', function () {
+    $olderPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'last_used_at' => now()->subDays(5),
+    ]);
+
+    $newerPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'last_used_at' => now()->subHour(),
+    ]);
+
+    $results = $this->service->getRecentlyUsedPasswords($this->user, 5);
+
+    expect($results->first()->id)->toBe($newerPassword->id)
+        ->and($results->last()->id)->toBe($olderPassword->id);
+});
+
+test('getRecentlyUsedPasswords respects limit parameter', function () {
+    Password::factory()->count(7)->create([
+        'user_id' => $this->user->id,
+        'last_used_at' => now()->subMinutes(rand(1, 60)),
+    ]);
+
+    $results = $this->service->getRecentlyUsedPasswords($this->user, 3);
+
+    expect($results)->toHaveCount(3);
+});
+
+test('getRecentlyUsedPasswords includes folder relationship', function () {
+    $folder = \App\Models\Folder::factory()->create(['user_id' => $this->user->id]);
+
+    $password = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'folder_id' => $folder->id,
+        'last_used_at' => now(),
+    ]);
+
+    $results = $this->service->getRecentlyUsedPasswords($this->user, 5);
+
+    expect($results->first()->folder)->not->toBeNull()
+        ->and($results->first()->folder->id)->toBe($folder->id);
+});
+
+test('getRecentlyExpiredPasswords returns only expired passwords', function () {
+    $expiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(5),
+    ]);
+
+    $notExpiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->addDays(5),
+    ]);
+
+    $noExpiryPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => null,
+    ]);
+
+    $results = $this->service->getRecentlyExpiredPasswords($this->user, 5);
+
+    expect($results->pluck('id')->toArray())
+        ->toContain($expiredPassword->id)
+        ->not->toContain($notExpiredPassword->id)
+        ->not->toContain($noExpiryPassword->id);
+});
+
+test('getRecentlyExpiredPasswords excludes passwords expired more than 30 days ago', function () {
+    $recentlyExpiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(10),
+    ]);
+
+    $oldExpiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(40),
+    ]);
+
+    $results = $this->service->getRecentlyExpiredPasswords($this->user, 5);
+
+    expect($results->pluck('id')->toArray())
+        ->toContain($recentlyExpiredPassword->id)
+        ->not->toContain($oldExpiredPassword->id);
+});
+
+test('getRecentlyExpiredPasswords orders by expires_at descending', function () {
+    $olderExpiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(20),
+    ]);
+
+    $newerExpiredPassword = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(5),
+    ]);
+
+    $results = $this->service->getRecentlyExpiredPasswords($this->user, 5);
+
+    expect($results->first()->id)->toBe($newerExpiredPassword->id)
+        ->and($results->last()->id)->toBe($olderExpiredPassword->id);
+});
+
+test('getRecentlyExpiredPasswords respects limit parameter', function () {
+    Password::factory()->count(7)->create([
+        'user_id' => $this->user->id,
+        'expires_at' => now()->subDays(rand(1, 20)),
+    ]);
+
+    $results = $this->service->getRecentlyExpiredPasswords($this->user, 3);
+
+    expect($results)->toHaveCount(3);
+});
+
+test('getRecentlyExpiredPasswords includes folder relationship', function () {
+    $folder = \App\Models\Folder::factory()->create(['user_id' => $this->user->id]);
+
+    $password = Password::factory()->create([
+        'user_id' => $this->user->id,
+        'folder_id' => $folder->id,
+        'expires_at' => now()->subDays(5),
+    ]);
+
+    $results = $this->service->getRecentlyExpiredPasswords($this->user, 5);
+
+    expect($results->first()->folder)->not->toBeNull()
+        ->and($results->first()->folder->id)->toBe($folder->id);
+});
+
 test('password query service applies expiry filters correctly', function () {
     $expired = Password::factory()->create([
         'user_id' => $this->user->id,
@@ -69,7 +215,7 @@ test('password query service applies expiry filters correctly', function () {
         ->toContain($notExpiring->id)
         ->toContain($noExpiry->id);
 
-    // Test default behavior (no filter)
+    // Test default behavior
     $defaultResults = $this->service->getFilteredPasswords(
         $this->user,
         [],

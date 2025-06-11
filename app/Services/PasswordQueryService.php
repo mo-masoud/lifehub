@@ -27,6 +27,34 @@ class PasswordQueryService
             : $query->get();
     }
 
+    /**
+     * Get recently used passwords for dashboard
+     */
+    public function getRecentlyUsedPasswords($user, int $limit = 5): Collection
+    {
+        return $user->passwords()
+            ->with('folder')
+            ->whereNotNull('last_used_at')
+            ->orderBy('last_used_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    /**
+     * Get recently expired passwords for dashboard
+     */
+    public function getRecentlyExpiredPasswords($user, int $limit = 5): Collection
+    {
+        return $user->passwords()
+            ->with('folder')
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<', now())
+            ->where('expires_at', '>=', now()->subDays(30)) // Only show passwords expired in last 30 days
+            ->orderBy('expires_at', 'desc') // Most recently expired first
+            ->take($limit)
+            ->get();
+    }
+
     protected function applyFilters(Builder $query, array $filters): void
     {
         // Folder filter
@@ -47,7 +75,7 @@ class PasswordQueryService
         // Search filter
         if (! empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $searchTerm = '%'.$filters['search'].'%';
+                $searchTerm = '%' . $filters['search'] . '%';
                 $q->where('name', 'like', $searchTerm)
                     ->orWhere('username', 'like', $searchTerm)
                     ->orWhere('url', 'like', $searchTerm)
