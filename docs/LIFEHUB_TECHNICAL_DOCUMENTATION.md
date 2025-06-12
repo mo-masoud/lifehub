@@ -515,7 +515,7 @@ getLatestNotifications(User $user, int $limit = 5): Collection
 getUnreadCount(User $user): int
 markAsRead(User $user, string $notificationId): bool
 markAllAsRead(User $user): int
-getPaginatedNotifications(User $user, int $perPage = 15): LengthAwarePaginator
+getPaginatedNotifications(User $user, int $perPage = 10): LengthAwarePaginator
 ```
 
 **Special Features**:
@@ -553,6 +553,33 @@ sendAllPasswordNotifications(): array    // Send both expiring soon and expired 
     'summary' => ['total_sent' => 2, 'total_skipped' => 1]
 ]
 ```
+
+#### NotificationsSheet Component (`resources/js/components/shared/notifications-sheet.tsx`)
+
+**Purpose**: Modern sheet-based notification interface with on-demand loading and rich interactions.
+
+**Key Features**:
+
+- **On-Demand Loading**: Fetches notifications only when sheet opens (10 per page)
+- **Integrated Password Actions**: Direct access to password details via ViewPasswordSheet
+- **Smart Pagination**: "Load more" functionality with clean progress indication
+- **Hover-to-Mark-Read**: 1000ms hover delay marks notifications as read
+- **Bulk Actions**: "Mark all read" with real-time count updates
+- **Responsive Design**: `sm:max-w-lg` width with proper mobile handling
+
+**UI Enhancements**:
+
+- **Enhanced Icons**: Larger notification icons (`size-5`) with improved color scheme
+- **Clean Layout**: Simplified notification cards without border backgrounds
+- **Contextual Actions**: Icon-only password action buttons for cleaner interface
+- **Smart Empty States**: Friendly messaging for empty notification states
+- **Real-time Updates**: Local state management with server synchronization
+
+**Performance Optimizations**:
+
+- **Parallel API Calls**: Loads notifications and unread count simultaneously
+- **Local State Management**: Immediate UI updates before server confirmation
+- **Efficient Pagination**: Only loads additional data when needed
 
 ### 4. API Layer
 
@@ -598,34 +625,34 @@ POST   /api/v1/notifications/mark-all-read      # Mark all notifications as read
 
 #### Inertia.js Shared Data (`app/Http/Middleware/HandleInertiaRequests.php`)
 
-**Shared Structure**:
+**Optimized Structure**:
 
 ```typescript
 notifications: {
-    latest: Notification[],      // Latest 5 notifications
-    unread_count: number         // Total unread count
+    unread_count: number; // Only unread count for badge (performance optimized)
 }
 ```
+
+**Performance Benefits**:
+
+- Eliminates unnecessary data fetching on every page load
+- Notifications loaded on-demand when user opens the sheet
+- Faster initial page loads with minimal server-side processing
 
 #### NotificationsNav Component (`resources/js/components/shared/notifications-nav.tsx`)
 
 **Features**:
 
-- **Dynamic Badge**: Shows unread count with red destructive styling
-- **Hover-to-Read**: 1000ms delay before marking notifications as read via API
-- **Mark All Read**: Bulk action with loading states and disabled state management
-- **Icon System**: Contextual icons based on notification type
-- **Responsive Design**: 320px width dropdown with proper spacing
-- **Timestamp Display**: Relative time formatting using date-fns
-- **Coming Soon Button**: Placeholder for full notification management view
+- **Smart Badge Display**: Shows unread count with "9+" for counts > 9
+- **Optimized Styling**: Compact badge with `text-[10px]` and `p-2` padding
+- **Direct Sheet Access**: Single click opens full notifications sheet
+- **Performance Focused**: No unnecessary data fetching, only badge count
 
 **UI Elements**:
 
-- Welcome notifications: Blue user icon with blue background
-- Password expiring: Amber shield icon with amber background
-- Password expired: Red shield alert icon with red background
-- Read indicators: Blue dot for unread notifications
-- Loading states: Spinner animation for async operations
+- **Badge Styling**: Red destructive background with white text
+- **Smart Truncation**: Shows "9+" for double-digit counts to maintain clean UI
+- **Responsive**: Consistent icon sizing across all devices
 
 ### 6. Automated Scheduling
 

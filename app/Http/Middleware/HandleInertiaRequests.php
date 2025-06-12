@@ -67,7 +67,6 @@ class HandleInertiaRequests extends Middleware
         $user = $request->user();
 
         return [
-            'latest' => $notificationService->getLatestNotifications($user, 5),
             'unread_count' => $notificationService->getUnreadCount($user),
         ];
     }
