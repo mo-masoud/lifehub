@@ -14,7 +14,7 @@ export function RecentPasswordsList({ passwords }: RecentPasswordsListProps) {
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Recently Used</h3>
+                <h3 className="text-lg font-semibold">Recently Used Passwords</h3>
                 <Button asChild variant="outline">
                     <Link href={route('passwords.index')}>View all</Link>
                 </Button>

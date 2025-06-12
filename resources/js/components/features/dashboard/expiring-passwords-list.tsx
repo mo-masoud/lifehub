@@ -17,7 +17,7 @@ export function ExpiringPasswordsList({ passwords }: ExpiringPasswordsListProps)
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Expiring Soon</h3>
+                <h3 className="text-lg font-semibold">Expiring Soon Passwords</h3>
                 <Button asChild variant="outline">
                     <Link href={viewAllUrl}>View all</Link>
                 </Button>

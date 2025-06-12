@@ -17,7 +17,7 @@ export function ExpiredPasswordsList({ passwords }: ExpiredPasswordsListProps) {
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Recently Expired</h3>
+                <h3 className="text-lg font-semibold">Recently Expired Passwords</h3>
                 <Button asChild variant="outline">
                     <Link href={viewAllUrl}>View all</Link>
                 </Button>
