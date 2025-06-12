@@ -206,6 +206,17 @@ Open your browser and navigate to:
 
 ---
 
+## 📚 Documentation
+
+For detailed technical information and development guidelines, please refer to our comprehensive documentation:
+
+- **[Technical Documentation](docs/LIFEHUB_TECHNICAL_DOCUMENTATION.md)** - Complete technical overview, architecture, and implementation details
+- **[Frontend Testing Guide](docs/FRONTEND_TESTING_GUIDE.md)** - Testing strategies, patterns, and best practices for the frontend
+- **[Frontend Coding Standards](docs/FRONTEND_CODING_STANDARDS.md)** - Code style guidelines and conventions for React/TypeScript
+- **[Components Guidelines](docs/COMPONENTS_GUIDELINES.md)** - UI component development standards and patterns
+
+---
+
 ## 🧪 Testing
 
 Run the test suite to ensure everything is working correctly:
